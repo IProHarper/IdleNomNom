@@ -1,0 +1,1 @@
+Idle game about eating dots
