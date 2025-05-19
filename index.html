@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idle Nom Nom</title>
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="module" src="./scripts/main.js"></script>
+    <script type="module" src="./scripts/buttonHandling.js"></script>
+</head>
+<body>
+    <h1>Idle Nom Nom</h1>
+    <p>Score: <span id="score">0</span></p>
+    <div class="stats-container">
+        <p id="feedSpeed" style="display:none">Auto Feed: 1.5/s</p>
+        <p id="displayValue">Value: 1</p>
+    </div>
+    <button id="feedNomNom" on click>Feed him</button>
+    <div class="nomnom-container">
+        <svg class="nomnom" width="40" height="40" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="50" fill="#33ecff"/>
+            <polygon points="50,50 100,0 100,100" fill="black">
+                <animate attributeName="points" dur="0.25s" repeatCount="indefinite"
+                    values="50,50 100,0 100,100;
+                            50,50 100,45 100,55;
+                            50,50 100,0 100,100"/>
+            </polygon>
+        </svg>
+    </div>
+    <div class="upgrades-container">
+        <div class="upgrade-row">
+            <span id="autoFeedText">Unlock Auto Feeding</span>
+            <button id="unlockAutoFeed" class="upgradeBttn">Cost: 50</button>
+        </div>
+        <div class="upgrade-row">
+            <span>+ Dot Value</span>
+            <button id="upgradeDotValue" class="upgradeBttn">Cost: 100</button>
+        </div>
+    </div>
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div id="progress-text">Unlock Nomscension - 10,000 (0%)</div>
+        </div>
+    </div>    
+</body>
+</html>
