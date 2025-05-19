@@ -5,7 +5,6 @@ import { buttonCheck } from './buttonHandling.js';
 
 $(document).ready(function(){
 
-
 const gameContainer = document.querySelector('.nomnom-container');
 const scoreDisplay = document.getElementById('score');
 const statDisplayValue = document.getElementById('displayValue');

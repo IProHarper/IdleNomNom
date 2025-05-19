@@ -16,18 +16,24 @@ export function enableAutofeed(self){
         if (!autoF.enabled){
         //Create initial dot and start autofeed
         createDot();
-        setInterval(createDot, autoF.speed*1000);
         const feedText = document.getElementById("autoFeedText");
-        feedText.innerText = "+ Auto Feed/s"
+        feedText.innerText = "Decrease Auto Feed interval"
         autoF.enabled = true;
         $("#feedSpeed").css("display", "block")
         } else {
-            clearInterval(createDot);
             autoF.speed = autoF.speed - autoF.increase;
-            setInterval(createDot, autoF.speed*1000);
         }
+        const autoFeedSpeedText = document.getElementById("feedSpeed")
+        autoFeedSpeedText.innerText = `Auto Feed 1 every ${autoF.speed.toFixed(2)}s`
+        //Clear dot interval and create a new one with the new speed
+        clearInterval(gameState.dotIntervalID);
+        gameState.dotIntervalID = setInterval(createDot, autoF.speed*1000);
+        //Update autofeed cost and level
         autoF.cost = autoF.cost.times(autoF.upgradeScale);
         autoF.level++;
+        if (autoF.level == 18){
+            autoF.enabled = false;
+        } 
         
     }
 }
