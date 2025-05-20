@@ -1,0 +1,2 @@
+chrome-headless:
+type: chrome-headless:120
