@@ -3,6 +3,7 @@ import { upgrades } from './data.js';
 import { gameState } from './data.js';
 
 
+
 //Create the nomnom dot. Move to nomnom position with dotspeed transition.
 export function createDot() {
     //Create dot on the page far right hand side.
@@ -10,6 +11,7 @@ export function createDot() {
     const dot = document.createElement('div');
     dot.classList.add('dot');
     gameContainer.appendChild(dot);
+
     let position = gameContainer.clientWidth;
     dot.style.left = position + 'px';
 
@@ -22,6 +24,25 @@ export function createDot() {
         dot.remove();
         if (event.propertyName == 'left'){
             increaseScore();
+            showFloatingText(gameState.dotValue*gameState.dotMulti, position/2+20, gameContainer.clientHeight/2-22);
         } 
+    });
+}
+
+function showFloatingText(text, x, y) {
+    const gameContainer = document.querySelector('.nomnom-container');
+    const floatingText = document.createElement('div');
+    floatingText.classList.add('floating-text');
+    gameContainer.appendChild(floatingText);
+
+    floatingText.textContent = "+" + text.toFixed(0);
+    floatingText.style.left = `${x}px`;
+    floatingText.style.top = `${y}px`;
+    const transR = Math.floor(Math.random() * (360 - -360 + 1)) + 360;
+
+    floatingText.style.rotate = `${transR}deg`;
+    // Remove after animation
+    floatingText.addEventListener("animationend", () => {
+        floatingText.remove();
     });
 }

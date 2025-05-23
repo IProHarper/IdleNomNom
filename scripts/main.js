@@ -12,13 +12,18 @@ const statDisplayValue = document.getElementById('displayValue');
 const stageData = gameState.gameStage.data
 const state = gameState.gameStage.stage
 
+//Set display to only have upgrades at first
+$("#left-container").children().css('display', 'none');
+$("#upgrades-container").css('display', '');
+
 $("#feedNomNom").click(createDot);
+
 
 function updateDisplay() {
     scoreDisplay.textContent = gameState.score.round();
     updateProgressBar();
     buttonCheck();
-    updateStats();
+    //updateStats();
 }
 
 function updateStats(){

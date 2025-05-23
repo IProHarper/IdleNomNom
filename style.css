@@ -1,34 +1,44 @@
 body {
-    background-color: rgb(103, 103, 103);
+    background-color: #323436;
     color: white;
     text-align: center;
-    font-family: Arial, sans-serif;
+    font-family: pixleFont, Arial, sans-serif;
 }
 .nomnom-container {
     position: relative;
     width: 80%;
     height: 100px;
-    margin: 10px auto;
+    margin:auto;
     background-color: #000;
     border-radius: 25px;
     overflow: hidden;
 }
-.menu-container {
+#menu-container {
     position: relative;
-    width: 600px;
-    height: 200px;
-    margin: 50px auto;
-    background-color: #000;
+    display: flex;
+    align-items: left;
+    background-color: #E3E374;
     overflow: hidden;
+    padding: 0.2em;
 }
-.upgrades-container{
+
+#upgrades-container{
+    margin-top: 1em;
     display: grid;
     grid-template-columns: 1fr;
     column-gap: 10px;
     row-gap: 10px;
-    width:80%;
+    width:50%;
 }
-.stats-container{
+#upgrades-container{
+    margin-top: 1em;
+    display: block;
+    grid-template-columns: 1fr;
+    column-gap: 10px;
+    row-gap: 10px;
+    width:50%;
+}
+#stats-container{
     position: absolute; /* Ensures it can be placed anywhere */
     top: 10px; /* Distance from the top */
     right: 10px; /* Distance from the right */
@@ -60,11 +70,9 @@ body {
     width: 100%;
 }
 
-
-
 .nomnom {
     position: absolute;
-    left: auto;
+    margin:auto;
     top: 50%;
     width: 40px;
     height: 40px;
@@ -81,11 +89,32 @@ body {
     border-radius: 50%;
     transform: translateY(-50%);
     z-index: 15;
-    transition-timing-function: linear;
+    pointer-events: none;
+    user-select: none;
 }
 
+.floating-text {
+    position: absolute;
+    color: white;
+    font-size: 1em;
+    pointer-events: none;
+    user-select: none;
+    font-family: pixleFont, Arial, sans-serif;
+    z-index: 15;
+    animation: floatUp 1s ease-out forwards;
+}
+@keyframes floatUp {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) translateY(-40px);
+    }
+}
 
-
+/* Buttons */
 .upgradeBttn{
     border-radius: 5px;
     width: 10em;
@@ -94,22 +123,43 @@ body {
 .upgrade-row{
     display: grid;
     grid-template-columns: 1fr 1fr;
-    align-items: center;
+    align-items: left;
+    margin-top: auto;
+    margin-left: 1em;
 }
 button {
-    background-color: #007bff;
+    background-color: #3399FF;
     color: #fff;
     padding: 10px 20px;
     border: none;
     cursor: pointer;
     border:2px solid#000;
+    border-radius: 1em;
+    font-family: pixleFont, Arial, sans-serif;
    }
    
 button:hover {
-    background-color: #0056b3;
+    background-color: #66B3FF;
 }
 button:disabled {
     background-color: #ccc;
     color: #666;
     cursor: not-allowed;
 }
+#feedNomNom {
+    margin:0.5em;
+    font-size: large;
+}
+
+@font-face {
+    font-family: 'pixleFont'; /*Font by Riciery Leal*/
+    src: url('./assets/VCR_OSD_MONO_1.001.ttf'); /*URL to font*/
+}
+
+/* pallet
+Dark
+#0080FF
+#3399FF
+#66B3FF
+#99CCFF
+Light */

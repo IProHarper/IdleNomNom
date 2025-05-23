@@ -12,6 +12,32 @@ $("#unlockAutoFeed").on('click',function(){
 $("#upgradeDotValue").on('click',function(){
     upgradeDotValue();
 });
+$("#upgradesBttn").on('click',function(){
+    $("#left-container").children().css('display', 'none');
+    $("#upgrades-container").css('display', '');
+});
+$("#shopBttn").on('click',function(){
+    $("#left-container").children().css('display', 'none');
+    $("#shop-container").css('display', '');
+});
+
+
+
+//Menu Items
+
+// const menuButtons = $("#menu-container").children();
+// for (let i = 0; i < menuButtons.length; i++){
+//     $(`#${menuButtons[i].id}`).on('click',function(){
+//         const menuToDisplay = menuButtons[i].attributes.cont.value;
+//         // HIDE ALL
+//         $("#left-container").children().css('display', 'none');
+//         console.log(menuToDisplay);
+//         $("#"+menuToDisplay).css('display', '');
+//         console.log($('#'+menuToDisplay));
+//         // DISPLAY menuButtons[i].attributes.cont.value
+//     });
+//     console.log(menuButtons[i].attributes.cont.value);
+// }
 
 
 export function hideButton(button_id){
