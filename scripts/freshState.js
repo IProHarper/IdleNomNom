@@ -1,6 +1,6 @@
 import "./break_infinity.js";
 
-var gameStages = [
+const gameStages = [
     {
         name: "Beginning",
         progressText: "Unlock Nomscension",
@@ -8,7 +8,7 @@ var gameStages = [
     }
 ]
 
-export var freshGameState = {
+export const freshGameState = {
     score: new Decimal(0),
     liftimeScore: new Decimal(0),
     dotValue: new Decimal(1),
@@ -20,7 +20,7 @@ export var freshGameState = {
     },
     dotIntervalID: 99919
 }
-export var freshUpgrades = {
+export const freshUpgrades = {
     autoFeed : {
         id: "unlockAutoFeed",
         enabled: false,
@@ -36,6 +36,7 @@ export var freshUpgrades = {
         increase: new Decimal(1),
         cost: new Decimal(50),
         upgradeScale: 1.1,
+        level: 0,
         owned: 0
     },
     increaseDotSpeed : {
@@ -43,6 +44,7 @@ export var freshUpgrades = {
         increase: new Decimal(0.2),
         cost: new Decimal(100),
         upgradeScale: 1.5,
+        level: 0,
         maxlevel: 20,
         owned: 0
     }

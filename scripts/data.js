@@ -36,6 +36,7 @@ export var upgrades = {
         increase: new Decimal(1),
         cost: new Decimal(50),
         upgradeScale: 1.1,
+        level: 0,
         owned: 0
     },
     increaseDotSpeed : {
@@ -43,6 +44,7 @@ export var upgrades = {
         increase: new Decimal(0.2),
         cost: new Decimal(100),
         upgradeScale: 1.5,
+        level: 0,
         maxlevel: 20,
         owned: 0
     }
