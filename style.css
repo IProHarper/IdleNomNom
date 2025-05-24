@@ -114,7 +114,32 @@ body {
     }
 }
 
+#savePopup {
+    opacity: 0;
+    transition: opacity 0.5s;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+   }
+   
+#savePopup.show {
+   opacity: 1;
+}
+
 /* Buttons */
+#ResetBttn {
+    float: right;
+    background-color: Red;
+    position: absolute;
+    z-index: 5;
+    left:10px;
+    top:10px;
+}
 .upgradeBttn{
     border-radius: 5px;
     width: 10em;

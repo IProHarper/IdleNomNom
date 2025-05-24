@@ -12,7 +12,7 @@ export var gameState = {
     score: new Decimal(0),
     liftimeScore: new Decimal(0),
     dotValue: new Decimal(1),
-    dotMulti: new Decimal(1),
+    dotMulti: new Decimal(100),
     dotSpeed: new Decimal(4),
     gameStage: {
         stage: 0,
@@ -36,6 +36,14 @@ export var upgrades = {
         increase: new Decimal(1),
         cost: new Decimal(50),
         upgradeScale: 1.1,
+        owned: 0
+    },
+    increaseDotSpeed : {
+        id: "upgradeDotSpeed",
+        increase: new Decimal(0.2),
+        cost: new Decimal(100),
+        upgradeScale: 1.5,
+        maxlevel: 20,
         owned: 0
     }
 }

@@ -1,8 +1,10 @@
 import { createDot } from './consumables.js';
 import { enableAutofeed } from './features.js';
 import { upgradeDotValue } from './upgradeButtons.js';
+import { upgradeDotSpeed } from './upgradeButtons.js';
 import { upgrades } from './data.js';
 import { gameState } from './data.js';
+import { freshGameState, freshUpgrades } from './freshState.js';
 
 $("#feedNomNom").on('click',createDot());
 
@@ -12,6 +14,10 @@ $("#unlockAutoFeed").on('click',function(){
 $("#upgradeDotValue").on('click',function(){
     upgradeDotValue();
 });
+$("#upgradeDotSpeed").on('click',function(){
+    upgradeDotSpeed();
+});
+
 $("#upgradesBttn").on('click',function(){
     $("#left-container").children().css('display', 'none');
     $("#upgrades-container").css('display', '');
@@ -21,6 +27,16 @@ $("#shopBttn").on('click',function(){
     $("#shop-container").css('display', '');
 });
 
+$("#ResetBttn").click(function(){
+    if (confirm("Warning! You are about to Reset all progress and start from 0.\nAre you sure you wish to continue?")){
+        console.log(gameState, freshGameState);
+        //gameState = freshGameState;
+        for (let key in freshGameState) {
+            gameState[key] = freshGameState[key];
+        }
+        //upgrades = freshUpgrades;
+    }    
+});
 
 
 //Menu Items

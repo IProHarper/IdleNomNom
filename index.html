@@ -17,6 +17,7 @@
         <p id="feedSpeed" style="display:none">Auto Feed 1 every 1.5s</p>
         <p id="displayValue">Value: 1</p>
     </div> -->
+    <button id="ResetBttn">Reset</button>
     <div class="nomnom-container">
         <svg class="nomnom" width="40" height="40" viewBox="0 0 100 100">
             <circle cx="50" cy="50" r="50" fill="#33ecff"/>
@@ -43,10 +44,13 @@
             <span id="autoFeedText">Unlock Auto Feeding</span>
             <button id="unlockAutoFeed" class="upgradeBttn">Cost: 50</button>
         </div>
-
         <div class="upgrade-row">
             <span>Increase Dot Value</span>
             <button id="upgradeDotValue" class="upgradeBttn">Cost: 100</button>
+        </div>
+        <div class="upgrade-row">
+            <span>Increase Dot Speed</span>
+            <button id="upgradeDotSpeed" class="upgradeBttn">Cost: 100</button>
         </div>
     </div>
     <!-- Display the shop items -->
@@ -62,6 +66,7 @@
         <div class="progress-bar">
             <div id="progress-text">Unlock Nomscension - 10,000 (0%)</div>
         </div>
-    </div>    
+    </div>
+<div id="savePopup">Game Saved!</div>    
 </body>
 </html>

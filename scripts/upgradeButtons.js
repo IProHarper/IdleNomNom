@@ -12,3 +12,16 @@ export function upgradeDotValue(){
         incDotVal.cost = incDotVal.cost.times(incDotVal.upgradeScale);
     }
 }
+
+
+export function upgradeDotSpeed(){
+    let incDotSpeed = upgrades.increaseDotSpeed;
+    if (gameState.score.greaterThanOrEqualTo(incDotSpeed.cost)){
+        //Reduce score
+        gameState.score = gameState.score.minus(incDotSpeed.cost);
+        //Update dot Value
+        gameState.dotSpeed = gameState.dotSpeed.minus(incDotSpeed.increase);
+        //Update dot cost
+        incDotSpeed.cost = incDotSpeed.cost.times(incDotSpeed.upgradeScale);
+    }
+}
