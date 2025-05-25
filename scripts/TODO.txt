@@ -1,0 +1,19 @@
+Issues:
+Auto feed unlock made disabled and text - Bought
+Progression bar isn't scaled right
+
+
+Features:
+
+Clean ups:
+- Clear any dots upon reset/update display
+
+
+
+Fixed/Completed:
+Dot Speed can get too fast
+Add Dot Multiplied buttons
+Add autofeed upgrade speed button
+
+
+

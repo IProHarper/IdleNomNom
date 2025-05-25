@@ -22,7 +22,7 @@ export const freshGameState = {
 }
 export const freshUpgrades = {
     autoFeed : {
-        id: "unlockAutoFeed",
+        id: "upgradeAutoFeedSpeed",
         enabled: false,
         increase: new Decimal(0.5),
         speed: new Decimal(10),
@@ -45,7 +45,19 @@ export const freshUpgrades = {
         cost: new Decimal(100),
         upgradeScale: 1.5,
         level: 0,
-        maxlevel: 20,
+        maxlevel: 16,
+        owned: 0
+    },
+    increaseDotMulti : {
+        id: "upgradeDotMulti",
+        increase: new Decimal(2),
+        cost: new Decimal(1000),
+        upgradeScale: 2,
+        level: 0,
+        maxlevel: 19,
         owned: 0
     }
 }
+
+
+

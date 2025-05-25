@@ -20,7 +20,6 @@ $(document).ready(function(){
     //Set display to only have upgrades at first
     $("#left-container").children().css('display', 'none');
     $("#upgrades-container").css('display', '');
-
     $("#feedNomNom").click(createDot);
 
 
@@ -38,13 +37,13 @@ $(document).ready(function(){
 
     //Upgrade progressBar based on score
     function updateProgressBar() {
-        const progressBar = document.querySelector('.progress-bar');
-        const progressBarText = document.getElementById('progress-text');
-        const maxScore = stageData[state].requiredScore;
+        let progressBar = document.querySelector('.progress-bar');
+        let progressBarText = document.getElementById('progress-text');
+        let maxScore = stageData[state].requiredScore;
         let progress = (gameState.liftimeScore / maxScore); // Convert score to percentage
         progressBar.style.width = progress + "%";
-        const text = stageData[state].progressText;
-        progressBarText.innerHTML = `${text} - ${gameState.liftimeScore}/${maxScore.toLocaleString()} (${(progress*100).toFixed(2)}%)`;
+        let text = stageData[state].progressText;
+        progressBarText.innerHTML = `${text} - ${gameState.liftimeScore}/${maxScore.toLocaleString()} (${(progress).toFixed(2)}%)`;
     }
 
 
