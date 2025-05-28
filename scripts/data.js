@@ -60,5 +60,12 @@ export var upgrades = {
         maxlevel: 19
     }
 }
+export var shopUpgrades = {
+    unlockAutoFeed : {
+        id: "unlockAutoFeedSpeed",
+        bought: false,
+        cost: new Decimal(200),
+    }
+}
 
 
