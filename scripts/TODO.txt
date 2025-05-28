@@ -6,7 +6,8 @@ Progression bar isn't scaled right
 Features:
 
 Clean ups:
-- Clear any dots upon reset/update display
+Clear any dots upon reset/update display
+Optimise display updates
 
 
 
