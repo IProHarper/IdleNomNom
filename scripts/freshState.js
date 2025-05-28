@@ -4,7 +4,7 @@ const gameStages = [
     {
         name: "Beginning",
         progressText: "Unlock Nomscension",
-        requiredScore: new Decimal(10000)
+        requiredScore: new Decimal(100000)
     }
 ]
 
@@ -59,5 +59,11 @@ export const freshUpgrades = {
     }
 }
 
-
+ export const freshShopUpgrades = {
+    unlockAutoFeed : {
+        id: "unlockAutoFeedSpeed",
+        bought: false,
+        cost: new Decimal(200),
+    }
+}
 
