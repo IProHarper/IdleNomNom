@@ -1,5 +1,4 @@
-import { gameState } from './data.js'
-import { upgrades } from './data.js'
+import { gameState, shopUpgrades, upgrades } from './data.js'
 import { createDot } from './consumables.js';
 
 import { buttonBought } from './buttonHandling.js';
@@ -7,7 +6,7 @@ import { hideButton } from './buttonHandling.js';
 
 //Enable the Auto feed Button
 export function enableAutofeed(){
-    const autoF = upgrades.autoFeed;
+    const autoF = shopUpgrades.unlockAutoFeed;
     //Check if upgrade can be bought
     if (gameState.score.greaterThanOrEqualTo(autoF.cost)){
         //Reduce score based on cost
@@ -16,35 +15,67 @@ export function enableAutofeed(){
         $("#unlockAutoFeed").css("background", "green");
         $("#unlockAutoFeed").css("color", "black");
         upgrades.autoFeed.enabled = true;
+        shopUpgrades.unlockAutoFeed.bought = true;
         $("#upgradeAutoFeedSpeed").css("display", "block")
-        gameState.dotIntervalID = setInterval(createDot, autoF.speed*1000);
-        //Update autofeed cost and level
-        upgrades.autoFeed.cost = autoF.cost.times(autoF.upgradeScale);
-        upgrades.autoFeed.level++;
+        gameState.dotIntervalID = setInterval(createDot, upgrades.autoFeed.speed*1000);    
     }
 }
 
+export function createKids(){
+    const gameContainer = document.querySelector('.nomnom-container');
+
+    //Make BLUE Child
+    const blueKid = document.createElement('div');
+    blueKid.classList.add('nomnomjr');
+    gameContainer.appendChild(blueKid);
+    blueKid.innerHTML = `
+     <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="50" fill="blue"/>
+            <polygon points="50,50 100,0 100,100" fill="black">
+                <animate attributeName="points" dur="0.25s" repeatCount="indefinite"
+                    values="50,50 100,0 100,100;
+                            50,50 100,45 100,55;
+                            50,50 100,0 100,100"/>
+            </polygon>
+        </svg>
+    `;
+    blueKid.style.left = gameContainer.clientWidth/2 - (blueKid.clientWidth*2.5) + "px";
+    blueKid.style.width = "32px";
+    blueKid.style.height = "32px";
+
+    //Make Yellow Child
+    const yellowKid = document.createElement('div');
+    yellowKid.classList.add('nomnomjr');
+    gameContainer.appendChild(yellowKid);
+    yellowKid.innerHTML = `
+     <svg viewBox="0 0 100 100">
+            <circle id=childYellow cx="50" cy="50" r="50" fill="yellow"/>
+            <polygon points="50,50 100,0 100,100" fill="black">
+                <animate attributeName="points" dur="0.25s" repeatCount="indefinite"
+                    values="50,50 100,0 100,100;
+                            50,50 100,45 100,55;
+                            50,50 100,0 100,100"/>
+            </polygon>
+        </svg>
+    `;
+    yellowKid.style.left = gameContainer.clientWidth/2 - (yellowKid.clientWidth*4.25) + "px";
+    
+    //Make Red Child
+    const redKid = document.createElement('div');
+    redKid.classList.add('nomnomjr');
+    gameContainer.appendChild(redKid);
+    redKid.innerHTML = `
+     <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="50" fill="red"/>
+            <polygon points="50,50 100,0 100,100" fill="black">
+                <animate attributeName="points" dur="0.25s" repeatCount="indefinite"
+                    values="50,50 100,0 100,100;
+                            50,50 100,45 100,55;
+                            50,50 100,0 100,100"/>
+            </polygon>
+        </svg>
+    `;
+    redKid.style.left = gameContainer.clientWidth/2 - (redKid.clientWidth*6.25) + "px";
+}
 
 
-
-// if (!autoF.enabled){
-//     //Create initial dot and start autofeed
-//     createDot();
-//     //const feedText = document.getElementById("autoFeedText");
-//     //feedText.innerText = "Decrease Auto Feed interval"
-//     // autoF.enabled = true;
-//     // $("#feedSpeed").css("display", "block")
-//     } else {
-//         autoF.speed = autoF.speed - autoF.increase;
-//     }
-//     // const autoFeedSpeedText = document.getElementById("feedSpeed")
-//     // autoFeedSpeedText.innerText = `Auto Feed 1 every ${autoF.speed.toFixed(2)}s`
-//     //Clear dot interval and create a new one with the new speed
-//     clearInterval(gameState.dotIntervalID);
-//     gameState.dotIntervalID = setInterval(createDot, autoF.speed*1000);
-//     //Update autofeed cost and level
-//     autoF.cost = autoF.cost.times(autoF.upgradeScale);
-//     autoF.level++;
-//     if (autoF.level == 18){
-//         autoF.enabled = false;
-//     }
