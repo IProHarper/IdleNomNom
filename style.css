@@ -4,6 +4,7 @@ body {
     text-align: center;
     font-family: pixleFont, Arial, sans-serif;
 }
+/* Containers */
 .nomnom-container {
     position: relative;
     width: 80%;
@@ -21,7 +22,6 @@ body {
     overflow: hidden;
     padding: 0.2em;
 }
-
 #upgrades-container{
     margin-top: 1em;
     display: grid;
@@ -39,6 +39,8 @@ body {
     column-gap: 10px;
     row-gap: 10px;
     width:50%;
+    overflow: scroll;
+    padding-bottom: 10%;
 }
 #stats-container{
     position: absolute; /* Ensures it can be placed anywhere */
@@ -59,6 +61,7 @@ body {
     background-color: #333; /* Dark background */
 } 
 
+/* Progress Bar */
 .progress-bar {
     width: 0%; /* Starts empty */
     height: 100%;
@@ -72,6 +75,7 @@ body {
     width: 100%;
 }
 
+/* Mr NomNOm */
 .nomnom {
     position: absolute;
     margin:auto;
@@ -80,6 +84,18 @@ body {
     height: 40px;
     transform: translateY(-50%);
     z-index: 10;
+}
+.nomnomjr {
+    position: absolute;
+    margin:auto;
+    top: 60%;
+    width: 20px;
+    height: 20px;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+#mrNomNom {
+    fill: white;
 }
 .dot {
     position: absolute;
