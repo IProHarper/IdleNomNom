@@ -1,6 +1,6 @@
 import { saveGame,checkSaveFile } from './gameFiles.js';
 import { createDot } from './consumables.js';
-import { gameState } from './data.js'
+import { gameState, upgrades } from './data.js'
 import { buttonCheck } from './buttonHandling.js';
 
 
