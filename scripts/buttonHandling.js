@@ -1,5 +1,5 @@
 import { createDot } from './consumables.js';
-import { enableAutofeed } from './features.js';
+import { enableAutofeed, createKids } from './features.js';
 import { upgradeDotValue, upgradeDotSpeed, upgradeAutoFeedSpeed,upgradeDotMulti } from './upgradeButtons.js';
 import { upgrades, gameState } from './data.js';
 
@@ -8,14 +8,48 @@ import { loadUpgradeData, loadGameStateData, saveGame } from './gameFiles.js';
 
 $("#feedNomNom").on('click',createDot());
 
+//SHOP UPGRADES
 $("#unlockAutoFeed").on('click',function(){
     enableAutofeed(this);
     disableButton("unlockAutoFeed");
 });
-$("#upgradeAutoFeedSpeed").on('click',function(){
-    upgradeAutoFeedSpeed();
+$("#enableCillianMode").on('click',function(){
+    $("#mrNomNom").css("fill", "blue");
+    $(".dot").css("background-color", "blue");
+    if ($(".nomnomjr").children().length>0){
+        $(".nomnomjr").children().css('display', 'none');
+    }
+});
+$("#enableConallMode").on('click',function(){
+    $("#mrNomNom").css("fill", "yellow");
+    $(".dot").css("background-color", "yellow");
+    if ($(".nomnomjr").children().length>0){
+        $(".nomnomjr").children().css('display', 'none');
+    }
+});
+$("#enableAidanMode").on('click',function(){
+    $("#mrNomNom").css("fill", "red");
+    $(".dot").css("background-color", "red");
+    if ($(".nomnomjr").children().length>0){
+        $(".nomnomjr").children().css('display', 'none');
+    }
+});
+$("#enableDADMode").on('click',function(){
+    $("#mrNomNom").css("fill", "green");
+    console.log($(".nomnomjr").children().length);
+    if ($(".nomnomjr").children().length == 0){
+        createKids()
+    } else {
+        $(".nomnomjr").children().css('display', 'block');
+    }
+    
 });
 
+
+
+
+
+//BASE UPGRADES
 $("#upgradeDotValue").on('click',function(){
     upgradeDotValue();
 });
@@ -24,6 +58,9 @@ $("#upgradeDotSpeed").on('click',function(){
 });
 $("#upgradeDotMulti").on('click',function(){
     upgradeDotMulti();
+});
+$("#upgradeAutoFeedSpeed").on('click',function(){
+    upgradeAutoFeedSpeed();
 });
 
 $("#upgradesBttn").on('click',function(){
