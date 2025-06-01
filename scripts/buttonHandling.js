@@ -1,49 +1,72 @@
 import { createDot } from './consumables.js';
-import { enableAutofeed, createKids } from './features.js';
-import { upgradeDotValue, upgradeDotSpeed, upgradeAutoFeedSpeed,upgradeDotMulti } from './upgradeButtons.js';
-import { upgrades, gameState } from './data.js';
+import { enableAutofeed, createKids, nomscend } from './features.js';
+import { upgradeDotValue, upgradeDotSpeed, upgradeAutoFeedSpeed, upgradeDotMulti, upgradeNomDotMulti, increaseDotMultiMax } from './upgradeButtons.js';
+import { upgrades, gameState, shopUpgrades } from './data.js';
+import { formatNum } from './data.js';
 
-import { freshGameState, freshUpgrades } from './freshState.js';
 import { loadUpgradeData, loadGameStateData, saveGame } from './gameFiles.js';
 
-$("#feedNomNom").on('click',createDot());
+$("#feedNomNom").click(createDot);
+
+// Modal Handling
+$(".closeBttn").on("click", () => {
+    $("#popUpModal").hide();
+});
+export function openModal() {
+    $("#popUpModal").show();
+}
+$(window).on("click", function(event) {
+    if (event.target === $("#popUpModal")[0]) {
+        $("#popUpModal").hide();
+    }
+});
+
+//###############
 
 //SHOP UPGRADES
 $("#unlockAutoFeed").on('click',function(){
-    enableAutofeed(this);
-    disableButton("unlockAutoFeed");
+    enableAutofeed();
+});
+
+
+$("#enableLachlanMode").on('click',function(){
+    $("#mrNomNom").css("fill", "purple");
+    $(".dot").css("background-color", "purple");
+    if ($(".nomnomjr").children().length>0){
+        $(".nomnomjr").children().hide();
+    }
 });
 $("#enableCillianMode").on('click',function(){
     $("#mrNomNom").css("fill", "blue");
     $(".dot").css("background-color", "blue");
     if ($(".nomnomjr").children().length>0){
-        $(".nomnomjr").children().css('display', 'none');
+        $(".nomnomjr").children().hide();
     }
 });
 $("#enableConallMode").on('click',function(){
     $("#mrNomNom").css("fill", "yellow");
     $(".dot").css("background-color", "yellow");
     if ($(".nomnomjr").children().length>0){
-        $(".nomnomjr").children().css('display', 'none');
+        $(".nomnomjr").children().hide();
     }
 });
 $("#enableAidanMode").on('click',function(){
     $("#mrNomNom").css("fill", "red");
     $(".dot").css("background-color", "red");
     if ($(".nomnomjr").children().length>0){
-        $(".nomnomjr").children().css('display', 'none');
+        $(".nomnomjr").children().hide();
     }
 });
 $("#enableDADMode").on('click',function(){
     $("#mrNomNom").css("fill", "green");
-    console.log($(".nomnomjr").children().length);
     if ($(".nomnomjr").children().length == 0){
         createKids()
     } else {
-        $(".nomnomjr").children().css('display', 'block');
+        $(".nomnomjr").children().show();
     }
     
 });
+//###############
 
 
 
@@ -62,7 +85,20 @@ $("#upgradeDotMulti").on('click',function(){
 $("#upgradeAutoFeedSpeed").on('click',function(){
     upgradeAutoFeedSpeed();
 });
+//###############
+//Nom Upgrades
+$("#upgradeNomDotMulti").on('click',function(){
+    upgradeNomDotMulti();
+});
+$("#upgradeDotMultiMax").on('click',function(){
+    increaseDotMultiMax();
+});
 
+
+
+
+//Menu Buttons
+//Left
 $("#upgradesBttn").on('click',function(){
     $("#left-container").children().css('display', 'none');
     $("#upgrades-container").css('display', '');
@@ -72,36 +108,45 @@ $("#shopBttn").on('click',function(){
     $("#shop-container").css('display', '');
 });
 
+//Right
+$("#nomscendUpgradesBttn").on('click',function(){
+    $("#right-container").children().css('display', 'none');
+    $("#nomUpgrades-container").css('display', '');
+});
+$("#customizeBttn").on('click',function(){
+    $("#right-container").children().css('display', 'none');
+    $("#customize-container").css('display', '');
+});
+$("#statBttn").on('click',function(){
+    $("#right-container").children().css('display', 'none');
+    $("#stats-container").css('display', '');
+});
+//###############
+
+$("#nomscensionBttn").on('click',function(){
+    openModal();
+});
+
+
+$("#nomscendBttn").on('click',function(){
+    nomscend();
+});
+
+$("#debugBttn").on('click',function(){
+    gameState.score = gameState.score.plus(1000000);
+    $("nomscendBttn").css("display", "block");
+});
+
 $("#ResetBttn").click(function(){
     if (confirm("Warning! You are about to Reset all progress and start from 0.\nAre you sure you wish to continue?")){
-        loadGameStateData(freshGameState);
-        loadUpgradeData(freshUpgrades);
-        saveGame();
+        localStorage.removeItem("gameState");
+        localStorage.removeItem("Upgrades");
+        localStorage.removeItem("shopUpgrades");
+        location.reload();
     }    
 });
 
 
-//Menu Items
-
-//Function to handle all top row menu buttons. 
-// const menuButtons = $("#menu-container").children();
-// for (let i = 0; i < menuButtons.length; i++){
-//     $(`#${menuButtons[i].id}`).on('click',function(){
-//         const menuToDisplay = menuButtons[i].attributes.cont.value;
-//         // HIDE ALL
-//         $("#left-container").children().css('display', 'none');
-//         console.log(menuToDisplay);
-//         $("#"+menuToDisplay).css('display', '');
-//         console.log($('#'+menuToDisplay));
-//         // DISPLAY menuButtons[i].attributes.cont.value
-//     });
-//     console.log(menuButtons[i].attributes.cont.value);
-// }
-
-
-export function hideButton(button_id){
-    $("#"+button_id).css("display", "none");
-}
 
 export function buttonBought(button_id, self){
     //$(self).closest(".upgrade-row").remove();
@@ -110,23 +155,41 @@ export function buttonBought(button_id, self){
 }
 
 
-function disableButton(button_id){
-    $("#"+button_id).prop("disabled", true);
-}
-
-
 
 //Check all game buttons and update their status
 export function buttonCheck(){
     for (let [key, value] of Object.entries(upgrades)){
+        if (value.type == "nomCoins"){
+            $("#"+value.id).prop("disabled", value.cost.greaterThan(gameState.nomCoins));
+            $("#"+value.id+"Text").text(formatNum(value.cost));
+        } else if (value.type == "score" ){
+            $("#"+value.id).prop("disabled", value.cost.greaterThan(gameState.score));
+            $("#"+value.id).html(`Cost: ${formatNum(value.cost)}`);
+        }
+
         if (value.level >= value.maxlevel){
             $("#"+value.id).prop("disabled", true);
             $("#"+value.id).html(`MAX LEVEL`);
             $("#"+value.id).css("background", "green");
             $("#"+value.id).css("color", "black");
         } else {
-            $("#"+value.id).prop("disabled", value.cost.greaterThan(gameState.score));
-            $("#"+value.id).html(`Cost: ${value.cost.round(1)}`);
+            $("#"+value.id).css("background", "");
+            $("#"+value.id).css("color", "");
         }
     }
+
+    for (let [key, value] of Object.entries(shopUpgrades)){
+        if (value.bought == true){
+            $("#"+value.id).prop("disabled", true);
+            $("#"+value.id).html(`OWNED`);
+            $("#"+value.id).css("background", "green");
+            $("#"+value.id).css("color", "black");
+        } else {
+            $("#"+value.id).prop("disabled", value.cost.greaterThan(gameState.score));
+            $("#"+value.id).html(`Cost: ${formatNum(value.cost)}`);
+            $("#"+value.id).css("background", "");
+            $("#"+value.id).css("color", "");
+        }
+    }
+    $("#nomscendBttn").prop("disabled", gameState.score.lessThanOrEqualTo(gameState.nomsecScoreReq))
 }

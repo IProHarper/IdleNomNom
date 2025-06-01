@@ -1,6 +1,7 @@
 import { increaseScore } from './score.js'
 import { upgrades } from './data.js';
 import { gameState } from './data.js';
+import { playEatDotSound } from './soundHandler.js';
 
 
 
@@ -11,6 +12,7 @@ export function createDot() {
     const dot = document.createElement('div');
     dot.classList.add('dot');
     gameContainer.appendChild(dot);
+    dot.style.backgroundColor = $("#mrNomNom").css('fill');
 
     let position = gameContainer.clientWidth;
     dot.style.left = position + 'px';
@@ -18,13 +20,14 @@ export function createDot() {
     // Apply dynamic animation duration
     dot.style.transition = `${gameState.dotSpeed}s`;
     dot.style.transitionTimingFunction = `linear`;
-    dot.style.translate = `-${position/2-20}px`;
+    dot.style.translate = `-${position/2}px`;
     
     dot.addEventListener("transitionend", (event) => {
         dot.remove();
         if (event.propertyName == 'left'){
             increaseScore();
-            showFloatingText(gameState.dotValue*gameState.dotMulti, position/2+20, gameContainer.clientHeight/2-22);
+            showFloatingText(gameState.dotValue.times(gameState.dotMulti.plus(gameState.nomscendMultiValue)), position/2+20, gameContainer.clientHeight/2-22);
+            //playEatDotSound();
         } 
     });
 }
@@ -36,7 +39,7 @@ function showFloatingText(text, x, y) {
     gameContainer.appendChild(floatingText);
 
     floatingText.textContent = "+" + text.toFixed(0);
-    floatingText.style.left = `${x}px`;
+    floatingText.style.left = `${x-20}px`;
     floatingText.style.top = `${y}px`;
     const transR = Math.floor(Math.random() * (360 - -360 + 1)) + 360;
 

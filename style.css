@@ -17,44 +17,63 @@ body {
 #menu-container {
     position: relative;
     display: flex;
-    align-items: left;
     background-color: #E3E374;
-    overflow: hidden;
+    width:auto;
     padding: 0.2em;
 }
-#upgrades-container{
-    margin-top: 1em;
+#menu-left {
+    width: 50%;
+    display: flex;
+    justify-content: left;
+}
+#menu-right {
+    width:50%;
+    display: flex;
+    justify-content: right;
+}
+#left-container {
+    width: 45%;
+    display: inline-flex;
+    justify-content: right;
+    /* background-color: #3e3f40; */
+}
+#right-container {
+    width: 45%;
+    display: inline-flex;
+    justify-content: left;
+    /* background-color: #3e3f40; */
+}
+.upgrades{
+     margin-top: 1em;
     display: grid;
     grid-template-columns: 1fr;
     column-gap: 10px;
     row-gap: 10px;
     width:50%;
-    overflow: scroll;
-    padding-bottom: 10%;
-}
-#shop-container{
-    margin-top: 1em;
-    display: block;
-    grid-template-columns: 1fr;
-    column-gap: 10px;
-    row-gap: 10px;
-    width:50%;
-    overflow: scroll;
+    overflow: hidden;
     padding-bottom: 10%;
 }
 #stats-container{
-    position: absolute; /* Ensures it can be placed anywhere */
-    top: 10px; /* Distance from the top */
-    right: 10px; /* Distance from the right */
-    width: 20%;
-    height: 100px;
-    border-radius: 5%;
-    background-color: #777;
+    display: block;
+    margin:auto;
+    width:50%;
+    overflow: hidden;
+    padding-bottom: 10%;
+    line-height: normal;
+    margin-left: 5%;
 }
+#stats-container p{
+    display:flex;
+    margin:auto;
+}
+#stats-container span{
+    color:aqua;
+}
+
 .progress-container {
     position: fixed;
     bottom: 0;
-    margin-bottom: 1%;
+    margin-bottom: 0%;
     left: 0;
     width: 100%;
     height: 30px;
@@ -79,6 +98,7 @@ body {
 .nomnom {
     position: absolute;
     margin:auto;
+    margin-left: -20px;
     top: 50%;
     width: 40px;
     height: 40px;
@@ -88,6 +108,7 @@ body {
 .nomnomjr {
     position: absolute;
     margin:auto;
+    margin-left:-20px;
     top: 60%;
     width: 20px;
     height: 20px;
@@ -163,6 +184,11 @@ body {
     width: 10em;
     display: inline;
 }
+.nomBttn{
+    border-radius: 5px;
+    width: 7em;
+    display: inline;
+}
 .upgradeBttn{
     border-radius: 5px;
     width: 10em;
@@ -171,16 +197,22 @@ body {
 .upgrade-row{
     display: grid;
     grid-template-columns: 1fr 1fr;
-    align-items: left;
+    align-items: center;
     margin-top: auto;
     margin-left: 1em;
 }
+.upgrade-row button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 button {
     background-color: #3399FF;
     color: #fff;
     padding: 10px 20px;
-    border: none;
     cursor: pointer;
+    align-items: center;
     border:2px solid#000;
     border-radius: 1em;
     font-family: pixleFont, Arial, sans-serif;
@@ -198,11 +230,73 @@ button:disabled {
     margin:0.5em;
     font-size: large;
 }
+#nomscendBttn {
+    margin:0.5em;
+    font-size: large;
+}
 
 @font-face {
     font-family: 'pixleFont'; /*Font by Riciery Leal*/
     src: url('./assets/VCR_OSD_MONO_1.001.ttf'); /*URL to font*/
 }
+
+.resourceImg{
+    width: 2em;
+    display:inline;
+}
+.buttonImg{
+    width: 1em;
+    display:inline;
+}
+.nomCoin {
+    background-image: url("./assets/images/NomCoin.png");
+    width: 2em;
+    display:inline;
+}
+
+
+/* Modal backdrop */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6); /* semi-transparent background */
+  backdrop-filter: blur(2px);
+}
+
+/* Centered modal box */
+.modal-container {
+  background-color: #F0FFFF;
+  color: black;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 12px;
+  width: 40%;
+  box-shadow: 0 0 15px rgba(0,0,0,0.4);
+  position: relative;
+  text-align: center;
+}
+.modal-container p{
+    text-align:left;
+    font-size: medium;
+}
+
+/* Close button */
+.closeBttn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
 
 /* pallet
 Dark

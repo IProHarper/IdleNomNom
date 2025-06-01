@@ -1,8 +1,8 @@
-import { gameState, shopUpgrades, upgrades } from './data.js'
+import { gameStages, gameState, shopUpgrades, upgrades, formatNum } from './data.js'
 import { createDot } from './consumables.js';
+import { loadUpgradeData, resetUpgrades } from './gameFiles.js';
+import { openModal } from './buttonHandling.js';
 
-import { buttonBought } from './buttonHandling.js';
-import { hideButton } from './buttonHandling.js';
 
 //Enable the Auto feed Button
 export function enableAutofeed(){
@@ -11,13 +11,39 @@ export function enableAutofeed(){
     if (gameState.score.greaterThanOrEqualTo(autoF.cost)){
         //Reduce score based on cost
         gameState.score = gameState.score.minus(autoF.cost);
-        $("#unlockAutoFeed").html("OWNED");
-        $("#unlockAutoFeed").css("background", "green");
-        $("#unlockAutoFeed").css("color", "black");
         upgrades.autoFeed.enabled = true;
         shopUpgrades.unlockAutoFeed.bought = true;
-        $("#upgradeAutoFeedSpeed").css("display", "block")
-        gameState.dotIntervalID = setInterval(createDot, upgrades.autoFeed.speed*1000);    
+        gameState.dotIntervalID = setInterval(createDot, upgrades.autoFeed.speed*1000); 
+        $("#upgradeAutoFeedSpeed").parent().css("display", "");
+    }
+}
+
+export function unlockNomscend(){
+    $("#nomsecReqText").text(`Lifetime Score Required to Nomscend: ${formatNum(gameState.nomsecScoreReq)}`);
+    $("#nomscendBttn").show();
+    $("#nomscendUpgradesBttn").show();
+    $("#nomscensionBttn").show();
+}
+
+//Nomscend - Reset progress but start with a base 10 multiplier
+export function nomscend(){
+    //Pop up disclaimer and 
+    $("#popUpModal").hide();
+    $("#nomsecReqText").text(`Lifetime Score Required to Nomscend: ${formatNum(gameState.nomsecScoreReq)}`)
+    if (gameState.score.greaterThanOrEqualTo(gameState.nomsecScoreReq)){
+        const gs = gameState;
+        gameState.nomCoins = gameState.nomCoins.plus(gs.nomscendScore.divide(100000));
+        gameState.score = new Decimal(0);
+        gameState.dotValue = new Decimal(1);
+        gameState.dotMulti = new Decimal(1);
+        gameState.dotSpeed = new Decimal(4);
+        gameState.dotSpeed = new Decimal(4);
+        gameState.nomscensionCount = gs.nomscensionCount.plus(1);
+        gameState.nomscendScore = new Decimal(0);
+        clearInterval(gameState.dotIntervalID);
+        $('.dot').remove();
+        gameState.nomsecScoreReq = gs.nomsecScoreReq.times(11);
+        resetUpgrades();
     }
 }
 

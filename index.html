@@ -11,12 +11,34 @@
     <script type="module" src="./scripts/buttonHandling.js"></script>
 </head>
 <body>
+    <!-- Modal  -->
+    <div id="popUpModal" class="modal">
+        <div class="modal-container">
+            <span class="closeBttn">&times;</span>
+            <h2>Welcome to Nomscension!</h2>
+            <p>You've unlocked Nomscension! This means you can reset all your progress in exchange for some Nom Coins!</p>
+            <p>Nom Coins can be used to buy upgrades that will help you get to your next Nomscension a LOT quicker.
+            Checkout the Nomscension Upgrades to see what you might want before you Nomscend</p>
+            <p id="nomsecReqText" style="text-align:center">Nomscension Score Required: 100000</p>
+            <p style="text-align: center;">By Nomscending now, you'll get</p>
+            <span id="nomCoinGainsText" style="color:blue">1</span>
+            <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+            <br>
+            <button id="nomscendBttn">NOMSCEND</button>
+        </div>
+    </div>
+
+
+    <!-- <audio id="eatDot-audio" src="./assets/audio/dotEat.wav" preload="auto"></audio> -->
     <h1>IDLE NOM NOM</h1>
+    <!-- <label for="volumeSlider">Volume: </label>
+    <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.1"> -->
     <p>Dots: <span id="score">0</span></p>
-    <!-- <div class="stats-container">
-        <p id="feedSpeed" style="display:none">Auto Feed 1 every 1.5s</p>
-        <p id="displayValue">Value: 1</p>
-    </div> -->
+    <div id="nomCoinDisplay" style="align-items: center">
+        <span id="nomCoinStatText" style="color:aqua">1</span>
+        <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+    </div>
+    <!-- <button id="debugBttn">Debug</button> -->
     <button id="ResetBttn">Reset</button>
     <div class="nomnom-container" kids=false>
         <svg class="nomnom" width="40" height="40" viewBox="0 0 100 100">
@@ -30,16 +52,28 @@
         </svg>
     </div>
     <div>
-        <button id="feedNomNom" on click>FEEEEEED</button>
+        <button id="feedNomNom">FEEEEEED</button>
+        <button id="nomscensionBttn">NOMSCENSION</button>
     </div>
+
+
+    <!-- Menu Bar -->
     <div id="menu-container">
-        <button id="upgradesBttn" cont="upgrades-container">Upgrades</button>&nbsp;
-        <button id="shopBttn" cont="shop-container">Shop</button>&nbsp;
-        <button id="statBttn" cont="stats-container">Stats</button>&nbsp;
+        <div id="menu-left">
+            <button id="upgradesBttn">Upgrades</button>&nbsp;
+            <button id="shopBttn">Shop</button>&nbsp;
+        </div>
+        <div id="menu-right">
+            <button id="nomscendUpgradesBttn">Nomscend Upgrades</button>&nbsp;
+            <button id="customizeBttn">Customize</button>&nbsp;
+            <button id="statBttn">Stats</button>
+            <!-- <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom coins"> -->
+        </div>
     </div>
+    <!-- Left container -->
     <div id="left-container">
     <!-- Display the upgrades -->
-    <div id="upgrades-container">
+    <div id="upgrades-container" class="upgrades">
         <div class="upgrade-row">
             <span>Increase Dot Value</span>
             <button id="upgradeDotValue" class="upgradeBttn">Cost: 100</button>
@@ -49,43 +83,84 @@
             <button id="upgradeDotSpeed" class="upgradeBttn">Cost: 100</button>
         </div>
         <div class="upgrade-row">
-            <span>Increase Auto Feed Speed</span>
-            <button id="upgradeAutoFeedSpeed" class="upgradeBttn">Cost: 200</button>
-        </div>
-        <div class="upgrade-row">
             <span>Increase Dot Multiplier</span>
             <button id="upgradeDotMulti" class="upgradeBttn">Cost: 1000</button>
         </div>
+        <div class="upgrade-row">
+            <span>Increase Auto Feed Speed</span>
+            <button id="upgradeAutoFeedSpeed" class="upgradeBttn">Cost: 200</button>
+        </div>
     </div>
-
-
     <!-- Display the shop items -->
-     <div id="shop-container">
+     <div id="shop-container" class="upgrades">
         <div class="upgrade-row">
             <span id="autoFeedText">Unlock Auto Feeding</span>
-            <button id="unlockAutoFeed" class="shopBttn">Cost: 50</button>
+            <button id="unlockAutoFeed" class="shopBttn">Cost: 200</button>
         </div>
-        <div class="upgrade-row">
-            <span id="Cillian">CILLIAN Mode</span>
-            <button id="enableCillianMode" class="shopBttn">FREE</button>
+    </div>
+</div>
+
+<!-- RIGHT main container -->
+    <div id="right-container">
+        <!-- Stats -->
+        <div id="stats-container">
+            <p>Lifetime Score: <span id="lifetimeScoreText"></span></p>
+            <p>Dots Eaten: <span id="dotsEatenText"></span></p>
+            <br>
+            <p>Base Dot Value: <span id="dotBaseValueText"></span></p>
+            <p>Dot Speed: <span id="dotSpeedText"></span></p>
+            <p>Dot Multiplier: <span  id="dotMultiText"></span></p>
+            <p>Auto Feed Speed: <span id="autofeedSpeedText"></span>/sec</p>
+            <br>
+            <p>Nomscensions: <span id="nomscensionCountText"></span></p>
+            <p>Nom Coins: <span id="nomCoinsText"></span></p>
         </div>
-        <div class="upgrade-row">
-            <span id="Conall">CONALL Mode</span>
-            <button id="enableConallMode" class="shopBttn">FREE</button>
+        <!-- Display the NomscendUpgrades items -->
+        <div id="nomUpgrades-container" class="upgrades">
+            <div class="upgrade-row">
+                <button id="upgradeNomDotMulti" class="nomBttn"><span id="upgradeNomDotMultiText">5</span>
+                    <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                </button>
+                Starting Dot Multi + 10
+            </div>
+            <div class="upgrade-row">
+                <button id="upgradeDotMultiMax" class="nomBttn"><span id="upgradeDotMultiMaxText">5</span>
+                    <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                </button>
+                Dot Multi Max Level + 1
+            </div>
         </div>
-        <div class="upgrade-row">
-            <span id="Aidan">AIDAN Mode</span>
-            <button id="enableAidanMode" class="shopBttn">FREE</button>
+        
+        <!-- Customisation -->
+        <div id="customize-container" class="upgrades">
+            <div class="upgrade-row">
+                <span>CILLIAN Mode</span>
+                <button id="enableCillianMode" class="shopBttn">FREE</button>
+            </div>
+            <div class="upgrade-row">
+                <span>CONALL Mode</span>
+                <button id="enableConallMode" class="shopBttn">FREE</button>
+            </div>
+            <div class="upgrade-row">
+                <span>AIDAN Mode</span>
+                <button id="enableAidanMode" class="shopBttn">FREE</button>
+            </div>
+            <div class="upgrade-row">
+                <span>DAD Mode</span>
+                <button id="enableDADMode" class="shopBttn">FREE</button>
+            </div>
+            <div class="upgrade-row">
+                <span >LACHLAN Mode</span>
+                <button id="enableLachlanMode" class="shopBttn">FREE</button>
+            </div>
         </div>
-        <div class="upgrade-row">
-            <span id="Darren">DAD Mode</span>
-            <button id="enableDADMode" class="shopBttn">FREE</button>
+         
+
+
         </div>
     </div>
 
-
-    <!-- Progress bar at the bottom -->
-</div>
+<!-- Progress bar at the bottom -->
     <div class="progress-container">
         <div class="progress-bar">
             <div id="progress-text">Unlock Nomscension - 10,0000 (0%)</div>
