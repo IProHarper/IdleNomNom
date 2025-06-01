@@ -83,10 +83,10 @@ $(document).ready(function(){
         let progressBar = document.querySelector('.progress-bar');
         let progressBarText = document.getElementById('progress-text');
         let maxScore = gameStages[gameState.stage].requirement;
-        let progress = stat.divideBy(maxScore).toNumber();
+        let progress = (stat.divideBy(maxScore).toNumber())*100;
 
         progressBar.style.width = progress + "%";
-        progressBarText.innerHTML = `${gameStages[gameState.stage].progressText} - (${progress.toFixed(2)*100}%)`;
+        progressBarText.innerHTML = `${gameStages[gameState.stage].progressText} - (${progress.toFixed(2)}%)`;
     }
 
 
