@@ -30,7 +30,7 @@ export function nomscend(){
     //Pop up disclaimer and 
     $("#popUpModal").hide();
     $("#nomsecReqText").text(`Lifetime Score Required to Nomscend: ${formatNum(gameState.nomsecScoreReq)}`)
-    if (gameState.score.greaterThanOrEqualTo(gameState.nomsecScoreReq)){
+    // if (gameState.score.greaterThanOrEqualTo(gameState.nomsecScoreReq)){
         const gs = gameState;
         gameState.nomCoins = gameState.nomCoins.plus(gs.nomscendScore.divide(100000));
         gameState.score = new Decimal(0);
@@ -44,7 +44,7 @@ export function nomscend(){
         $('.dot').remove();
         gameState.nomsecScoreReq = gs.nomsecScoreReq.times(11);
         resetUpgrades();
-    }
+    // 
 }
 
 export function createKids(){
