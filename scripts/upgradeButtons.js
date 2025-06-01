@@ -45,9 +45,9 @@ export function upgradeAutoFeedSpeed(){
         upgrades.autoFeed.cost = incAFSpeed.cost.times(incAFSpeed.upgradeScale);
         //Increase level
         upgrades.autoFeed.level = upgrades.autoFeed.level + 1;
+        clearInterval(gameState.dotIntervalID);
+        gameState.dotIntervalID = setInterval(createDot, incAFSpeed.speed*1000);
     }
-    clearInterval(gameState.dotIntervalID);
-    gameState.dotIntervalID = setInterval(createDot, incAFSpeed.speed*1000);
 }
 
 export function upgradeDotMulti(){
@@ -84,3 +84,12 @@ export function increaseDotMultiMax(){
         upgrades.increaseDotMulti.maxlevel = upgrades.increaseDotMulti.maxlevel+1;
     }
 }
+// export function increaseDotValMax(){
+//     const upgradeData = upgrades.increaseDotValMax;
+//     if (gameState.nomCoins.greaterThanOrEqualTo(upgradeData.cost)){
+//         gameState.nomCoins = gameState.nomCoins.minus(upgradeData.cost);
+//         upgrades.increaseDotMultiMax.cost = new Decimal(upgradeData.baseCost.times(Math.pow(upgradeData.upgradeScale, upgradeData.level)).toFixed(2));
+//         upgrades.increaseDotMultiMax.level = upgrades.increaseDotMultiMax.level+1;
+//         upgrades.increaseDotMulti.maxlevel = upgrades.increaseDotMulti.maxlevel+1;
+//     }
+// }

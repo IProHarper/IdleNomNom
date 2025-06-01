@@ -1,6 +1,7 @@
 Issues:
-Auto feed unlock made disabled and text - Bought
-Progression bar isn't scaled right
+Autofeed can duplicate
+Autofeed speed not resetting
+Dot multi nom upgrade maybe doesn't look right
 
 
 Features:

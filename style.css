@@ -179,6 +179,9 @@ body {
     left:10px;
     top:10px;
 }
+#nomscensionBttn{
+    font-size: large;
+}
 .shopBttn{
     border-radius: 5px;
     width: 10em;
