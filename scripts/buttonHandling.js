@@ -160,10 +160,10 @@ export function buttonBought(button_id, self){
 export function buttonCheck(){
     for (let [key, value] of Object.entries(upgrades)){
         if (value.type == "nomCoins"){
-            $("#"+value.id).prop("disabled", value.cost.greaterThanEqualTo(gameState.nomCoins));
+            $("#"+value.id).prop("disabled", value.cost.greaterThan(gameState.nomCoins));
             $("#"+value.id+"Text").text(formatNum(value.cost));
         } else if (value.type == "score" ){
-            $("#"+value.id).prop("disabled", value.cost.greaterThanEqualTo(gameState.score));
+            $("#"+value.id).prop("disabled", value.cost.greaterThan(gameState.score));
             $("#"+value.id).html(`Cost: ${formatNum(value.cost)}`);
         }
 
@@ -185,11 +185,11 @@ export function buttonCheck(){
             $("#"+value.id).css("background", "green");
             $("#"+value.id).css("color", "black");
         } else {
-            $("#"+value.id).prop("disabled", value.cost.greaterThanEqualTo(gameState.score));
+            $("#"+value.id).prop("disabled", value.cost.greaterThan(gameState.score));
             $("#"+value.id).html(`Cost: ${formatNum(value.cost)}`);
             $("#"+value.id).css("background", "");
             $("#"+value.id).css("color", "");
         }
     }
-    $("#nomscendBttn").prop("disabled", gameState.score.lessThanOrEqualTo(gameState.nomsecScoreReq))
+    // $("#nomscendBttn").prop("disabled", gameState.score.lessThanOrEqualTo(gameState.nomsecScoreReq))
 }
