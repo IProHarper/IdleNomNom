@@ -26,7 +26,7 @@ export function createDot() {
         dot.remove();
         if (event.propertyName == 'left'){
             increaseScore();
-            showFloatingText(gameState.dotValue.times(gameState.dotMulti.plus(gameState.nomscendMultiValue)), position/2+20, gameContainer.clientHeight/2-22);
+            showFloatingText(gameState.dotValue.times(gameState.dotMulti), position/2+20, gameContainer.clientHeight/2-22);
             //playEatDotSound();
         } 
     });
