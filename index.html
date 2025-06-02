@@ -19,10 +19,12 @@
             <p>You've unlocked Nomscension! This means you can reset all your progress in exchange for some Nom Coins!</p>
             <p>Nom Coins can be used to buy upgrades that will help you get to your next Nomscension a LOT quicker.
             Checkout the Nomscension Upgrades to see what you might want before you Nomscend</p>
-            <p id="nomsecReqText" style="text-align:center">Nomscension Score Required: 100000</p>
+            <p style="text-align:center">Nomscension Score Required: <span id="nomsecReqText" style="color:blue">100000</span></p>
             <p style="text-align: center;">By Nomscending now, you'll get</p>
-            <span id="nomCoinGainsText" style="color:blue">1</span>
-            <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+            <div class="nomCoinDisplay">
+                <span id="nomCoinGainsText" style="color:blue">1</span>
+                <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+            </div>
             <br>
             <button id="nomscendBttn">NOMSCEND</button>
         </div>
@@ -34,11 +36,11 @@
     <!-- <label for="volumeSlider">Volume: </label>
     <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.1"> -->
     <p>Dots: <span id="score">0</span></p>
-    <div id="nomCoinDisplay" style="justify-content: center">
+    <div class="nomCoinDisplay">
         <span id="nomCoinStatText" style="color:aqua">1</span>
         <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom coins">
     </div>
-    <!-- <button id="debugBttn">Debug</button> -->
+    <button id="debugBttn">Debug</button>
     <button id="ResetBttn">Reset</button>
     <div class="nomnom-container" kids=false>
         <svg class="nomnom" width="40" height="40" viewBox="0 0 100 100">
@@ -76,18 +78,22 @@
     <div id="upgrades-container" class="upgrades">
         <div class="upgrade-row">
             <span>Increase Dot Value</span>
+            <span id="upgradeDotValueLvl">Level: 0</span>
             <button id="upgradeDotValue" class="upgradeBttn">Cost: 100</button>
         </div>
         <div class="upgrade-row">
             <span>Increase Dot Speed</span>
+            <span id="upgradeDotSpeedLvl">Level: 0</span>
             <button id="upgradeDotSpeed" class="upgradeBttn">Cost: 100</button>
         </div>
         <div class="upgrade-row">
             <span>Increase Dot Multiplier</span>
+            <span id="upgradeDotMultiLvl">Level: 0</span>
             <button id="upgradeDotMulti" class="upgradeBttn">Cost: 1000</button>
         </div>
         <div class="upgrade-row">
             <span>Increase Auto Feed Speed</span>
+            <span id="upgradeAutoFeedSpeedLvl">Level: 0</span>
             <button id="upgradeAutoFeedSpeed" class="upgradeBttn">Cost: 200</button>
         </div>
     </div>
@@ -110,24 +116,48 @@
             <p>Base Dot Value: <span id="dotBaseValueText"></span></p>
             <p>Dot Speed: <span id="dotSpeedText"></span></p>
             <p>Dot Multiplier: <span  id="dotMultiText"></span></p>
-            <p>Auto Feed Speed: <span id="autofeedSpeedText"></span>/sec</p>
+            <p>Auto Feed Speed every :<span id="autofeedSpeedText"></span>s</p>
             <br>
             <p>Nomscensions: <span id="nomscensionCountText"></span></p>
             <p>Nom Coins: <span id="nomCoinsText"></span></p>
         </div>
         <!-- Display the NomscendUpgrades items -->
         <div id="nomUpgrades-container" class="upgrades">
-            <div class="upgrade-row">
+            <!-- <div class="upgrade-row">
                 <button id="upgradeNomDotMulti" class="nomBttn"><span id="upgradeNomDotMultiText">5</span>
                     <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
                 </button>
                 Starting Dot Multi + 10
+            </div> -->
+            <div class="upgrade-row">
+                <button id="upgradeNomDotVal" class="nomBttn"><span id="upgradeNomDotValText">0</span>
+                    <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                </button>
+                Dot Starting Value + 10
+            </div>
+            <div class="upgrade-row">
+                <button id="upgradeNomCoinMulti" class="nomBttn"><span id="upgradeNomCoinMultiText">0</span>
+                    <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                </button>
+                Nom Coin gain + 10%
             </div>
             <div class="upgrade-row">
                 <button id="upgradeDotMultiMax" class="nomBttn"><span id="upgradeDotMultiMaxText">5</span>
                     <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
                 </button>
                 Dot Multi Max Level + 1
+            </div>
+            <div class="upgrade-row">
+                <button id="upgradeDotValMax" class="nomBttn"><span id="upgradeDotValMaxText">5</span>
+                    <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                </button>
+                Dot Value Max Level + 25
+            </div>
+            <div class="upgrade-row">
+                <button id="upgradeStartDotSpeedLevel" class="nomBttn"><span id="upgradeStartDotSpeedLevelText">5</span>
+                    <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                </button>
+                Starting Dot Speed Level + 1
             </div>
         </div>
         
