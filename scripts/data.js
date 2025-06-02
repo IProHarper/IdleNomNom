@@ -1,14 +1,6 @@
 import "./break_infinity.js";
 
 
-export function formatNum(num){
-        if (num.greaterThan(1000000)) {
-            return num.toExponential(2);
-        } else {
-            return num.toFixed();
-        }
-    }
-
 export const gameStages = [
     {
         name: "Beginning",
@@ -21,11 +13,18 @@ export const gameStages = [
         progressText: "Nomscend 10 times",
         statType: "nomscend",
         requirement: new Decimal(10)
+    },
+    {
+        name: "Next level",
+        progressText: "Reach Score Goa... Well I haven't implemented this yet actually",
+        statType: "cap",
+        requirement: new Decimal(10000000000000000000000000)
     }
 ]
 
 
 export var gameState = {
+    gameVersion: 0.6,
     score: new Decimal(0),
     liftimeScore: new Decimal(0),
     dotValue: new Decimal(1),
@@ -37,10 +36,11 @@ export var gameState = {
     stageReached: false,
     nomsecScoreReq: new Decimal(100000),
     nomscensionCount: new Decimal(0),
-    nomscendMultiValue: new Decimal(0),
+    nomscendDotVal: new Decimal(0),
     nomCoins: new Decimal(0),
     nomscendScore: new Decimal(0),
     nomscentionUnlocked: false,
+    nomCoinMulti: new Decimal(1),
     dotIntervalID: 99919
 }
 
@@ -57,6 +57,7 @@ export var upgrades = {
         cost: new Decimal(25),
         upgradeScale: 1.25,
         level: 0,
+        minlevel: 0,
         maxlevel: 19,
         resetTier: 0
     },
@@ -68,6 +69,7 @@ export var upgrades = {
         cost: new Decimal(50),
         upgradeScale: 1.1,
         level: 0,
+        minlevel: 0,
         maxlevel: 100,
         resetTier: 0
     },
@@ -75,10 +77,12 @@ export var upgrades = {
         id: "upgradeDotSpeed",
         type: "score",
         increase: new Decimal(0.2),
+        baseSpeed: new Decimal(4),
         baseCost: new Decimal(100),
         cost: new Decimal(100),
         upgradeScale: 1.5,
         level: 0,
+        minlevel: 0,
         maxlevel: 16,
         resetTier: 0
     },
@@ -90,6 +94,7 @@ export var upgrades = {
         cost: new Decimal(1000),
         upgradeScale: 2,
         level: 0,
+        minlevel: 0,
         maxlevel: 5,
         resetTier: 0
     },
@@ -105,6 +110,17 @@ export var upgrades = {
         maxlevel: 100,
         resetTier: 1
     },
+    increaseNomDotVal : {
+        id: "upgradeNomDotVal",
+        type: "nomCoins",
+        increase: new Decimal(10),
+        baseCost: new Decimal(5),
+        cost: new Decimal(5),
+        upgradeScale: 2.11,
+        level: 1,
+        maxlevel: 100,
+        resetTier: 1
+    },
     increaseDotMultiMax : {
         id: "upgradeDotMultiMax",
         type: "nomCoins",
@@ -114,6 +130,39 @@ export var upgrades = {
         upgradeScale: 5.52,
         level: 1,
         maxlevel: 10,
+        resetTier: 1
+    },
+    increaseDotValMax : {
+        id: "upgradeDotValMax",
+        type: "nomCoins",
+        increase: new Decimal(25),
+        baseCost: new Decimal(5),
+        cost: new Decimal(5),
+        upgradeScale: 5.52,
+        level: 1,
+        maxlevel: 20,
+        resetTier: 1
+    },
+    increaseNomCoinMulti : {
+        id: "upgradeNomCoinMulti",
+        type: "nomCoins",
+        increase: 0.10,
+        baseCost: new Decimal(20),
+        cost: new Decimal(20),
+        upgradeScale: 8.25,
+        level: 1,
+        maxlevel: 10,
+        resetTier: 1
+    },
+    increaseStartDotSpeedLevel : {
+        id: "upgradeStartDotSpeedLevel",
+        type: "nomCoins",
+        increase: 1,
+        baseCost: new Decimal(50),
+        cost: new Decimal(50),
+        upgradeScale: 5.62,
+        level: 1,
+        maxlevel: 17,
         resetTier: 1
     }
 }
