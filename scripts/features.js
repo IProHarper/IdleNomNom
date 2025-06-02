@@ -1,7 +1,8 @@
-import { gameStages, gameState, shopUpgrades, upgrades, formatNum } from './data.js'
+import { gameStages, gameState, shopUpgrades, upgrades } from './data.js'
 import { createDot } from './consumables.js';
 import { loadUpgradeData, resetUpgrades } from './gameFiles.js';
 import { openModal } from './buttonHandling.js';
+import { formatNum } from './util.js';
 
 
 //Enable the Auto feed Button
@@ -23,20 +24,26 @@ export function unlockNomscend(){
     $("#nomscendBttn").show();
     $("#nomscendUpgradesBttn").show();
     $("#nomscensionBttn").show();
+    $("#popUpModal").show();
+    $("#nomscendBttnBttn").prop("disabled", true);
+    setTimeout(() => {
+      $("#nomscendBttnBttn").prop("disabled", false);
+    }, 2000); 
+
 }
 
 //Nomscend - Reset progress but start with a base 10 multiplier
 export function nomscend(){
     //Pop up disclaimer and 
     $("#popUpModal").hide();
-    $("#nomsecReqText").text(`Lifetime Score Required to Nomscend: ${formatNum(gameState.nomsecScoreReq)}`)
+    $("#nomsecReqText").text(formatNum(gameState.nomsecScoreReq));
     // if (gameState.score.greaterThanOrEqualTo(gameState.nomsecScoreReq)){
         const gs = gameState;
-        gameState.nomCoins = gameState.nomCoins.plus(gs.nomscendScore.divide(100000));
+        gameState.nomCoins = gameState.nomCoins.plus(gs.nomscendScore.divide(100000)).times(gs.nomCoinMulti);
         gameState.score = new Decimal(0);
-        gameState.dotValue = new Decimal(1);
+        gameState.dotValue = new Decimal(gs.nomscendDotVal);
+        if (gameState.dotValue == 0 ){ gameState.dotValue = new Decimal(1);}
         gameState.dotMulti = new Decimal(1);
-        gameState.dotSpeed = new Decimal(4);
         gameState.dotSpeed = new Decimal(4);
         gameState.nomscensionCount = gs.nomscensionCount.plus(1);
         gameState.nomscendScore = new Decimal(0);
@@ -44,7 +51,6 @@ export function nomscend(){
         $('.dot').remove();
         gameState.nomsecScoreReq = gs.nomsecScoreReq.times(11);
         resetUpgrades();
-    // 
 }
 
 export function createKids(){
