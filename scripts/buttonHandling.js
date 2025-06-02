@@ -1,8 +1,8 @@
 import { createDot } from './consumables.js';
 import { enableAutofeed, createKids, nomscend } from './features.js';
-import { upgradeDotValue, upgradeDotSpeed, upgradeAutoFeedSpeed, upgradeDotMulti, upgradeNomDotMulti, increaseDotMultiMax } from './upgradeButtons.js';
+import { upgradeDotValue, upgradeDotSpeed, upgradeAutoFeedSpeed, upgradeDotMulti, increaseNomDotMulti, increaseDotMultiMax, increaseDotValMax, increaseNomCoinMulti, increaseNomDotVal, increaseStartDotSpeedLevel } from './upgradeButtons.js';
 import { upgrades, gameState, shopUpgrades } from './data.js';
-import { formatNum } from './data.js';
+import { formatNum } from './util.js';
 
 import { loadUpgradeData, loadGameStateData, saveGame } from './gameFiles.js';
 
@@ -88,11 +88,25 @@ $("#upgradeAutoFeedSpeed").on('click',function(){
 //###############
 //Nom Upgrades
 $("#upgradeNomDotMulti").on('click',function(){
-    upgradeNomDotMulti();
+    increaseNomDotMulti();
+});
+$("#upgradeNomDotVal").on('click',function(){
+    increaseNomDotVal();
+});
+$("#upgradeNomCoinMulti").on('click',function(){
+    increaseNomCoinMulti();
 });
 $("#upgradeDotMultiMax").on('click',function(){
     increaseDotMultiMax();
 });
+$("#upgradeDotValMax").on('click',function(){
+    increaseDotValMax();
+});
+$("#upgradeStartDotSpeedLevel").on('click',function(){
+    increaseStartDotSpeedLevel();
+});
+
+
 
 
 
@@ -133,8 +147,7 @@ $("#nomscendBttn").on('click',function(){
 });
 
 $("#debugBttn").on('click',function(){
-    gameState.score = gameState.score.plus(1000000);
-    $("nomscendBttn").css("display", "block");
+    gameState.dotValue = gameState.dotValue.plus(100);
 });
 
 $("#ResetBttn").click(function(){
@@ -191,5 +204,5 @@ export function buttonCheck(){
             $("#"+value.id).css("color", "");
         }
     }
-    // $("#nomscendBttn").prop("disabled", gameState.score.lessThanOrEqualTo(gameState.nomsecScoreReq))
+    // $("#nomscendBttn").prop("disabled", gameState.score.greaterThanOrEqualTo(gameState.nomsecScoreReq))
 }
