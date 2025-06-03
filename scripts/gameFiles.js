@@ -17,21 +17,87 @@ export function saveGame(){
 
 }
 
+export function compareSaveData(data,name){
+    //Compare gameState Data
+    if (name == "gameState"){
+        //Check if there is a game version. Can remove this after a week
+        if (data.gameVersion){
+            //Check if site version is newer than players save
+            if (gameState.gameVersion > data.gameVersion){
+                //Look through keys in site version
+                for (let key in Object.keys(gameState)){
+                    //If players verions does not exist. Assign site version to that.
+                    if (!data[key]){
+                        data[key] = gameState[key];
+                    }
+                }
+            }    
+        } else {
+            for (let key in Object.keys(gameState)){
+                    //If players verions does not exist. Assign site version to that.
+                    if (!data[key]){
+                        data[key] = gameState[key];
+                    }
+                }
+        }
+        // if (Object.keys(gameState).length > Object.keys(JSON.parse(testData)).length){
+    loadGameStateData(data);   
+    }
+    if (name == "Upgrades"){
+            //Check if site version is newer than players save
+            if (Object.keys(upgrades).length > Object.keys(data).length){
+                //Look through keys in site version
+                for (let item in Object.keys(upgrades)){
+                    //If players verions has an upgrade variable. Use it. Otherwise take it from site version
+                    if (data[item]){
+                        for (let key in upgrades[item]){
+                            if (!data[item][key]){
+                                data[item][key] = upgrades[item][key];
+                            }
+                        }
+                    } else {
+                        data[item] = upgrades[item]
+                    }
+                }
+            }  
+            loadUpgradeData(data, "upgrades");   
+    }
+    if (name == "shopUpgrades"){
+        //Check if site version is newer than players save
+        if (Object.keys(shopUpgrades).length > Object.keys(data).length){
+            //Look through keys in site version
+            for (let item in Object.keys(shopUpgrades)){
+                //If players verions has an upgrade variable. Use it. Otherwise take it from site version
+                if (data[item]){
+                    for (let key in shopUpgrades[item]){
+                        if (!data[item][key]){
+                            data[item][key] = shopUpgrades[item][key];
+                        }
+                    }
+                } else {
+                    data[item] = shopUpgrades[item]
+                }
+            }
+        } 
+        loadUpgradeData(data, "shopUpgrades"); 
+    }
+}
 
 export function checkSaveFile(){
+
     if (localStorage.getItem("gameState")){
         const data = JSON.parse(localStorage.getItem("gameState"));
-        loadGameStateData(data);
+        compareSaveData(data, "gameState")
     } else { localStorage.setItem("gameState", JSON.stringify(gameState)); }
 
     if (localStorage.getItem("Upgrades")){
         const data = JSON.parse(localStorage.getItem("Upgrades"));
-        loadUpgradeData(data, "upgrades");
+        compareSaveData(data, "upgrades")
     } else { localStorage.setItem("Upgrades", JSON.stringify(upgrades));}
 
     if (localStorage.getItem("shopUpgrades")){
         const data = JSON.parse(localStorage.getItem("shopUpgrades"));
-        loadUpgradeData(data, "shopUpgrades");
+        compareSaveData(data, "shopUpgrades")
     } else { localStorage.setItem("shopUpgrades", JSON.stringify(shopUpgrades));}
 
     //Start autofeed if previously active
@@ -83,7 +149,7 @@ export function resetUpgrades(){
     for (let item in upgrades){
         if (upgrades[item].resetTier <= 0){
             upgrades[item].cost = upgrades[item].baseCost;
-            upgrades[item].level = 0;
+            upgrades[item].level = upgrades[item].minlevel;
         }
     }
     for (let item in shopUpgrades){
@@ -92,4 +158,5 @@ export function resetUpgrades(){
         }
     }
     upgrades.autoFeed.speed = new Decimal(10);
+    upgrades.autoFeed.enabled = false;
 }
