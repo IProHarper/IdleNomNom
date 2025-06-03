@@ -24,7 +24,7 @@ export const gameStages = [
 
 
 export var gameState = {
-    gameVersion: 0.6,
+    gameVersion: 0.7,
     score: new Decimal(0),
     liftimeScore: new Decimal(0),
     dotValue: new Decimal(1),
