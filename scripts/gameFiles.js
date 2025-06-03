@@ -20,32 +20,18 @@ export function saveGame(){
 export function compareSaveData(data,name){
     //Compare gameState Data
     if (name == "gameState"){
-        //Check if there is a game version. Can remove this after a week
-        if (data.gameVersion){
-            //Check if site version is newer than players save
-            if (gameState.gameVersion > data.gameVersion){
-                //Look through keys in site version
-                for (let key in Object.keys(gameState)){
-                    //If players verions does not exist. Assign site version to that.
-                    if (!data[key]){
-                        data[key] = gameState[key];
-                    }
-                }
-            }    
-        } else {
-            for (let key in Object.keys(gameState)){
-                    //If players verions does not exist. Assign site version to that.
-                    if (!data[key]){
-                        data[key] = gameState[key];
-                    }
-                }
+        //Look through keys in site version
+        for (let key in Object.keys(gameState)){
+            //If players verions does not exist. Assign site version to that.
+            if (!data[key]){
+                data[key] = gameState[key];
+            }
         }
         // if (Object.keys(gameState).length > Object.keys(JSON.parse(testData)).length){
     loadGameStateData(data);   
     }
+
     if (name == "Upgrades"){
-            //Check if site version is newer than players save
-            if (Object.keys(upgrades).length > Object.keys(data).length){
                 //Look through keys in site version
                 for (let item in Object.keys(upgrades)){
                     //If players verions has an upgrade variable. Use it. Otherwise take it from site version
@@ -53,19 +39,17 @@ export function compareSaveData(data,name){
                         for (let key in upgrades[item]){
                             if (!data[item][key]){
                                 data[item][key] = upgrades[item][key];
+                                console.log(upgrades[item]);
                             }
                         }
                     } else {
                         data[item] = upgrades[item]
                     }
                 }
-            }  
             loadUpgradeData(data, "upgrades");   
     }
     if (name == "shopUpgrades"){
-        //Check if site version is newer than players save
-        if (Object.keys(shopUpgrades).length > Object.keys(data).length){
-            //Look through keys in site version
+        //Look through keys in site version
             for (let item in Object.keys(shopUpgrades)){
                 //If players verions has an upgrade variable. Use it. Otherwise take it from site version
                 if (data[item]){
@@ -78,11 +62,11 @@ export function compareSaveData(data,name){
                     data[item] = shopUpgrades[item]
                 }
             }
-        } 
         loadUpgradeData(data, "shopUpgrades"); 
     }
 }
 
+//Check Game files for existing save
 export function checkSaveFile(){
 
     if (localStorage.getItem("gameState")){
@@ -92,7 +76,7 @@ export function checkSaveFile(){
 
     if (localStorage.getItem("Upgrades")){
         const data = JSON.parse(localStorage.getItem("Upgrades"));
-        compareSaveData(data, "upgrades")
+        compareSaveData(data, "Upgrades")
     } else { localStorage.setItem("Upgrades", JSON.stringify(upgrades));}
 
     if (localStorage.getItem("shopUpgrades")){
@@ -109,6 +93,7 @@ export function checkSaveFile(){
     }
 }
 
+//Load save file to site. Make any decimals decimals again since they are stored in save as string.
 export function loadUpgradeData(data, name){
     if (name == "upgrades"){
         for (let item in data){
