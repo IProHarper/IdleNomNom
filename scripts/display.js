@@ -17,6 +17,12 @@ export function initDisplay(){
     $("#nomCoinDisplay").hide();
     $("#upgradeAutoFeedSpeed").parent().hide();
 
+    //Set Upgrade Levels
+    $("#upgradeDotValueLvl").text(`Level: ${upgrades.increaseDotValue.level}`);
+    $("#upgradeDotSpeedLvl").text(`Level: ${upgrades.increaseDotSpeed.level}`);
+    $("#upgradeDotMultiLvl").text(`Level: ${upgrades.increaseDotMulti.level}`);
+    $("#upgradeAutoFeedSpeedLvl").text(`Level: ${upgrades.autoFeed.level}`);
+
 
     if (gameState.nomscentionUnlocked) {
         $("#nomscendUpgradesBttn").show(); 
