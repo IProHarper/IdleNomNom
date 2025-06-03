@@ -4,7 +4,7 @@ import { upgradeDotValue, upgradeDotSpeed, upgradeAutoFeedSpeed, upgradeDotMulti
 import { upgrades, gameState, shopUpgrades } from './data.js';
 import { formatNum } from './util.js';
 
-import { loadUpgradeData, loadGameStateData, saveGame } from './gameFiles.js';
+import { loadUpgradeData, loadGameStateData, saveGame, checkSaveFile, compareSaveData } from './gameFiles.js';
 
 $("#feedNomNom").click(createDot);
 
@@ -148,6 +148,9 @@ $("#nomscendBttn").on('click',function(){
 
 $("#debugBttn").on('click',function(){
     gameState.dotValue = gameState.dotValue.plus(100);
+    console.log(Object.keys(upgrades).length);
+    // const testData = JSON.parse(localStorage.getItem("gameState"));
+    // compareSaveData("gameState", testData);
 });
 
 $("#ResetBttn").click(function(){
