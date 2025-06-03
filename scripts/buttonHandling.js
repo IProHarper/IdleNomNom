@@ -161,6 +161,9 @@ $("#ResetBttn").click(function(){
         location.reload();
     }    
 });
+$("#SaveBttn").click(function(){
+    saveGame(); 
+});
 
 
 
