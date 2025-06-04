@@ -1,4 +1,5 @@
 import { gameState } from "./data.js";
+import "./break_infinity.js";
 
 // const map = ["", "k", "m", "b", "t", "Qa", "Qi", "Sx", "Sp", "Oct", "No", "Dc"];
 
@@ -27,25 +28,44 @@ export function formatNum(num){
 }
 
 
-
+//Calculate how many upgrades can be bought
 export function calcBuyMax(upgradeData){
-    //Calculate how many upgradescan be bought
+    
+    let moneyType;
     if (upgradeData.type == "score"){
-        let moneyType = gameState.score;
+        moneyType = gameState.score;
     } else if (upgradeData.type == "nomCoins"){
-        let moneyType = gameState.nomCoins;
+        moneyType = gameState.nomCoins;
     }
-    let totalCost = 0;
-    let maxUpgrades = 0;
 
-    totalCost = totalCost.plus(upgradeData.cost);
-    maxUpgrades++;
-
-    while (totalCost <= moneyType) {
-        totalCost = totalCost.plus(increaseCost(upgradeData.baseCost, upgradeData.increase, upgradeData.level));
-        maxUpgrades++;
+    //Don't buy if they are already at max level
+    if (upgradeData.level+1 > upgradeData.maxlevel){
+      return ({count: 0, cost: 0});
     }
-    return (maxUpgrades,totalCost);
+
+    let totalCost;
+
+    if (moneyType.lessThan(upgradeData.cost)){
+      return ({count: 0, cost: 0});
+    } else {
+      totalCost = new Decimal(upgradeData.cost);
+      let maxUpgrades = 1;
+      let upgradeLevel = upgradeData.level
+
+      while (true){
+        //If score is greater than current cost plus the next upgrade cost && level will not exceed max
+        if (moneyType.greaterThanOrEqualTo(totalCost.plus(increaseCost(upgradeData.baseCost, upgradeData.upgradeScale, upgradeLevel))) && (upgradeLevel + 1 < upgradeData.maxlevel)){
+            totalCost = totalCost.plus(increaseCost(upgradeData.baseCost, upgradeData.upgradeScale, upgradeLevel));
+            upgradeLevel++;
+            maxUpgrades++;
+          // }
+        } else {
+          break;
+        }        
+      }
+      return ({count: maxUpgrades, cost: totalCost});
+    }
+    
 }
 
 export function increaseCost(baseCost, increase, level){
