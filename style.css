@@ -211,9 +211,14 @@ body {
     width: 10em;
     display: inline;
 }
+.maxBttn{
+    border-radius: 5px;
+    width: 2em;
+    display: inline;
+}
 .upgrade-row{
     display: grid;
-    grid-template-columns: 2fr 3fr 1fr;
+    grid-template-columns: 2fr 3fr 1fr 1fr;
     align-items: center;
     margin-top: auto;
     margin-left: 1em;
@@ -237,6 +242,9 @@ button {
    
 button:hover {
     background-color: #66B3FF;
+}
+button:active{
+    background-color: #33D;
 }
 button:disabled {
     background-color: #ccc;
