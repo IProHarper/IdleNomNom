@@ -39,7 +39,7 @@ export function updateStats(){
     scoreDisplay.textContent = formatNum(gameState.score);
     $("#lifetimeScoreText").text(formatNum(gameState.liftimeScore));
     $("#dotBaseValueText").text(formatNum(gameState.dotValue));
-    $("#dotSpeedText").text(gameState.dotSpeed);
+    $("#dotSpeedText").text(gameState.dotSpeed.toFixed(2));
     $("#dotsEatenText").text(formatNum(gameState.dotsEaten));
     $("#dotMultiText").text(formatNum(gameState.dotMulti));
     $("#autofeedSpeedText").text(upgrades.autoFeed.speed);
