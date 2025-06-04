@@ -3,6 +3,7 @@ import { createDot } from './consumables.js';
 import { loadUpgradeData, resetUpgrades } from './gameFiles.js';
 import { openModal } from './buttonHandling.js';
 import { formatNum } from './util.js';
+import { setDotMulti, setDotValue, setSpeed } from './upgradeButtons.js';
 
 
 //Enable the Auto feed Button
@@ -25,10 +26,6 @@ export function unlockNomscend(){
     $("#nomscendUpgradesBttn").show();
     $("#nomscensionBttn").show();
     $("#popUpModal").show();
-    $("#nomscendBttnBttn").prop("disabled", true);
-    setTimeout(() => {
-      $("#nomscendBttnBttn").prop("disabled", false);
-    }, 2000); 
 
 }
 
@@ -37,20 +34,16 @@ export function nomscend(){
     //Pop up disclaimer and 
     $("#popUpModal").hide();
     $("#nomsecReqText").text(formatNum(gameState.nomsecScoreReq));
-    // if (gameState.score.greaterThanOrEqualTo(gameState.nomsecScoreReq)){
-        const gs = gameState;
-        gameState.nomCoins = gameState.nomCoins.plus(gs.nomscendScore.divide(100000)).times(gs.nomCoinMulti);
-        gameState.score = new Decimal(0);
-        gameState.dotValue = new Decimal(gs.nomscendDotVal);
-        if (gameState.dotValue == 0 ){ gameState.dotValue = new Decimal(1);}
-        gameState.dotMulti = new Decimal(1);
-        gameState.dotSpeed = new Decimal(4);
-        gameState.nomscensionCount = gs.nomscensionCount.plus(1);
-        gameState.nomscendScore = new Decimal(0);
-        clearInterval(gameState.dotIntervalID);
-        $('.dot').remove();
-        gameState.nomsecScoreReq = gs.nomsecScoreReq.times(11);
-        resetUpgrades();
+    const gs = gameState;
+    gameState.nomCoins = gameState.nomCoins.plus(gs.nomscendScore.divide(100000)).times(gs.nomCoinMulti);
+    gameState.score = new Decimal(0);
+    gameState.nomscensionCount = gs.nomscensionCount.plus(1);
+    gameState.nomscendScore = new Decimal(0);
+    clearInterval(gameState.dotIntervalID);
+    $('.dot').remove();
+    gameState.nomsecScoreReq = gs.nomsecScoreReq.times(11);
+    $("#upgradeAutoFeedSpeed").parent().hide();
+    resetUpgrades();
 }
 
 export function createKids(){
