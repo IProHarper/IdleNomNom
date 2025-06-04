@@ -1,6 +1,8 @@
 import { gameState, upgrades, shopUpgrades } from './data.js'
 // import { freshGameState, freshUpgrades, freshShopUpgrades } from './data.js';
 import { createDot } from './consumables.js';
+import { setDotMulti, setDotValue, setSpeed } from './upgradeButtons.js';
+import { increaseCost } from './util.js';
 
 export function saveGame(){
     //Set data into local storage
@@ -133,15 +135,18 @@ export function loadGameStateData(data){
 export function resetUpgrades(){
     for (let item in upgrades){
         if (upgrades[item].resetTier <= 0){
-            upgrades[item].cost = upgrades[item].baseCost;
             upgrades[item].level = upgrades[item].minlevel;
+            upgrades[item].cost = increaseCost(upgrades[item].baseCost, upgrades[item].upgradeScale, upgrades[item].level);
         }
     }
+    setDotValue();
+    setSpeed();
+    setDotMulti();
     for (let item in shopUpgrades){
         if (shopUpgrades[item].resetTier <= 0){
             shopUpgrades[item].bought = false;
         }
     }
-    upgrades.autoFeed.speed = new Decimal(10);
+    upgrades.autoFeed.speed = upgrades.autoFeed.baseSpeed;
     upgrades.autoFeed.enabled = false;
 }
