@@ -1,12 +1,25 @@
 import { createDot } from './consumables.js';
 import { enableAutofeed, createKids, nomscend } from './features.js';
-import { upgradeDotValue, upgradeDotSpeed, upgradeAutoFeedSpeed, upgradeDotMulti, increaseNomDotMulti, increaseDotMultiMax, increaseDotValMax, increaseNomCoinMulti, increaseNomDotVal, increaseStartDotSpeedLevel } from './upgradeButtons.js';
+import { upgradeDotValue, upgradeDotSpeed, upgradeAutoFeedSpeed, upgradeDotMulti, increaseNomDotMulti, increaseDotMultiMax, increaseDotValMax, increaseNomCoinMulti, increaseNomDotVal, increaseStartDotSpeedLevel, increaseAutoFeedMax, setDotMulti, setAutoFeed } from './upgradeButtons.js';
+import { setDotValue, setSpeed } from './upgradeButtons.js';
 import { upgrades, gameState, shopUpgrades } from './data.js';
-import { formatNum } from './util.js';
+import { calcBuyMax, formatNum, increaseCost } from './util.js';
 
 import { loadUpgradeData, loadGameStateData, saveGame, checkSaveFile, compareSaveData } from './gameFiles.js';
 
-$("#feedNomNom").click(createDot);
+let holdInterval;
+
+$("#feedNomNom").on("mousedown", function () {
+    createDot();
+    holdInterval = setInterval(createDot, 250);
+});
+
+$("#feedNomNom").on("mouseup mouseleave", function () {
+    clearInterval(holdInterval);
+});
+
+
+// $("#feedNomNom").click(createDot);
 
 // Modal Handling
 $(".closeBttn").on("click", () => {
@@ -105,6 +118,50 @@ $("#upgradeDotValMax").on('click',function(){
 $("#upgradeStartDotSpeedLevel").on('click',function(){
     increaseStartDotSpeedLevel();
 });
+$("#upgradeAutoFeedMax").on('click',function(){
+    increaseAutoFeedMax();
+});
+
+
+//##############
+//Buy Maxes
+$("#dotValueMaxBttn").on('click', function(){
+    let results = calcBuyMax(upgrades.increaseDotValue);
+    if (results.count > 0){
+        upgrades.increaseDotValue.level = upgrades.increaseDotValue.level + results.count;
+        gameState.score = gameState.score.minus(results.cost);
+        upgrades.increaseDotValue.cost = increaseCost(upgrades.increaseDotValue.baseCost, upgrades.increaseDotValue.upgradeScale, upgrades.increaseDotValue.level);
+        setDotValue();
+    }
+});
+$("#dotSpeedMaxBttn").on('click', function(){
+    let results = calcBuyMax(upgrades.increaseDotSpeed);
+    if (results.count > 0){
+        upgrades.increaseDotSpeed.level = upgrades.increaseDotSpeed.level + results.count;
+        gameState.score = gameState.score.minus(results.cost);
+        upgrades.increaseDotSpeed.cost = increaseCost(upgrades.increaseDotSpeed.baseCost, upgrades.increaseDotSpeed.upgradeScale, upgrades.increaseDotSpeed.level);
+        setSpeed();
+    }
+});
+$("#dotMultiMaxBttn").on('click', function(){
+    let results = calcBuyMax(upgrades.increaseDotMulti);
+    if (results.count > 0){
+        upgrades.increaseDotMulti.level = upgrades.increaseDotMulti.level + results.count;
+        gameState.score = gameState.score.minus(results.cost);
+        upgrades.increaseDotMulti.cost = increaseCost(upgrades.increaseDotMulti.baseCost, upgrades.increaseDotMulti.upgradeScale, upgrades.increaseDotMulti.level);
+        setDotMulti();
+    }
+});
+$("#dotAFSpeedMaxBttn").on('click', function(){
+    let results = calcBuyMax(upgrades.autoFeed);
+    if (results.count > 0){
+        console.log(results.count);
+        upgrades.autoFeed.level = upgrades.autoFeed.level + results.count;
+        gameState.score = gameState.score.minus(results.cost);
+        upgrades.autoFeed.cost = increaseCost(upgrades.autoFeed.baseCost, upgrades.autoFeed.upgradeScale, upgrades.autoFeed.level);
+        setAutoFeed();
+    }
+});
 
 
 
@@ -148,9 +205,7 @@ $("#nomscendBttn").on('click',function(){
 
 $("#debugBttn").on('click',function(){
     gameState.dotValue = gameState.dotValue.plus(100);
-    console.log(Object.keys(upgrades).length);
-    // const testData = JSON.parse(localStorage.getItem("gameState"));
-    // compareSaveData("gameState", testData);
+    
 });
 
 $("#ResetBttn").click(function(){
@@ -210,5 +265,5 @@ export function buttonCheck(){
             $("#"+value.id).css("color", "");
         }
     }
-    // $("#nomscendBttn").prop("disabled", gameState.score.greaterThanOrEqualTo(gameState.nomsecScoreReq))
+    $("#nomscendBttn").prop("disabled", 200000 > (gameState.nomscendScore))
 }
