@@ -40,7 +40,7 @@
         <span id="nomCoinStatText" style="color:aqua">1</span>
         <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom coins">
     </div>
-    <!-- <button id="debugBttn">Debug</button> -->
+    <button id="debugBttn">Debug</button>
     <button id="ResetBttn">Reset</button>
     <button id="SaveBttn">Save</button>
     <div class="nomnom-container" kids=false>
@@ -81,21 +81,25 @@
             <span>Increase Dot Value</span>
             <span id="upgradeDotValueLvl">Level: 0</span>
             <button id="upgradeDotValue" class="upgradeBttn">Cost: 100</button>
+            <button class="maxBttn" id="dotValueMaxBttn">Max</button>
         </div>
         <div class="upgrade-row">
             <span>Increase Dot Speed</span>
             <span id="upgradeDotSpeedLvl">Level: 0</span>
             <button id="upgradeDotSpeed" class="upgradeBttn">Cost: 100</button>
+            <button class="maxBttn" id="dotSpeedMaxBttn">Max</button>
         </div>
         <div class="upgrade-row">
             <span>Increase Dot Multiplier</span>
             <span id="upgradeDotMultiLvl">Level: 0</span>
             <button id="upgradeDotMulti" class="upgradeBttn">Cost: 1000</button>
+            <button class="maxBttn" id="dotMultiMaxBttn">Max</button>
         </div>
         <div class="upgrade-row">
             <span>Increase Auto Feed Speed</span>
             <span id="upgradeAutoFeedSpeedLvl">Level: 0</span>
             <button id="upgradeAutoFeedSpeed" class="upgradeBttn">Cost: 200</button>
+            <button class="maxBttn" id="dotAFSpeedMaxBttn">Max</button>
         </div>
     </div>
     <!-- Display the shop items -->
@@ -153,6 +157,12 @@
                     <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
                 </button>
                 Dot Value Max Level + 25
+            </div>
+            <div class="upgrade-row">
+                <button id="upgradeAutoFeedMax" class="nomBttn"><span id="upgradeAutoFeedMaxText">10</span>
+                    <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                </button>
+                Auto Feed speed - 0.10
             </div>
             <div class="upgrade-row">
                 <button id="upgradeStartDotSpeedLevel" class="nomBttn"><span id="upgradeStartDotSpeedLevelText">5</span>
