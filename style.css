@@ -1,3 +1,4 @@
+
 body {
     background-color: #323436;
     color: white;
@@ -196,6 +197,7 @@ body {
 #nomscensionBttn{
     font-size: large;
 }
+
 .shopBttn{
     border-radius: 5px;
     width: 10em;
@@ -321,6 +323,50 @@ button:disabled {
   cursor: pointer;
 }
 
+@media only screen and (max-width: 600px) {
+    button{
+        user-select: none;
+    }
+  #menu-container button{
+        border-radius: 5px;
+        font-size: 0.75em;
+        display:block;
+        width: 10em;
+        margin:auto;
+    }
+    #menu-container{
+        overflow: scroll;
+    }
+    #menu-left {
+        width: 100%;
+        display: block;
+        justify-content: left;
+    }
+    #menu-right {
+        width:100%;
+        display: block;
+        margin:auto;
+    }
+    #left-container{
+        display: contents;
+        width: 100%;
+    }
+    #right-container{
+        display: contents;
+        width: 100%;
+    }
+    #upgrades-container {
+        width:100%;
+        overflow: scroll;
+        margin:auto;
+    }
+    #shop-container {
+        width:100%;
+        overflow: scroll;
+        margin:auto;
+    }
+
+}
 
 
 /* pallet
