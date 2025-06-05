@@ -9,12 +9,12 @@ import { loadUpgradeData, loadGameStateData, saveGame, checkSaveFile, compareSav
 
 let holdInterval;
 
-$("#feedNomNom").on("mousedown", function () {
+$("#feedNomNom").on("mousedown touchstart", function () {
     createDot();
     holdInterval = setInterval(createDot, 250);
 });
 
-$("#feedNomNom").on("mouseup mouseleave", function () {
+$("#feedNomNom").on("mouseup mouseleave  touchend", function () {
     clearInterval(holdInterval);
 });
 
