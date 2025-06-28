@@ -12,7 +12,7 @@ export function initDisplay(){
     $("#right-container").children().hide();
     $("#stats-container").show();
     $("#nomscendUpgradesBttn").hide(); 
-    $("#nomsecReqText").text(`Lifetime Score Required to Nomscend: ${formatNum(gameState.nomsecScoreReq)}`);
+    $("#nomCoinGainText").text(formatNum(gameState.nomscendScore.divide(100000).times(gameState.nomCoinMulti)));
     $("#nomscensionBttn").hide();
     $("#nomCoinDisplay").hide();
     $("#upgradeAutoFeedSpeed").parent().hide();
@@ -48,7 +48,10 @@ export function updateStats(){
     $("#nomCoinStatText").text(formatNum(gameState.nomCoins));
 
     //Update Nomsension coins
-    $("#nomCoinGainsText").text(formatNum(gameState.nomscendScore.divide(100000)));
+    //Stats version
+    $("#nomCoinGainText").text(formatNum(gameState.nomscendScore.divide(100000).times(gameState.nomCoinMulti)));
+    //Modal version
+    $("#nomCoinGainsText").text(formatNum(gameState.nomscendScore.divide(100000).times(gameState.nomCoinMulti)));
 }
 
 
