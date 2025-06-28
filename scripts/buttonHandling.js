@@ -1,17 +1,17 @@
 import { createDot } from './consumables.js';
 import { enableAutofeed, createKids, nomscend } from './features.js';
-import { upgradeDotValue, upgradeDotSpeed, upgradeAutoFeedSpeed, upgradeDotMulti, increaseNomDotMulti, increaseDotMultiMax, increaseDotValMax, increaseNomCoinMulti, increaseNomDotVal, increaseStartDotSpeedLevel, increaseAutoFeedMax, setDotMulti, setAutoFeed } from './upgradeButtons.js';
+import { upgradeDotValue, upgradeDotSpeed, upgradeAutoFeedSpeed, upgradeDotMulti, increaseNomDotMulti, increaseDotMultiMax, increaseDotValMax, increaseNomCoinMulti, increaseNomDotVal, increaseStartDotSpeedLevel, increaseAutoFeedMax, setDotMulti, setAutoFeed, increaseStartDotMultiLevel } from './upgradeButtons.js';
 import { setDotValue, setSpeed } from './upgradeButtons.js';
 import { upgrades, gameState, shopUpgrades } from './data.js';
 import { calcBuyMax, formatNum, increaseCost } from './util.js';
 
-import { loadUpgradeData, loadGameStateData, saveGame, checkSaveFile, compareSaveData } from './gameFiles.js';
+import { saveGame } from './gameFiles.js';
 
 let holdInterval;
 
 $("#feedNomNom").on("mousedown touchstart", function () {
     createDot();
-    holdInterval = setInterval(createDot, 250);
+    holdInterval = setInterval(createDot, 150);
 });
 
 $("#feedNomNom").on("mouseup mouseleave  touchend", function () {
@@ -41,6 +41,14 @@ $("#unlockAutoFeed").on('click',function(){
     enableAutofeed();
 });
 
+
+$("#enableDefaultMode").on('click',function(){
+    $("#mrNomNom").css("fill", "white");
+    $(".dot").css("background-color", "white");
+    if ($(".nomnomjr").children().length>0){
+        $(".nomnomjr").children().hide();
+    }
+});
 
 $("#enableLachlanMode").on('click',function(){
     $("#mrNomNom").css("fill", "purple");
@@ -121,6 +129,9 @@ $("#upgradeStartDotSpeedLevel").on('click',function(){
 $("#upgradeAutoFeedMax").on('click',function(){
     increaseAutoFeedMax();
 });
+$("#upgradeStartDotMultiLevel").on('click',function(){
+    increaseStartDotMultiLevel();
+});
 
 
 //##############
@@ -155,7 +166,6 @@ $("#dotMultiMaxBttn").on('click', function(){
 $("#dotAFSpeedMaxBttn").on('click', function(){
     let results = calcBuyMax(upgrades.autoFeed);
     if (results.count > 0){
-        console.log(results.count);
         upgrades.autoFeed.level = upgrades.autoFeed.level + results.count;
         gameState.score = gameState.score.minus(results.cost);
         upgrades.autoFeed.cost = increaseCost(upgrades.autoFeed.baseCost, upgrades.autoFeed.upgradeScale, upgrades.autoFeed.level);
