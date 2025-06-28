@@ -7,18 +7,20 @@ import { increaseCost } from './util.js';
 export function setDotValue(){
     gameState.dotValue = gameState.nomscendDotVal.plus(upgrades.increaseDotValue.increase.times(upgrades.increaseDotValue.level));
     $("#upgradeDotValueLvl").text(`Level: ${upgrades.increaseDotValue.level}`);
-
 }
 
 export function setSpeed(){
     //dotSpeed = baseSpeed - (level * increase)
     gameState.dotSpeed = upgrades.increaseDotSpeed.baseSpeed.minus(upgrades.increaseDotSpeed.level * upgrades.increaseDotSpeed.increase);
     $("#upgradeDotSpeedLvl").text(`Level: ${upgrades.increaseDotSpeed.level}`);
+    if (gameState.dotSpeed <= 0){
+        gameState.dotSpeed = 0.05;
+    }
 }
 
 export function setDotMulti(){
     //dotMulti = 1 + (level * increase)
-    gameState.dotMulti = new Decimal(1).plus(upgrades.increaseDotMulti.level*(upgrades.increaseDotMulti.increase));
+    gameState.dotMulti = new Decimal(upgrades.increaseDotMulti.level*(upgrades.increaseDotMulti.increase));
     $("#upgradeDotMultiLvl").text(`Level: ${upgrades.increaseDotMulti.level}`);
 }
 
@@ -61,7 +63,6 @@ export function upgradeDotSpeed(){
         upgrades.increaseDotSpeed.level = upgrades.increaseDotSpeed.level + 1;
         //Update dot cost
         incDotSpeed.cost = increaseCost(incDotSpeed.baseCost, incDotSpeed.upgradeScale, incDotSpeed.level);
-        
         $("#upgradeDotSpeedLvl").text(`Level: ${incDotSpeed.level}`);
     }
 }
@@ -71,13 +72,12 @@ export function upgradeDotMulti(){
     if (gameState.score.greaterThanOrEqualTo(incDotMulti.cost)){
         //Reduce score
         gameState.score = gameState.score.minus(incDotMulti.cost);
-        //Update dot Value
-        gameState.dotMulti = gameState.dotMulti.times(incDotMulti.increase);
         //Update level
         upgrades.increaseDotMulti.level = upgrades.increaseDotMulti.level+1;
         //Update dot cost
         incDotMulti.cost = increaseCost(incDotMulti.baseCost, incDotMulti.upgradeScale, incDotMulti.level);
-        $("#upgradeDotMultiLvl").text(`Level: ${incDotMulti.level}`);
+        setDotMulti();
+        // $("#upgradeDotMultiLvl").text(`Level: ${incDotMulti.level}`);
     }
 }
 
@@ -105,7 +105,7 @@ export function increaseNomCoinMulti(){
         //Purchase upgrade
         gameState.nomCoins = gameState.nomCoins.minus(upgradeData.cost);
         //Update effect
-        gameState.nomCoinMulti = gameState.nomCoinMulti.plus(upgradeData.increase);
+        gameState.nomCoinMulti = 1+(upgradeData.increase*upgradeData.level);
         //Increase level
         upgrades.increaseNomCoinMulti.level = upgradeData.level + 1;
         //Update upgrade cost
@@ -175,12 +175,33 @@ export function increaseStartDotSpeedLevel(){
         upgrades.increaseStartDotSpeedLevel.level = upgradeData.level+1;
         upgrades.increaseStartDotSpeedLevel.cost = increaseCost(upgradeData.baseCost, upgradeData.upgradeScale, upgradeData.level);
         //Upgrade Effect
-        upgrades.increaseDotSpeed.level = upgrades.increaseDotSpeed.level+upgradeData.increase;
         upgrades.increaseDotSpeed.minlevel = upgradeData.level;
-        upgrades.increaseDotSpeed.cost = increaseCost(upgrades.increaseDotSpeed.baseCost, upgrades.increaseDotSpeed.upgradeScale, upgrades.increaseDotSpeed.level);
+        if (upgrades.increaseDotSpeed.level < upgrades.increaseDotSpeed.minlevel){
+            upgrades.increaseDotSpeed.level = upgrades.increaseDotSpeed.minlevel;
+            upgrades.increaseDotSpeed.cost = increaseCost(upgrades.increaseDotSpeed.baseCost, upgrades.increaseDotSpeed.upgradeScale, upgrades.increaseDotSpeed.level);
+        }
         setSpeed();
     }
 }
+
+export function increaseStartDotMultiLevel(){
+    const upgradeData = upgrades.increaseStartDotMultiLevel;
+    //Purchase upgrade, increase cost and level
+    if (gameState.nomCoins.greaterThanOrEqualTo(upgradeData.cost)){
+        gameState.nomCoins = gameState.nomCoins.minus(upgradeData.cost);
+        upgrades.increaseStartDotMultiLevel.level = upgradeData.level+1;
+        upgrades.increaseStartDotMultiLevel.cost = increaseCost(upgradeData.baseCost, upgradeData.upgradeScale, upgradeData.level);
+        //Upgrade Effect
+        upgrades.increaseDotMulti.minlevel = upgradeData.level;
+        if (upgrades.increaseDotMulti.level < upgrades.increaseDotMulti.minlevel){
+            upgrades.increaseDotMulti.level = upgrades.increaseDotMulti.minlevel;
+            upgrades.increaseDotMulti.cost = increaseCost(upgrades.increaseDotMulti.baseCost, upgrades.increaseDotMulti.upgradeScale, upgrades.increaseDotMulti.level);
+        }
+        setDotMulti();
+    }
+}
+
+
 
 export function increaseAutoFeedMax(){
     const upgradeData = upgrades.increaseAutoFeedMax;
