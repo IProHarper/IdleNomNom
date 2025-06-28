@@ -24,7 +24,7 @@ export const gameStages = [
 
 
 export var gameState = {
-    gameVersion: 0.7,
+    gameVersion: 0.8,
     score: new Decimal(0),
     liftimeScore: new Decimal(0),
     dotValue: new Decimal(1),
@@ -117,7 +117,7 @@ export var upgrades = {
         increase: new Decimal(10),
         baseCost: new Decimal(2),
         cost: new Decimal(2),
-        upgradeScale: 2.11,
+        upgradeScale: 1.21,
         level: 1,
         maxlevel: 100,
         resetTier: 1
@@ -161,7 +161,7 @@ export var upgrades = {
         increase: 0.10,
         baseCost: new Decimal(20),
         cost: new Decimal(20),
-        upgradeScale: 3.25,
+        upgradeScale: 1.75,
         level: 1,
         maxlevel: 10,
         resetTier: 1
@@ -172,7 +172,18 @@ export var upgrades = {
         increase: 1,
         baseCost: new Decimal(25),
         cost: new Decimal(25),
-        upgradeScale: 1.62,
+        upgradeScale: 1.12,
+        level: 1,
+        maxlevel: 17,
+        resetTier: 1
+    },
+    increaseStartDotMultiLevel : {
+        id: "upgradeStartDotMultiLevel",
+        type: "nomCoins",
+        increase: 1,
+        baseCost: new Decimal(25),
+        cost: new Decimal(25),
+        upgradeScale: 1.12,
         level: 1,
         maxlevel: 17,
         resetTier: 1
