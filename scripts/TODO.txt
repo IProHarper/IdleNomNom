@@ -1,7 +1,6 @@
 Issues:
-Autofeed can duplicate
 Autofeed speed not resetting
-Dot multi nom upgrade maybe doesn't look right
+Nom starting value
 
 
 Features:
@@ -11,11 +10,6 @@ Clear any dots upon reset/update display
 Optimise display updates
 
 
-
-Fixed/Completed:
-Dot Speed can get too fast
-Add Dot Multiplied buttons
-Add autofeed upgrade speed button
 
 
 
