@@ -35,15 +35,23 @@ export function compareSaveData(data,name){
 
     if (name == "Upgrades"){
                 //Look through keys in site version
-                for (let item in Object.keys(upgrades)){
+                for (let item in upgrades){
                     //If players verions has an upgrade variable. Use it. Otherwise take it from site version
                     if (data[item]){
                         for (let key in upgrades[item]){
+                            //If the user version doesn't have a variable. Assign site version
                             if (!data[item][key]){
                                 data[item][key] = upgrades[item][key];
-                                console.log(upgrades[item]);
+                            }
+                            //Assign site version for upgrageScale and baseCost regardless
+                            //Will probably need to update this if going to update increase later
+                            if (key == "upgradeScale" || key == "baseCost"){
+                                data[item][key] = upgrades[item][key];
                             }
                         }
+                            // if (key == "minlevel" && data[key]){
+
+                            // }
                     } else {
                         data[item] = upgrades[item]
                     }
@@ -74,12 +82,17 @@ export function checkSaveFile(){
     if (localStorage.getItem("gameState")){
         const data = JSON.parse(localStorage.getItem("gameState"));
         compareSaveData(data, "gameState")
-    } else { localStorage.setItem("gameState", JSON.stringify(gameState)); }
+    } else { localStorage.setItem("gameState", JSON.stringify(gameState));}
 
     if (localStorage.getItem("Upgrades")){
-        const data = JSON.parse(localStorage.getItem("Upgrades"));
+        let data = JSON.parse(localStorage.getItem("Upgrades"));
         compareSaveData(data, "Upgrades")
-    } else { localStorage.setItem("Upgrades", JSON.stringify(upgrades));}
+    } else { 
+        console.log(upgrades);
+        localStorage.setItem("Upgrades", JSON.stringify(upgrades));
+        console.log(localStorage.getItem("Upgrades"));
+        console.log(JSON.parse(localStorage.getItem("gameState")));
+    }
 
     if (localStorage.getItem("shopUpgrades")){
         const data = JSON.parse(localStorage.getItem("shopUpgrades"));
