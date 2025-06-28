@@ -1,9 +1,6 @@
-import { gameStages, gameState, shopUpgrades, upgrades } from './data.js'
+import { gameState, shopUpgrades, upgrades } from './data.js'
 import { createDot } from './consumables.js';
-import { loadUpgradeData, resetUpgrades } from './gameFiles.js';
-import { openModal } from './buttonHandling.js';
-import { formatNum } from './util.js';
-import { setDotMulti, setDotValue, setSpeed } from './upgradeButtons.js';
+import { resetUpgrades } from './gameFiles.js';
 
 
 //Enable the Auto feed Button
@@ -21,7 +18,7 @@ export function enableAutofeed(){
 }
 
 export function unlockNomscend(){
-    $("#nomsecReqText").text(`Lifetime Score Required to Nomscend: ${formatNum(gameState.nomsecScoreReq)}`);
+    // $("#nomsecReqText").text(`Lifetime Score Required to Nomscend: ${formatNum(gameState.nomsecScoreReq)}`);
     $("#nomscendBttn").show();
     $("#nomscendUpgradesBttn").show();
     $("#nomscensionBttn").show();
@@ -33,7 +30,7 @@ export function unlockNomscend(){
 export function nomscend(){
     //Pop up disclaimer and 
     $("#popUpModal").hide();
-    $("#nomsecReqText").text(formatNum(gameState.nomsecScoreReq));
+    // $("#nomsecReqText").text(formatNum(gameState.nomsecScoreReq));
     const gs = gameState;
     gameState.nomCoins = gameState.nomCoins.plus(gs.nomscendScore.divide(100000)).times(gs.nomCoinMulti);
     gameState.score = new Decimal(0);
