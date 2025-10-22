@@ -4,7 +4,6 @@ import { gameState } from './data.js';
 import { playEatDotSound } from './soundHandler.js';
 
 
-
 //Create the nomnom dot. Move to nomnom position with dotspeed transition.
 export function createDot() {
     //Create dot on the page far right hand side.

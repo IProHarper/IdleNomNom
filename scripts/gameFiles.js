@@ -1,8 +1,8 @@
 import { gameState, upgrades, shopUpgrades } from './data.js'
 // import { freshGameState, freshUpgrades, freshShopUpgrades } from './data.js';
 import { createDot } from './consumables.js';
-import { setDotMulti, setDotValue, setSpeed } from './upgradeButtons.js';
-import { increaseCost } from './util.js';
+import { increaseCost, setAutoFeed, setDotMulti, setDotValue, setSpeed } from './util.js';
+import { updateLevels } from './display.js';
 
 export function saveGame(){
     //Set data into local storage
@@ -19,17 +19,17 @@ export function saveGame(){
 
 }
 
+
 export function compareSaveData(data,name){
     //Compare gameState Data
     if (name == "gameState"){
-        //Look through keys in site version
-        for (let key in Object.keys(gameState)){
+        //Iterate through keys in site version 
+        for (const [key, value] of Object.entries(gameState)){
             //If players verions does not exist. Assign site version to that.
             if (!data[key]){
                 data[key] = gameState[key];
             }
         }
-        // if (Object.keys(gameState).length > Object.keys(JSON.parse(testData)).length){
     loadGameStateData(data);   
     }
 
@@ -38,25 +38,22 @@ export function compareSaveData(data,name){
                 for (let item in upgrades){
                     //If players verions has an upgrade variable. Use it. Otherwise take it from site version
                     if (data[item]){
-                        for (let key in upgrades[item]){
+                        for (const [key, value] of Object.entries(upgrades[item])){
                             //If the user version doesn't have a variable. Assign site version
                             if (!data[item][key]){
                                 data[item][key] = upgrades[item][key];
                             }
-                            //Assign site version for upgrageScale and baseCost regardless
+                            //Assign site version for upgrageScale and baseCost regardless (For balance patches)
                             //Will probably need to update this if going to update increase later
-                            if (key == "upgradeScale" || key == "baseCost"){
+                            if (key == "upgradeScale" || key == "baseCost" || key == "increase" || key == "maxlevel"){
                                 data[item][key] = upgrades[item][key];
                             }
                         }
-                            // if (key == "minlevel" && data[key]){
-
-                            // }
                     } else {
                         data[item] = upgrades[item]
                     }
                 }
-            loadUpgradeData(data, "upgrades");   
+            loadUpgradeData(data, "upgrades"); 
     }
     if (name == "shopUpgrades"){
         //Look through keys in site version
@@ -88,10 +85,7 @@ export function checkSaveFile(){
         let data = JSON.parse(localStorage.getItem("Upgrades"));
         compareSaveData(data, "Upgrades")
     } else { 
-        console.log(upgrades);
         localStorage.setItem("Upgrades", JSON.stringify(upgrades));
-        console.log(localStorage.getItem("Upgrades"));
-        console.log(JSON.parse(localStorage.getItem("gameState")));
     }
 
     if (localStorage.getItem("shopUpgrades")){
@@ -119,8 +113,17 @@ export function loadUpgradeData(data, name){
                     upgrades[item][key] = data[item][key];
                 }
             }
+            //Update cost of upgrades
+            upgrades[item].cost = increaseCost(upgrades[item]);
         }
+        //Load max levels
+        //increaseDotMultiMax
+        upgrades.increaseDotMulti.maxlevel = ((upgrades.increaseDotMultiMax.level-1)*upgrades.increaseDotMulti.increase)+5; //5 = base max level
+        //increaseDotValMax
+        upgrades.increaseDotValue.maxlevel = ((upgrades.increaseDotValMax.level-1)*upgrades.increaseDotValMax.increase)+100;//100 = base max level
+        updateLevels();
     }
+
     else if (name == "shopUpgrades"){
         for (let item in data){
             for (let key in data[item]) {
@@ -134,6 +137,7 @@ export function loadUpgradeData(data, name){
     }
 }
 
+//Load the save into site data. If type of data is string in player version but object in site. It should be a break infinity Decimal.
 export function loadGameStateData(data){
     for (let key in data) {
         if (typeof gameState[key] == 'object' && typeof data[key] == 'string'){
@@ -149,7 +153,7 @@ export function resetUpgrades(){
     for (let item in upgrades){
         if (upgrades[item].resetTier <= 0){
             upgrades[item].level = upgrades[item].minlevel;
-            upgrades[item].cost = increaseCost(upgrades[item].baseCost, upgrades[item].upgradeScale, upgrades[item].level);
+            upgrades[item].cost = increaseCost(upgrades[item]);
         }
     }
     setDotValue();
@@ -160,6 +164,11 @@ export function resetUpgrades(){
             shopUpgrades[item].bought = false;
         }
     }
-    upgrades.autoFeed.speed = upgrades.autoFeed.baseSpeed;
-    upgrades.autoFeed.enabled = false;
+    if (upgrades.autoFeed.resetTier == 0){
+        upgrades.autoFeed.speed = upgrades.autoFeed.baseSpeed;
+        upgrades.autoFeed.enabled = false;
+        clearInterval(gameState.dotIntervalID);
+    } else {
+            setAutoFeed();
+    }
 }

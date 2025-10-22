@@ -1,9 +1,9 @@
 import { createDot } from './consumables.js';
 import { enableAutofeed, createKids, nomscend } from './features.js';
-import { upgradeDotValue, upgradeDotSpeed, upgradeAutoFeedSpeed, upgradeDotMulti, increaseNomDotMulti, increaseDotMultiMax, increaseDotValMax, increaseNomCoinMulti, increaseNomDotVal, increaseStartDotSpeedLevel, increaseAutoFeedMax, setDotMulti, setAutoFeed, increaseStartDotMultiLevel } from './upgradeButtons.js';
-import { setDotValue, setSpeed } from './upgradeButtons.js';
+import { upgradeDotValue, upgradeDotSpeed, upgradeAutoFeedSpeed, upgradeDotMulti} from './upgradeButtons.js';
+import { increaseNomDotMulti, increaseDotMultiMax, increaseDotValMax, increaseNomCoinMulti, increaseNomDotVal, increaseStartDotSpeedLevel, increaseAutoFeedMax, increaseStartDotMultiLevel, increaseDotSpeedBase, keepAutofeed } from './Upgrades/nomupgrades.js'
 import { upgrades, gameState, shopUpgrades } from './data.js';
-import { calcBuyMax, formatNum, increaseCost } from './util.js';
+import { calcBuyMax, formatNum, increaseCost, setDotValue, setSpeed, setAutoFeed, setDotMulti  } from './util.js';
 
 import { saveGame } from './gameFiles.js';
 
@@ -18,8 +18,6 @@ $("#feedNomNom").on("mouseup mouseleave  touchend", function () {
     clearInterval(holdInterval);
 });
 
-
-// $("#feedNomNom").click(createDot);
 
 // Modal Handling
 $(".closeBttn").on("click", () => {
@@ -41,7 +39,8 @@ $("#unlockAutoFeed").on('click',function(){
     enableAutofeed();
 });
 
-
+//################
+//Customization buttons (Color)
 $("#enableDefaultMode").on('click',function(){
     $("#mrNomNom").css("fill", "white");
     $(".dot").css("background-color", "white");
@@ -87,7 +86,7 @@ $("#enableDADMode").on('click',function(){
     }
     
 });
-//###############
+//####################
 
 
 
@@ -129,8 +128,14 @@ $("#upgradeStartDotSpeedLevel").on('click',function(){
 $("#upgradeAutoFeedMax").on('click',function(){
     increaseAutoFeedMax();
 });
+$("#upgradeDotSpeedBase").on('click',function(){
+    increaseDotSpeedBase();
+});
 $("#upgradeStartDotMultiLevel").on('click',function(){
     increaseStartDotMultiLevel();
+});
+$("#keepAutoFeed").on('click',function(){
+    keepAutofeed();
 });
 
 
@@ -141,7 +146,7 @@ $("#dotValueMaxBttn").on('click', function(){
     if (results.count > 0){
         upgrades.increaseDotValue.level = upgrades.increaseDotValue.level + results.count;
         gameState.score = gameState.score.minus(results.cost);
-        upgrades.increaseDotValue.cost = increaseCost(upgrades.increaseDotValue.baseCost, upgrades.increaseDotValue.upgradeScale, upgrades.increaseDotValue.level);
+        upgrades.increaseDotValue.cost = increaseCost(upgrades.increaseDotValue);
         setDotValue();
     }
 });
@@ -150,7 +155,7 @@ $("#dotSpeedMaxBttn").on('click', function(){
     if (results.count > 0){
         upgrades.increaseDotSpeed.level = upgrades.increaseDotSpeed.level + results.count;
         gameState.score = gameState.score.minus(results.cost);
-        upgrades.increaseDotSpeed.cost = increaseCost(upgrades.increaseDotSpeed.baseCost, upgrades.increaseDotSpeed.upgradeScale, upgrades.increaseDotSpeed.level);
+        upgrades.increaseDotSpeed.cost = increaseCost(upgrades.increaseDotSpeed);
         setSpeed();
     }
 });
@@ -159,7 +164,7 @@ $("#dotMultiMaxBttn").on('click', function(){
     if (results.count > 0){
         upgrades.increaseDotMulti.level = upgrades.increaseDotMulti.level + results.count;
         gameState.score = gameState.score.minus(results.cost);
-        upgrades.increaseDotMulti.cost = increaseCost(upgrades.increaseDotMulti.baseCost, upgrades.increaseDotMulti.upgradeScale, upgrades.increaseDotMulti.level);
+        upgrades.increaseDotMulti.cost = increaseCost(upgrades.increaseDotMulti);
         setDotMulti();
     }
 });
@@ -168,7 +173,7 @@ $("#dotAFSpeedMaxBttn").on('click', function(){
     if (results.count > 0){
         upgrades.autoFeed.level = upgrades.autoFeed.level + results.count;
         gameState.score = gameState.score.minus(results.cost);
-        upgrades.autoFeed.cost = increaseCost(upgrades.autoFeed.baseCost, upgrades.autoFeed.upgradeScale, upgrades.autoFeed.level);
+        upgrades.autoFeed.cost = increaseCost(upgrades.autoFeed);
         setAutoFeed();
     }
 });
@@ -244,9 +249,11 @@ export function buttonBought(button_id, self){
 export function buttonCheck(){
     for (let [key, value] of Object.entries(upgrades)){
         if (value.type == "nomCoins"){
+            value.cost = increaseCost(value);
             $("#"+value.id).prop("disabled", value.cost.greaterThan(gameState.nomCoins));
             $("#"+value.id+"Text").text(formatNum(value.cost));
         } else if (value.type == "score" ){
+            value.cost = increaseCost(value);
             $("#"+value.id).prop("disabled", value.cost.greaterThan(gameState.score));
             $("#"+value.id).html(`Cost: ${formatNum(value.cost)}`);
         }

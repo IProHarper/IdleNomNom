@@ -6,8 +6,9 @@ Nom starting value
 Features:
 
 Clean ups:
-Clear any dots upon reset/update display
+Convert upgrades to classes. methods would include cost increase, level increase, purchased
 Optimise display updates
+
 
 
 

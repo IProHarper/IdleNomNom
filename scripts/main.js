@@ -6,12 +6,14 @@ import { unlockNomscend } from './features.js';
 import { initDisplay, updateStats, updateProgressBar } from './display.js';
 
 
-
 $(document).ready(function(){
+    
+    
 
     //Load the gamestate if it exists in local storage
     checkSaveFile();
     initDisplay();
+    
 
     function updateDisplay(){
         updateProgressBar();

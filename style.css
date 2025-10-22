@@ -1,6 +1,22 @@
+/* Root Variables */
+:root {
+  --primary-color: #3399FF;
+  --primary-hover: #33D;
+  --success-color: #5cb85c;
+  --disabled-color: #95a5a6;
+  --bg-primary: #323436;
+  --bg-secondary: #2a2a3e;
+  --bg-card: #33334d;
+  --text-primary: #ffffff;
+  --text-secondary: #b8b8d0;
+  --border-color: #4a4a6a;
+  --shadow: rgba(0, 0, 0, 0.3);
+}
+
+
 
 body {
-    background-color: #323436;
+    background-color: var(--bg-primary);
     color: white;
     text-align: center;
     font-family: pixleFont, Arial, sans-serif;
@@ -376,3 +392,226 @@ Dark
 #66B3FF
 #99CCFF
 Light */
+
+
+
+
+
+
+/*
+Code taken from https://codepen.io/nahuelsotelo/pen/nJJKGX
+
+style sheet should be scss extension
+
+<div class="ghost inky">
+  <div class ="ghost__body">
+    <svg>
+      <polygon  points="0 24, 4 24, 4 12, 8 12, 8 8, 12 8, 12 4, 20 4, 20 0, 36 0, 36 4, 44 4, 44 8, 48 8, 48 12, 52 12, 52 24, 56 24, 56 48, 0 48 "/>
+    </svg>
+  </div>
+  <div class="ghost__eye--left">
+    <svg>
+      <polygon points="4 0, 12 0, 12 4, 16 4, 16 16, 12 16, 12 20, 4 20, 4 16, 0 16, 0 4, 4 4 "/>
+    </svg>
+  </div>
+  <div class="ghost__eye--right">
+    <svg>
+      <polygon points="4 0, 12 0, 12 4, 16 4, 16 16, 12 16, 12 20, 4 20, 4 16, 0 16, 0 4, 4 4 "/>
+    </svg>
+  </div>
+  <div class="ghost__feet"></div>
+<div>
+
+$ghost-color: blue;
+$ghosts: blinky, pinky, clyde, inky ;
+$colors: red, pink, orange, cyan ;
+$ghosts-colors: zip($ghosts, $colors);
+$duration: 2s;
+
+@keyframes move {
+  0% {
+    top: 200px;
+    left: 300px;
+  }
+  100% {
+    top: 200px;
+    left: 30px;
+  }
+}
+@keyframes eyesballs {
+  0% {
+    top: 8px;
+    left: 0px;
+  }
+  33%{
+    top: 8px;
+    left: 4px;
+  }
+  50%{
+    top: 8px;
+    left: 0px;
+  }
+  66%{
+    top: 8px;
+    left: 4px;
+  }
+  100% {
+    top: 8px;
+    left: 0px;
+  }
+}
+
+@keyframes feet {
+  0% {
+    box-shadow:
+        4px 0 $ghost-color,
+        8px 0 $ghost-color,
+        12px 0 $ghost-color,
+        
+        4px 4px $ghost-color,
+        8px 4px $ghost-color,
+        
+        20px 0 $ghost-color,
+        24px 0 $ghost-color,
+        28px 0 $ghost-color,
+        32px 0 $ghost-color,
+    
+        24px 4px $ghost-color,
+        28px 4px $ghost-color,
+      
+        40px 0 $ghost-color,
+        44px 0 $ghost-color,
+        48px 0 $ghost-color,
+        52px 0 $ghost-color,
+    
+        44px 4px $ghost-color,
+        48px 4px $ghost-color
+      ;
+  }
+  50% { 
+    box-shadow:
+        0 4px $ghost-color,
+        4px 0 $ghost-color,
+        
+        12px 0 $ghost-color,
+        16px 0 $ghost-color,
+        20px 0 $ghost-color,
+        16px 4px $ghost-color,
+        20px 4px $ghost-color,
+      
+        32px 0 $ghost-color,
+        36px 0 $ghost-color,
+        40px 0 $ghost-color,
+        32px 4px $ghost-color,
+        36px 4px $ghost-color,
+      
+        48px 0 $ghost-color,
+        52px 0 $ghost-color,
+        52px 4px $ghost-color
+      ;
+  }
+  100% {
+    box-shadow:
+        4px 0 $ghost-color,
+        8px 0 $ghost-color,
+        12px 0 $ghost-color,
+        
+        4px 4px $ghost-color,
+        8px 4px $ghost-color,
+        
+        20px 0 $ghost-color,
+        24px 0 $ghost-color,
+        28px 0 $ghost-color,
+        32px 0 $ghost-color,
+    
+        24px 4px $ghost-color,
+        28px 4px $ghost-color,
+      
+        40px 0 $ghost-color,
+        44px 0 $ghost-color,
+        48px 0 $ghost-color,
+        52px 0 $ghost-color,
+    
+        44px 4px $ghost-color,
+        48px 4px $ghost-color
+      ;
+  }
+}
+
+body {
+  background: #000;
+}
+
+.ghost {
+  position: absolute;
+    top: 0;
+    left: 0;
+  width: 56px;
+  height: 56px;
+  
+  animation-name: move;
+  animation-duration: $duration;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+} 
+.ghost__feet {
+  animation-name: feet;
+  animation-duration: .4s;
+  animation-fill-mode: forwards;
+  animation-timing-function: steps(1);
+  animation-iteration-count: infinite;
+    
+  background: $ghost-color;
+  content: '';
+  display: block;
+  position: absolute;
+    top: 48px;
+    left: 0;
+  width: 4px;
+  height: 4px;
+  z-index: 1;
+}
+.ghost__body {
+  fill: $ghost-color;
+}
+%ghost__eye {
+  fill: #fff;
+  position: absolute;
+    top: 16px;
+  width: 16px;
+  height: 20px;
+  
+  animation-name: eyes;
+  animation-duration: $duration;
+  animation-fill-mode: forwards;
+  animation-timing-function: steps(1);
+  animation-iteration-count: infinite;
+  
+    &:after {
+    background: blue;
+    content: '';
+    display: block;
+    position: absolute;
+      top: 8px;
+      left: 0;
+    width: 8px;
+    height: 8px;
+    
+    animation-name: eyesballs;
+    animation-duration: $duration;
+    animation-fill-mode: forwards;
+    animation-timing-function: steps(1);
+    animation-iteration-count: infinite;
+  }
+}
+.ghost__eye--left {
+  @extend %ghost__eye;
+    left: 8px;
+}
+.ghost__eye--right {
+  @extend %ghost__eye;
+    right: 8px;
+}
+
+*/

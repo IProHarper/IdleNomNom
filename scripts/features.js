@@ -33,13 +33,19 @@ export function nomscend(){
     // $("#nomsecReqText").text(formatNum(gameState.nomsecScoreReq));
     const gs = gameState;
     gameState.nomCoins = gameState.nomCoins.plus(gs.nomscendScore.divide(100000)).times(gs.nomCoinMulti);
+    if (gameState.nomCoinBestGain.lessThan((gs.nomscendScore.divide(100000)).times(gs.nomCoinMulti))){
+        gameState.nomCoinBestGain = gs.nomscendScore.divide(100000).times(gs.nomCoinMulti);
+    }
+    gameState.lifetimeNomCoins.plus(gs.nomscendScore.divide(100000).times(gs.nomCoinMulti));
     gameState.score = new Decimal(0);
     gameState.nomscensionCount = gs.nomscensionCount.plus(1);
     gameState.nomscendScore = new Decimal(0);
     clearInterval(gameState.dotIntervalID);
     $('.dot').remove();
     gameState.nomsecScoreReq = gs.nomsecScoreReq.times(11);
-    $("#upgradeAutoFeedSpeed").parent().hide();
+    if (upgrades.autoFeed.resetTier == 0){
+            $("#upgradeAutoFeedSpeed").parent().hide();
+    }
     resetUpgrades();
 }
 
