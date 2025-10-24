@@ -186,26 +186,42 @@ $("#dotAFSpeedMaxBttn").on('click', function(){
 //Menu Buttons
 //Left
 $("#upgradesBttn").on('click',function(){
-    $("#left-container").children().css('display', 'none');
-    $("#upgrades-container").css('display', '');
+    $("#baseUpgrades").show();
+    $("#shop-container").hide();
+    $("#nomUpgrades-container").hide();
+    $("#customize-container").hide();
+    $("#stats-container").hide();
 });
 $("#shopBttn").on('click',function(){
-    $("#left-container").children().css('display', 'none');
-    $("#shop-container").css('display', '');
+    $("#baseUpgrades").hide();
+    $("#shop-container").show();
+    $("#nomUpgrades-container").hide();
+    $("#customize-container").hide();
+    $("#stats-container").hide();
 });
 
 //Right
 $("#nomscendUpgradesBttn").on('click',function(){
-    $("#right-container").children().css('display', 'none');
-    $("#nomUpgrades-container").css('display', '');
+    $("#baseUpgrades").hide();
+    $("#shop-container").hide();
+    $("#nomUpgrades-container").show();
+    $("#customize-container").hide();
+    $("#stats-container").hide();
 });
 $("#customizeBttn").on('click',function(){
-    $("#right-container").children().css('display', 'none');
-    $("#customize-container").css('display', '');
+    $("#baseUpgrades").hide();
+    $("#shop-container").hide();
+    $("#nomUpgrades-container").hide();
+    $("#customize-container").show();
+    $("#stats-container").hide();
+
 });
 $("#statBttn").on('click',function(){
-    $("#right-container").children().css('display', 'none');
-    $("#stats-container").css('display', '');
+    $("#baseUpgrades").hide();
+    $("#shop-container").hide();
+    $("#nomUpgrades-container").hide();
+    $("#customize-container").hide();
+    $("#stats-container").show();
 });
 //###############
 
