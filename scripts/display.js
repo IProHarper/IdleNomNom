@@ -6,19 +6,28 @@ const scoreDisplay = document.getElementById('score');
 
 export function updateLevels(){
 
-    //Set Upgrade Levels
+    //Set Base Upgrades Levels
     $("#upgradeDotValueLvl").text(`Level: ${upgrades.increaseDotValue.level}/${upgrades.increaseDotValue.maxlevel}`);
     $("#upgradeDotSpeedLvl").text(`Level: ${upgrades.increaseDotSpeed.level}/${upgrades.increaseDotSpeed.maxlevel}`);
     $("#upgradeDotMultiLvl").text(`Level: ${upgrades.increaseDotMulti.level}/${upgrades.increaseDotMulti.maxlevel}`);
     $("#upgradeAutoFeedSpeedLvl").text(`Level: ${upgrades.autoFeed.level}/${upgrades.autoFeed.maxlevel}`);
+
+    //Nom Upgrades
+    $("#upgradeNomDotValLvl").text(`Level: ${upgrades.increaseNomDotVal.level}/${upgrades.increaseNomDotVal.maxlevel}`);
+    $("#upgradeNomCoinMultiLvl").text(`Level: ${upgrades.increaseNomCoinMulti.level}/${upgrades.increaseNomCoinMulti.maxlevel}`);
+    $("#upgradeDotMultiMaxLvl").text(`Level: ${upgrades.increaseDotMultiMax.level}/${upgrades.increaseDotMultiMax.maxlevel}`);
+    $("#upgradeDotValMaxLvl").text(`Level: ${upgrades.increaseDotValMax.level}/${upgrades.increaseDotValMax.maxlevel}`);
+    $("#upgradeStartDotSpeedLevelLvl").text(`Level: ${upgrades.increaseStartDotSpeedLevel.level}/${upgrades.increaseStartDotSpeedLevel.maxlevel}`);
+    $("#upgradeStartDotMultiLevelLvl").text(`Level: ${upgrades.increaseStartDotMultiLevel.level}/${upgrades.increaseStartDotMultiLevel.maxlevel}`);
+    $("#upgradeDotSpeedBaseLvl").text(`Level: ${upgrades.increaseDotSpeedBase.level}/${upgrades.increaseDotSpeedBase.maxlevel}`);
+    $("#upgradeAutoFeedMaxLvl").text(`Level: ${upgrades.increaseAutoFeedMax.level}/${upgrades.increaseAutoFeedMax.maxlevel}`);
+
 }
 
 export function initDisplay(){
     //Set display to only have upgrades at first
-    $("#left-container").children().hide();
     $("#upgrades-container").show();
-    $("#right-container").children().hide();
-    $("#stats-container").show();
+    $("#stats-container").hide();
     $("#nomscendUpgradesBttn").hide(); 
     $("#nomCoinGainText").text(formatNum(gameState.nomscendScore.divide(100000).times(gameState.nomCoinMulti)));
     $("#nomscensionBttn").hide();
@@ -26,6 +35,28 @@ export function initDisplay(){
     $("#upgradeAutoFeedSpeed").parent().hide();
 
     updateLevels();
+
+    // Update Descriptions:
+    //Set Base Desc
+    $("#upgradeDotValueDesc").text(upgrades.increaseDotValue.desc);
+    $("#upgradeDotSpeedDesc").text(upgrades.increaseDotSpeed.desc);
+    $("#upgradeDotMultiDesc").text(upgrades.increaseDotMulti.desc);
+    $("#upgradeAutoFeedSpeedDesc").text(upgrades.autoFeed.desc);
+
+    //Nom Upgrades
+    $("#upgradeNomDotValDesc").text(upgrades.increaseNomDotVal.desc);
+    $("#upgradeNomCoinMultiDesc").text(upgrades.increaseNomCoinMulti.desc);
+    $("#upgradeDotMultiMaxDesc").text(upgrades.increaseDotMultiMax.desc);
+    $("#upgradeDotValMaxDesc").text(upgrades.increaseDotValMax.desc);
+    $("#upgradeStartDotSpeedLevelDesc").text(upgrades.increaseStartDotSpeedLevel.desc);
+    $("#upgradeStartDotMultiLevelDesc").text(upgrades.increaseStartDotMultiLevel.desc);
+    $("#upgradeDotSpeedBaseDesc").text(upgrades.increaseDotSpeedBase.desc);
+    $("#upgradeAutoFeedMaxDesc").text(upgrades.increaseAutoFeedMax.desc);
+    $("#keepAutoFeedDesc").text(upgrades.keepAutoFeed.desc);
+
+     // Shop Upgrades
+    $("#upgradeAutoFeedSpeedDesc").text(upgrades.autoFeed.desc);
+
 
     //Display nomscention specfics buttons and areas if its unlocked.
     if (gameState.nomscentionUnlocked) {
