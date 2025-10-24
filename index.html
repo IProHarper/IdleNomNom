@@ -74,156 +74,337 @@
             <!-- <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom coins"> -->
         </div>
     </div>
-    <!-- Left container -->
-    <div id="left-container">
+
     <!-- Display the upgrades -->
-    <div id="upgrades-container" class="upgrades">
-        <div class="upgrade-row">
-            <span>Increase Dot Value</span>
-            <span id="upgradeDotValueLvl">Level: 0</span>
-            <button id="upgradeDotValue" class="upgradeBttn">Cost: 100</button>
-            <button class="maxBttn" id="dotValueMaxBttn">Max</button>
-        </div>
-        <div class="upgrade-row">
-            <span>Increase Dot Speed</span>
-            <span id="upgradeDotSpeedLvl">Level: 0</span>
-            <button id="upgradeDotSpeed" class="upgradeBttn">Cost: 100</button>
-            <button class="maxBttn" id="dotSpeedMaxBttn">Max</button>
-        </div>
-        <div class="upgrade-row">
-            <span>Increase Dot Multiplier</span>
-            <span id="upgradeDotMultiLvl">Level: 0</span>
-            <button id="upgradeDotMulti" class="upgradeBttn">Cost: 1000</button>
-            <button class="maxBttn" id="dotMultiMaxBttn">Max</button>
-        </div>
-        <div class="upgrade-row">
-            <span>Increase Auto Feed Speed</span>
-            <span id="upgradeAutoFeedSpeedLvl">Level: 0</span>
-            <button id="upgradeAutoFeedSpeed" class="upgradeBttn">Cost: 200</button>
-            <button class="maxBttn" id="dotAFSpeedMaxBttn">Max</button>
+    <div id="baseUpgrades" class="upgrades-container">
+        <!-- <h2 style="color: var(--text-primary); margin: 20px 0;">Upgrades</h2> -->
+        <div class="upgrades-grid">
+            <!-- upgradeDotValue -->
+            <div class="upgrade-card">
+                <div class="upgrade-header">
+                    <span class="upgrade-icon">📈</span>
+                    <div class="upgrade-info">
+                        <h3 class="upgrade-name">Dot Base Value</h3>            
+                        <p class="upgrade-description" id="upgradeDotValueDesc">Increases Dot Value</p>
+                        <span id="upgradeDotValueLvl" class="upgrade-level">Level: 0</span>
+                    </div>
+                </div>
+                <button id="upgradeDotValue" class="upgradeBttn">Cost: 100</button>
+                <button class="maxBttn" id="dotValueMaxBttn">Buy Max</button>
+            </div>
+            <!--  upgradeDotSpeed -->
+            <div class="upgrade-card">
+                <div class="upgrade-header">
+                    <span class="upgrade-icon">⚡</span>
+                    <div class="upgrade-info">
+                        <h3 class="upgrade-name">Dot Speed +</h3>
+                        <p class="upgrade-description" id="upgradeDotSpeedDesc">Desc</p>
+                        <span id="upgradeDotSpeedLvl" class="upgrade-level">Level: 0</span>
+                    </div>
+                </div>
+                <button id="upgradeDotSpeed" class="upgradeBttn">Cost: 100</button>
+                <button class="maxBttn" id="dotSpeedMaxBttn">Max</button>
+            </div>
+
+            <!-- upgradeDotMulti -->
+            <div class="upgrade-card">
+                <div class="upgrade-header">
+                    <span class="upgrade-icon">❎</span>
+                    <div class="upgrade-info">
+                        <h3 class="upgrade-name">Dot Multiplier x</h3>
+                        <p class="upgrade-description" id="upgradeDotMultiDesc">Desc</p>
+                        <span id="upgradeDotMultiLvl" class="upgrade-level">Level: 0</span>
+                    </div>
+                </div>
+                <button id="upgradeDotMulti" class="upgradeBttn">Cost: 1000</button>
+                <button class="maxBttn" id="dotMultiMaxBttn">Max</button>
+            </div>
+            <!-- upgradeAutoFeedSpeed -->
+            <div class="upgrade-card">
+                <div class="upgrade-header">
+                    <span class="upgrade-icon">🤖</span>
+                    <div class="upgrade-info">
+                        <h3 class="upgrade-name">Auto Feed Speed</h3>
+                        <p class="upgrade-description" id="upgradeAutoFeedSpeedDesc">Desc</p>
+                        <span id="upgradeAutoFeedSpeedLvl" class="upgrade-level">Level: 0</span>
+                    </div>
+                </div>
+                <button id="upgradeAutoFeedSpeed" class="upgradeBttn">Cost: 200</button>
+                <button class="maxBttn" id="dotAFSpeedMaxBttn">Max</button>
+            </div>
         </div>
     </div>
+
     <!-- Display the shop items -->
-     <div id="shop-container" class="upgrades">
-        <div class="upgrade-row">
-            <span id="autoFeedText">Unlock Auto Feeding</span>
-            <button id="unlockAutoFeed" class="shopBttn">Cost: 200</button>
+     <div id="shop-container" class="upgrades-container">
+        <div class="upgrades-grid">
+            <div class="upgrade-card">
+                <div class="upgrade-header">
+                    <span class="upgrade-icon">🔓</span>
+                    <div class="upgrade-info">
+                        <h3 class="upgrade-name">Unlock Auto Feeding</h3>
+                        <p class="upgrade-description" >Allow dots to automatically appear! They'll start slow but a new upgrade is unlocked!</p>
+                        <!-- <span id="autoFeedText">Unlock Auto Feeding</span> -->
+                    </div>
+                </div>
+                <button id="unlockAutoFeed" class="shopBttn">Cost: 200</button>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- RIGHT main container -->
-    <div id="right-container">
-        <!-- Stats -->
-        <div id="stats-container">
-            <p>Lifetime Score: <span id="lifetimeScoreText"></span></p>
-            <p>Dots Eaten: <span id="dotsEatenText"></span></p>
-            <br>
-            <p>Base Dot Value: <span id="dotBaseValueText"></span></p>
-            <p>Dot Speed: <span id="dotSpeedText"></span></p>
-            <p>Dot Multiplier: <span  id="dotMultiText"></span></p>
-            <p>Auto Feed Speed every :<span id="autofeedSpeedText"></span>s</p>
-            <br>
-            <p>Nomscensions: <span id="nomscensionCountText"></span></p>
-            <p>Nom Coins: <span id="nomCoinsText"></span></p>
-            <p>Lifetime Nom Coins <span id="LifetimeNomCoinsText"></span></p>
-        </div>
+<!-- RIGHT main options -->
         <!-- Display the NomscendUpgrades items -->
-        <div id="nomUpgrades-container" class="upgrades">
-            <!-- <div id="nomUpgrades-menu">
-                <button id="NomStartingUpgradesBttn"></button>
+        <div id="nomUpgrades-container" class="upgrades-container">
+        <h2 style="color: var(--text-primary); margin: 10px 0; font-size: 20px;">Base Upgrades</h2>
+            <div class="upgrades-grid">
+                <!-- upgradeNomDotVal -->
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon"></span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">Dot Base Value</h3>
+                            <p class="upgrade-description">Desc</p>
+                            <span id="upgradeNomDotValLvl" class="upgrade-level">Level: 0</span>
+                        </div>
+                    </div>
+                    <button id="upgradeNomDotVal" class="nomBttn"><span id="upgradeNomDotValText">0</span>
+                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                    </button>
+                </div>
+                <!-- upgradeNomCoinMulti -->
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon"></span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">Nom Coin gain x2</h3>
+                            <p class="upgrade-description">Desc</p>
+                            <span id="upgradeNomCoinMultiLvl" class="upgrade-level">Level: 0</span>
+                        </div>
+                    </div>
+                    <button id="upgradeNomCoinMulti" class="nomBttn"><span id="upgradeNomCoinMultiText">0</span>
+                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                    </button>
+                </div>
             </div>
-            <div id="nomUpgradesStartingLevel-continer">
-
-            </div> -->
-            <!-- <div class="upgrade-row">
-                <button id="upgradeNomDotMulti" class="nomBttn"><span id="upgradeNomDotMultiText">5</span>
-                    <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                </button>
-                Starting Dot Multi + 10
-            </div> -->
-            <div class="upgrade-row">
-                <button id="upgradeNomDotVal" class="nomBttn"><span id="upgradeNomDotValText">0</span>
-                    <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                </button>
-                Increase Dot Base Value
+            <h2 style="color: var(--text-primary); margin: 10px 0; font-size: 20px;">Max Level +</h2>
+            <div class="upgrades-grid">
+                <!-- Dot Multi Max Level+ -->
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon"></span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">Dot Multi Max Level+</h3>
+                            <p class="upgrade-description">Desc</p>
+                            <span id="upgradeDotMultiMaxLvl" class="upgrade-level">Level: 0</span>
+                        </div>
+                    </div>
+                    <button id="upgradeDotMultiMax" class="nomBttn"><span id="upgradeDotMultiMaxText">5</span>
+                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                    </button>
+                </div>
+                <!-- Dot Value Max Level+ -->
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon"></span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">Dot Value Max Level+</h3>
+                            <p class="upgrade-description">Desc</p>
+                            <span id="upgradeDotValMaxLvl" class="upgrade-level">Level: 0</span>
+                        </div>
+                    </div>
+                    <button id="upgradeDotValMax" class="nomBttn"><span id="upgradeDotValMaxText">5</span>
+                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                    </button>
+                </div>
             </div>
-            <div class="upgrade-row">
-                <button id="upgradeNomCoinMulti" class="nomBttn"><span id="upgradeNomCoinMultiText">0</span>
-                    <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                </button>
-                Nom Coin gain x2
+            <h2 style="color: var(--text-primary); margin: 10px 0; font-size: 20px;">Starting Levels +</h2>
+            <div class="upgrades-grid">
+            <!-- Starting Dot Speed Level + 1 -->
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon"></span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">Starting Dot Speed Level + 1</h3>
+                            <p class="upgrade-description">Desc</p>
+                            <span id="upgradeStartDotSpeedLevelLvl" class="upgrade-level">Level: 0</span>
+                        </div>
+                    </div>
+                    <button id="upgradeStartDotSpeedLevel" class="nomBttn"><span id="upgradeStartDotSpeedLevelText">5</span>
+                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                    </button>
+                </div>
+                <!-- Starting Dot Multi Level + 1 -->
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon"></span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">Starting Dot Multi Level + 1</h3>
+                            <p class="upgrade-description">Desc</p>
+                            <span id="upgradeStartDotMultiLevelLvl" class="upgrade-level">Level: 0</span>
+                        </div>
+                    </div>
+                    <button id="upgradeStartDotMultiLevel" class="nomBttn"><span id="upgradeStartDotMultiLevelText">5</span>
+                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                    </button>
+                </div>
+                <!-- Permanent AutoFeed -->
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon"></span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">Permanent AutoFeed</h3>
+                            <p class="upgrade-description">Desc</p>
+                            <span id="keepAutoFeedLvl" class="upgrade-level">Level: 0</span>
+                        </div>
+                    </div>
+                    <button id="keepAutoFeed" class="nomBttn"><span id="keepAutoFeedText">200</span>
+                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                    </button>
+                </div>
             </div>
-            <div class="upgrade-row">
-                <button id="upgradeDotMultiMax" class="nomBttn"><span id="upgradeDotMultiMaxText">5</span>
-                    <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                </button>
-                Dot Multi Max Level+
+                <!-- Misc Upgrades -->
+            <h2 style="color: var(--text-primary); margin: 10px 0; font-size: 20px;">Misc</h2>
+            <div class="upgrades-grid">
+                <!-- Auto Feed Speed+ -->
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon"></span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">Auto Feed Speed+</h3>
+                            <p class="upgrade-description">Desc</p>
+                            <span id="upgradeAutoFeedMaxLvl" class="upgrade-level">Level: 0</span>
+                        </div>
+                    </div>
+                    <button id="upgradeAutoFeedMax" class="nomBttn"><span id="upgradeAutoFeedMaxText">10</span>
+                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                    </button>
+                </div>
+                <!-- Dot Feed speed+ -->
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon"></span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">Dot Feed speed+</h3>
+                            <p class="upgrade-description">Desc</p>
+                            <span id="upgradeDotSpeedBaseLvl" class="upgrade-level">Level: 0</span>
+                        </div>
+                    </div>
+                    <button id="upgradeDotSpeedBase" class="nomBttn"><span id="upgradeDotSpeedBaseText">10</span>
+                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                    </button>
+                </div>
             </div>
-            <div class="upgrade-row">
-                <button id="upgradeDotValMax" class="nomBttn"><span id="upgradeDotValMaxText">5</span>
-                    <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                </button>
-                Dot Value Max Level+
-            </div>
-            <div class="upgrade-row">
-                <button id="upgradeAutoFeedMax" class="nomBttn"><span id="upgradeAutoFeedMaxText">10</span>
-                    <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                </button>
-                Auto Feed speed+
-            </div>
-            <div class="upgrade-row">
-                <button id="upgradeDotSpeedBase" class="nomBttn"><span id="upgradeDotSpeedBaseText">10</span>
-                    <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                </button>
-                Dot Feed speed+
-            </div>
-            <div class="upgrade-row">
-                <button id="upgradeStartDotSpeedLevel" class="nomBttn"><span id="upgradeStartDotSpeedLevelText">5</span>
-                    <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                </button>
-                Starting Dot Speed Level + 1
-            </div>
-            <div class="upgrade-row">
-                <button id="upgradeStartDotMultiLevel" class="nomBttn"><span id="upgradeStartDotMultiLevelText">5</span>
-                    <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                </button>
-                Starting Dot Multi Level + 1
-            </div>
-            <div class="upgrade-row">
-                <button id="keepAutoFeed" class="nomBttn"><span id="keepAutoFeedText">200</span>
-                    <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                </button>
-                Permanent AutoFeed
-            </div>
-            
         </div>
         
-        <!-- Customisation -->
-        <div id="customize-container" class="upgrades">
-            <div class="upgrade-row">
-                <span>DEFAULT Mode</span>
-                <button id="enableDefaultMode" class="shopBttn">FREE</button>
+        <!-- CUSTOMIZE SECTION -->
+        <div id="customize-container">
+            <h2 style="color: var(--text-primary); margin: 20px 0;">Customize</h2>
+            <div class="upgrades-grid">
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon">🎨</span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">DEFAULT Mode</h3>
+                        </div>
+                    </div>
+                    <p class="upgrade-description">Classic look and feel</p>
+                    <button id="enableDefaultMode" class="buy-button" style="background: white;color:black;">FREE</button>
+                </div>
+
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon">🎨</span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">CILLIAN Mode</h3>
+                        </div>
+                    </div>
+                    <p class="upgrade-description">I'm Blue Da Ba Dee</p>
+                    <button id="enableCillianMode" class="buy-button" style="background: blue;">FREE</button>
+                </div>
+
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon">🎨</span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">CONALL Mode</h3>
+                        </div>
+                    </div>
+                    <p class="upgrade-description">Mr Pineapple</p>
+                    <button id="enableConallMode" class="buy-button" style="background: yellow;color:black">FREE</button>
+                </div>
+
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon">🎨</span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">AIDAN Mode</h3>
+                        </div>
+                    </div>
+                    <p class="upgrade-description">NOW I'M ANGRY!</p>
+                    <button id="enableAidanMode" class="buy-button" style="background: red;">FREE</button>
+                </div>
+
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon">🎨</span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">DAD Mode</h3>
+                        </div>
+                    </div>
+                    <p class="upgrade-description">Just a Dad and his 3 sons</p>
+                    <button id="enableDADMode" class="buy-button" style="background: green;">FREE</button>
+                </div>
+
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon">🎨</span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">LACHLAN Mode</h3>
+                        </div>
+                    </div>
+                    <p class="upgrade-description">Waruilachlan</p>
+                    <button id="enableLachlanMode" class="buy-button" style="background: purple;">FREE</button>
+                </div>
             </div>
-            <div class="upgrade-row">
-                <span>CILLIAN Mode</span>
-                <button id="enableCillianMode" class="shopBttn">FREE</button>
-            </div>
-            <div class="upgrade-row">
-                <span>CONALL Mode</span>
-                <button id="enableConallMode" class="shopBttn">FREE</button>
-            </div>
-            <div class="upgrade-row">
-                <span>AIDAN Mode</span>
-                <button id="enableAidanMode" class="shopBttn">FREE</button>
-            </div>
-            <div class="upgrade-row">
-                <span>DAD Mode</span>
-                <button id="enableDADMode" class="shopBttn">FREE</button>
-            </div>
-            <div class="upgrade-row">
-                <span >LACHLAN Mode</span>
-                <button id="enableLachlanMode" class="shopBttn">FREE</button>
+        </div>
+
+        
+         <!-- STATS SECTION -->
+        <div id="stats-container" style="pointer-events: none;">
+            <h2 style="color: var(--text-primary); margin: 20px 0;">Statistics</h2>
+            <div class="upgrades-grid">
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon">📊</span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">Game Stats</h3>
+                        </div>
+                    </div>
+                    <div class="upgrade-stats" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                        <div style="width: 100%; display: flex; justify-content: space-between;">
+                            <span class="stat-label">Lifetime Score:</span>
+                            <span class="stat-value" id="lifetimeScoreText">0</span>
+                        </div>
+                        <div style="width: 100%; display: flex; justify-content: space-between;">
+                            <span class="stat-label">Dots Eaten:</span>
+                            <span class="stat-value" id="dotsEatenText">0</span>
+                        </div>
+                        <div style="width: 100%; display: flex; justify-content: space-between;">
+                            <span class="stat-label">Nomscensions:</span>
+                            <span class="stat-value" id="nomscensionCountText">0</span>
+                        </div>
+                        <div style="width: 100%; display: flex; justify-content: space-between;">
+                            <span class="stat-label">Lifetime Nom Coins:</span>
+                            <span class="stat-value" id="LifetimeNomCoinsText">0</span>
+                        </div>
+                        <div style="width: 100%; display: flex; justify-content: space-between;">
+                            <span class="stat-label">Nom Coins:</span>
+                            <span class="stat-value" id="nomCoinsText">0</span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
             </div>
         </div>
          
