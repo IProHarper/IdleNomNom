@@ -61,7 +61,7 @@ export var upgrades = {
     //Standard Upgrades
     autoFeed : {
         id: "upgradeAutoFeedSpeed",
-        desc: "Auto feed dots",
+        desc: "Send some dots automatically to Mr Nom Nom. Starts slow but a new upgrade is unlocked!",
         type: "score",
         enabled: false,
         increase: new Decimal(0.5),
@@ -77,7 +77,7 @@ export var upgrades = {
     },
     increaseDotValue : {
         id: "upgradeDotValue",
-        desc: "Increase Dot Value",
+        desc: "Increase the base dot value.",
         type: "score",
         increase: new Decimal(1),
         baseCost: new Decimal(50),
@@ -90,7 +90,7 @@ export var upgrades = {
     },
     increaseDotSpeed : {
         id: "upgradeDotSpeed",
-        desc: "Increase Dot Speed",
+        desc: "Send those dots faster and faster!",
         type: "score",
         increase: new Decimal(0.2),
         baseSpeed: new Decimal(4),
@@ -104,7 +104,7 @@ export var upgrades = {
     },
     increaseDotMulti : {
         id: "upgradeDotMulti",
-        desc: "Increase Value Multi",
+        desc: "Did someone say multiplication?",
         type: "score",
         increase: new Decimal(2),
         baseCost: new Decimal(1000),
@@ -118,6 +118,7 @@ export var upgrades = {
     //Nom Upgrades
     increaseNomDotMulti : {
         id: "upgradeNomDotMulti",
+        desc: "",
         type: "nomCoins",
         increase: new Decimal(10),
         baseCost: new Decimal(3),
@@ -129,6 +130,7 @@ export var upgrades = {
     },
     increaseNomDotVal : {
         id: "upgradeNomDotVal",
+        desc: "Increase the base dot value permanently",
         type: "nomCoins",
         increase: new Decimal(10),
         baseCost: new Decimal(1),
@@ -140,6 +142,7 @@ export var upgrades = {
     },
     increaseDotMultiMax : {
         id: "upgradeDotMultiMax",
+        desc: "Increase the max number of upgrades purchaseable for Dot Multiplier X",
         type: "nomCoins",
         increase: new Decimal(3),
         baseCost: new Decimal(2),
@@ -151,6 +154,7 @@ export var upgrades = {
     },
     increaseDotValMax : {
         id: "upgradeDotValMax",
+        desc: "Increase the max number of upgrades purchaseable for base upgrade Dot Value",
         type: "nomCoins",
         increase: new Decimal(25),
         baseCost: new Decimal(2),
@@ -162,6 +166,7 @@ export var upgrades = {
     },
     increaseAutoFeedMax : {
         id: "upgradeAutoFeedMax",
+        desc: "Increase the auto feeding max speed!",
         type: "nomCoins",
         increase: new Decimal(0.1),
         baseCost: new Decimal(10),
@@ -173,6 +178,7 @@ export var upgrades = {
     },
     increaseDotSpeedBase : {
         id: "upgradeDotSpeedBase",
+        desc: "Send those dots just that bit quicker!",
         type: "nomCoins",
         increase: new Decimal(0.1),
         baseCost: new Decimal(10),
@@ -184,6 +190,7 @@ export var upgrades = {
     },
     increaseNomCoinMulti : {
         id: "upgradeNomCoinMulti",
+        desc: "Nom coin gain x2 per level!",
         type: "nomCoins",
         increase: 2,
         baseCost: new Decimal(20),
@@ -195,6 +202,7 @@ export var upgrades = {
     },
     increaseStartDotSpeedLevel : {
         id: "upgradeStartDotSpeedLevel",
+        desc: "Increase the starting level of the base upgrade Dot Speed on Nomscension",
         type: "nomCoins",
         increase: 1,
         baseCost: new Decimal(20),
@@ -206,6 +214,7 @@ export var upgrades = {
     },
     increaseStartDotMultiLevel : {
         id: "upgradeStartDotMultiLevel",
+        desc: "Increase the starting level of the base upgrade Dot Multiplier on Nomscension",
         type: "nomCoins",
         increase: 1,
         baseCost: new Decimal(20),
@@ -217,6 +226,7 @@ export var upgrades = {
     },
     keepAutoFeed : {
         id: "keepAutoFeed",
+        desc: "Keep auto feeding upgrades on Nomscension.",
         bought: false,
         type: "nomCoins",
         baseCost: new Decimal(200),
@@ -228,6 +238,7 @@ export var upgrades = {
     },
     increaseBigDotChance : {
         id: "upgradeBigDotChance",
+        desc: "Adds a chance to send a mega dot woth 10x!",
         type: "nomCoins",
         increase: 1,
         baseCost: new Decimal(25),
