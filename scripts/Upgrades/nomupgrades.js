@@ -134,6 +134,7 @@ export function keepAutofeed(){
     upgrades.autoFeed.resetTier = 1;
     shopUpgrades.unlockAutoFeed.resetTier = 1;
     }
+    updateLevels();
 }
 
 export function increaseNomDotMulti(){
