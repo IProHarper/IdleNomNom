@@ -32,19 +32,28 @@
 
 
     <!-- <audio id="eatDot-audio" src="./assets/audio/dotEat.wav" preload="auto"></audio> -->
-    <h1>IDLE NOM NOM</h1>
-    <!-- <label for="volumeSlider">Volume: </label>
-    <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.1"> -->
-    <p>Dots: <span id="score">0</span></p>
-    <div class="nomCoinDisplay">
-        <span id="nomCoinStatText" style="color:aqua">1</span>
-        <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-        &nbsp;(+<span id="nomCoinGainText" style="color:aqua">1</span>&nbsp;ON NOMSCENSION)
-    </div>
+    <h1 style="text-decoration: underline;">IDLE NOM NOM</h1>
+    
     <!-- <button id="debugBttn">Debug</button> -->
     <button id="ResetBttn">Reset</button>
     <button id="SaveBttn">Save</button>
-    <div class="nomnom-container" kids=false>
+    <div id="resource-container" class="resources">
+        <span class="resource-item">
+                <div class="resource-label">Dots:</div>
+                <div id="score" class="resource-amount">0</div>
+        </span>
+        <div  class="resource-item">
+            <div class="resource-label">Nom Coins:</div>
+            <div id="nomCoinStatText" style="color:aqua">1</div>
+            <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+            (+<span id="nomCoinGainText" style="color:aqua">1</span>)
+        </div>
+    </div>
+    <!-- <div id="gameContainer">
+        <div id="centreDot">
+        </div>
+    </div> -->
+    <div class="nomnom-container" kids=false id="mrNomNomContainer">
         <svg class="nomnom" width="40" height="40" viewBox="0 0 100 100">
             <circle id=mrNomNom cx="50" cy="50" r="50"/>
             <polygon points="50,50 100,0 100,100" fill="black">
@@ -55,6 +64,53 @@
             </polygon>
         </svg>
     </div>
+    <div class="nomnom-container" id="mrSquareContainer">
+    <svg class="nomnom" width="40" height="40" viewBox="0 0 100 100">
+        <!-- Square body -->
+        <rect id="mrSquare" x="0" y="0" width="100" height="100" style="fill:white;"/>
+        
+        <!-- Animated mouth (eating motion) -->
+        <polygon points="50,50 100,0 100,100" fill="black">
+            <animate attributeName="points" dur="0.25s" repeatCount="indefinite"
+                values="50,50 100,0 100,100;
+                        50,50 100,45 100,55;
+                        50,50 100,0 100,100"/>
+        </polygon>
+    </svg>
+    </div>
+
+    <div class="nomnom-container" id="mrHexContainer">
+    <svg class="nomnom" width="40" height="40" viewBox="0 0 100 100">
+        <!-- Square body -->
+        <rect id="mrHex" x="0" y="0" width="100" height="100" style="fill:white;"transform="rotate(45 50 50)"/>
+        
+        <!-- Animated mouth (eating motion) -->
+        <polygon points="50,50 100,0 100,100" fill="black">
+            <animate attributeName="points" dur="0.25s" repeatCount="indefinite"
+                values="50,50 100,0 100,100;
+                        50,50 100,45 100,55;
+                        50,50 100,0 100,100"/>
+        </polygon>
+    </svg>
+    </div>
+
+    <div class="nomnom-container" id="mrTriangleContainer">
+        <svg class="nomnom" width="40" height="40" viewBox="0 0 100 100">
+            <!-- Triangle body (pointing right) -->
+            <polygon id="mrTriangle" points="0,0 0,100 100,50" style="fill:white;"/>
+             <!-- <polygon id="mrTriangle" points="13,86.6 50,0 87,86.6" style="fill:white;"/> -->
+
+            <!-- Animated mouth (eating motion) -->
+            <polygon points="50,50 100,30 100,70" fill="black">
+                <animate attributeName="points" dur="0.25s" repeatCount="indefinite"
+                    values="40,50 100,-10 100,130;
+                            40,50 100,45 100,55;
+                            40,50 100,-10 100,130"/>
+            </polygon>
+        </svg>
+    </div>
+
+
     <div>
         <button id="feedNomNom">FEEEEEED</button>
         <button id="nomscensionBttn">NOMSCENSION</button>
@@ -293,6 +349,32 @@
                         <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
                     </button>
                 </div>
+                <!-- Score Boost from Nom Coins -->
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon"></span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">Nom Coin Score Boost</h3>
+                            <p class="upgrade-description" id="unlocknomCoinScoreBoostDesc">Desc</p>
+                        </div>
+                    </div>
+                    <button id="unlocknomCoinScoreBoost" class="nomBttn"><span id="unlocknomCoinScoreBoostText">10</span>
+                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                    </button>
+                </div>
+                <!-- Unlock Mr Square -->
+                <!-- <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon"></span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">Unlock Mr Square</h3>
+                            <p class="upgrade-description" id="unlockSquareDesc">Desc</p>
+                        </div>
+                    </div>
+                    <button id="unlockSquare" class="nomBttn"><span id="unlockSquareText">100</span>
+                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+                    </button>
+                </div> -->
             </div>
         </div>
         
@@ -368,6 +450,19 @@
             </div>
         </div>
 
+        <!-- <div id="stats-container">
+            <p>Lifetime Score: <span id="lifetimeScoreText"></span></p>
+            <p>Dots Eaten: <span id="dotsEatenText"></span></p>
+            <br>
+            <p>Base Dot Value: <span id="dotBaseValueText"></span></p>
+            <p>Dot Speed: <span id="dotSpeedText"></span></p>
+            <p>Dot Multiplier: <span  id="dotMultiText"></span></p>
+            <p>Auto Feed Speed every :<span id="autofeedSpeedText"></span>s</p>
+            <br>
+            <p>Nomscensions: <span id="nomscensionCountText"></span></p>
+            <p>Nom Coins: <span id="nomCoinsText"></span></p>
+            <p>Lifetime Nom Coins <span id="LifetimeNomCoinsText"></span></p>
+        </div> -->
         
          <!-- STATS SECTION -->
         <div id="stats-container" style="pointer-events: none;">
@@ -390,6 +485,23 @@
                             <span class="stat-value" id="dotsEatenText">0</span>
                         </div>
                         <div style="width: 100%; display: flex; justify-content: space-between;">
+                            <span class="stat-label">Base Dot Value:</span>
+                            <span class="stat-value" id="dotBaseValueText">0</span>
+                        </div>
+                        <div style="width: 100%; display: flex; justify-content: space-between;">
+                            <span class="stat-label">Dot Multiplier:</span>
+                            <span class="stat-value" id="dotMultiText">0</span>
+                        </div>
+                        <div style="width: 100%; display: flex; justify-content: space-between;">
+                            <span class="stat-label">Dot Speed:</span>
+                            <span class="stat-value" id="dotSpeedText">0</span>
+                        </div>
+                        <div style="width: 100%; display: flex; justify-content: space-between;">
+                            <span class="stat-label">Auto Feed Speed every:</span>
+                            <span class="stat-value" id="autofeedSpeedText">0</span>
+                        </div>
+                        <br>
+                        <div style="width: 100%; display: flex; justify-content: space-between;">
                             <span class="stat-label">Nomscensions:</span>
                             <span class="stat-value" id="nomscensionCountText">0</span>
                         </div>
@@ -400,6 +512,10 @@
                         <div style="width: 100%; display: flex; justify-content: space-between;">
                             <span class="stat-label">Nom Coins:</span>
                             <span class="stat-value" id="nomCoinsText">0</span>
+                        </div>
+                        <div style="width: 100%; display: flex; justify-content: space-between;">
+                            <span class="stat-label">Nom Coin Boost Value:</span>
+                            <span class="stat-value" id="nomScoreBoostAmountText">0</span>
                         </div>
                     </div>
                     </div>
