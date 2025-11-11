@@ -30,8 +30,14 @@ export function formatNum(num){
 
 
 //Calculate how many upgrades can be bought
+//Return Amount of upgrades and total cost
 export function calcBuyMax(upgradeData){
     
+    //Don't buy if they are already at max level
+    if (upgradeData.level >= upgradeData.maxlevel){
+      return ({count: 0, cost: 0});
+    }
+
     //Check if the cost is score or nomCoins
     let moneyType;
     if (upgradeData.type == "score"){
@@ -40,10 +46,6 @@ export function calcBuyMax(upgradeData){
         moneyType = gameState.nomCoins;
     }
 
-    //Don't buy if they are already at max level
-    if (upgradeData.level >= upgradeData.maxlevel){
-      return ({count: 0, cost: 0});
-    }
 
     let totalCost;
 
@@ -52,12 +54,12 @@ export function calcBuyMax(upgradeData){
     } else {
       totalCost = new Decimal(upgradeData.cost);
       let maxUpgrades = 1;
-      let upgradeLevel = upgradeData.level
+      let upgradeLevel = upgradeData.level+1;
 
       while (true){
         //If score is greater than current cost plus the next upgrade cost && level will not exceed max
-        if (moneyType.greaterThanOrEqualTo(totalCost.plus(increaseCost(upgradeData))) && (upgradeLevel + 1 < upgradeData.maxlevel)){
-            totalCost = totalCost.plus(increaseCost(upgradeData));
+        if (moneyType.greaterThanOrEqualTo(totalCost.plus(buyMaxCostCalc(upgradeData, upgradeLevel))) && (upgradeLevel + 1 < upgradeData.maxlevel)){
+            totalCost = totalCost.plus(buyMaxCostCalc(upgradeData,upgradeLevel));
             upgradeLevel++;
             maxUpgrades++;
           // }
@@ -68,6 +70,10 @@ export function calcBuyMax(upgradeData){
       return ({count: maxUpgrades, cost: totalCost});
     }
     
+}
+
+function buyMaxCostCalc(upgrade, newLevel){
+  return (new Decimal(upgrade.baseCost.times(Math.pow(upgrade.upgradeScale, newLevel)).toFixed(2)))
 }
 
 export function increaseCost(upgrade){
@@ -100,4 +106,8 @@ export function setAutoFeed(){
     upgrades.autoFeed.speed = upgrades.autoFeed.baseSpeed.minus(upgrades.autoFeed.increase*upgrades.autoFeed.level)
     gameState.dotIntervalID = setInterval(createDot, upgrades.autoFeed.speed*1000);
     $("#upgradeAutoFeedSpeedLvl").text(`Level: ${upgrades.autoFeed.level}/${upgrades.autoFeed.maxlevel}`);
+}
+
+export function calcNomGain(){
+  return formatNum(gameState.nomscendScore.divide(100000).times(gameState.nomCoinMulti));
 }
