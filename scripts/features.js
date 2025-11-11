@@ -1,6 +1,8 @@
 import { gameState, shopUpgrades, upgrades } from './data.js'
 import { createDot } from './consumables.js';
 import { resetUpgrades } from './gameFiles.js';
+import { calcNomGain } from './util.js';
+import { updateNomScoreBoost } from './score.js';
 
 
 //Enable the Auto feed Button
@@ -18,7 +20,6 @@ export function enableAutofeed(){
 }
 
 export function unlockNomscend(){
-    // $("#nomsecReqText").text(`Lifetime Score Required to Nomscend: ${formatNum(gameState.nomsecScoreReq)}`);
     $("#nomscendBttn").show();
     $("#nomscendUpgradesBttn").show();
     $("#nomscensionBttn").show();
@@ -32,11 +33,11 @@ export function nomscend(){
     $("#popUpModal").hide();
     // $("#nomsecReqText").text(formatNum(gameState.nomsecScoreReq));
     const gs = gameState;
-    gameState.nomCoins = gameState.nomCoins.plus(gs.nomscendScore.divide(100000)).times(gs.nomCoinMulti);
-    if (gameState.nomCoinBestGain.lessThan((gs.nomscendScore.divide(100000)).times(gs.nomCoinMulti))){
-        gameState.nomCoinBestGain = gs.nomscendScore.divide(100000).times(gs.nomCoinMulti);
+    gameState.nomCoins = gameState.nomCoins.plus(calcNomGain());
+    if (gameState.nomCoinBestGain.lessThan(calcNomGain())){
+        gameState.nomCoinBestGain = new Decimal(calcNomGain());
     }
-    gameState.lifetimeNomCoins.plus(gs.nomscendScore.divide(100000).times(gs.nomCoinMulti));
+    gameState.lifetimeNomCoins = gameState.lifetimeNomCoins.plus(calcNomGain());
     gameState.score = new Decimal(0);
     gameState.nomscensionCount = gs.nomscensionCount.plus(1);
     gameState.nomscendScore = new Decimal(0);
@@ -47,6 +48,7 @@ export function nomscend(){
             $("#upgradeAutoFeedSpeed").parent().hide();
     }
     resetUpgrades();
+    updateNomScoreBoost();
 }
 
 export function createKids(){
