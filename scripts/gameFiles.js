@@ -1,5 +1,4 @@
 import { gameState, upgrades, shopUpgrades } from './data.js'
-// import { freshGameState, freshUpgrades, freshShopUpgrades } from './data.js';
 import { createDot } from './consumables.js';
 import { increaseCost, setAutoFeed, setDotMulti, setDotValue, setSpeed } from './util.js';
 import { updateLevels } from './display.js';
@@ -53,20 +52,36 @@ export function compareSaveData(data,name){
                         data[item] = upgrades[item]
                     }
                 }
+                //Remove any extra upgrades that may have been removed.
+                if (data.length > upgrades.length){
+                    for (let item in data){
+                        if (data[item] && !upgrades[item]){
+                            //Splice the index of the extra items, 1 = number of items to splice.
+                            data.splice(data.indexOf(data[item], 1))
+                        }
+                    }
+                }
             loadUpgradeData(data, "upgrades"); 
     }
     if (name == "shopUpgrades"){
         //Look through keys in site version
-            for (let item in Object.keys(shopUpgrades)){
+            // for (let item in Object.keys(shopUpgrades)){
+            for (const [key, value] of Object.entries(shopUpgrades)){
                 //If players verions has an upgrade variable. Use it. Otherwise take it from site version
-                if (data[item]){
-                    for (let key in shopUpgrades[item]){
-                        if (!data[item][key]){
-                            data[item][key] = shopUpgrades[item][key];
+                if (data[key]){
+                        if (!data[key][value]){
+                            data[key][value] = shopUpgrades[key][value];
                         }
-                    }
                 } else {
-                    data[item] = shopUpgrades[item]
+                    data[key] = shopUpgrades[key]
+                }
+            }
+            //Check for removed upgrades and delete them.
+            if (Object.keys(data).length > Object.keys(shopUpgrades).length){
+                for (const [key, value] of Object.entries(data)){
+                    if (data[key] && !shopUpgrades[key]){
+                        delete data[key];
+                    }
                 }
             }
         loadUpgradeData(data, "shopUpgrades"); 
@@ -75,7 +90,6 @@ export function compareSaveData(data,name){
 
 //Check Game files for existing save
 export function checkSaveFile(){
-
     if (localStorage.getItem("gameState")){
         const data = JSON.parse(localStorage.getItem("gameState"));
         compareSaveData(data, "gameState")
@@ -118,21 +132,19 @@ export function loadUpgradeData(data, name){
         }
         //Load max levels
         //increaseDotMultiMax
-        upgrades.increaseDotMulti.maxlevel = ((upgrades.increaseDotMultiMax.level-1)*upgrades.increaseDotMulti.increase)+5; //5 = base max level
+        upgrades.increaseDotMulti.maxlevel = ((upgrades.increaseDotMultiMax.level-1)*upgrades.increaseDotMultiMax.increase)+5; //5 = base max level
         //increaseDotValMax
         upgrades.increaseDotValue.maxlevel = ((upgrades.increaseDotValMax.level-1)*upgrades.increaseDotValMax.increase)+100;//100 = base max level
         updateLevels();
     }
 
     else if (name == "shopUpgrades"){
-        for (let item in data){
-            for (let key in data[item]) {
-                if (typeof shopUpgrades[item][key] == 'object' && typeof data[item][key] == 'string'){
-                    shopUpgrades[item][key] = new Decimal(data[item][key]);
+        for (const [key, value] of Object.entries(data)){
+                if (typeof shopUpgrades[key][value] == 'object' && typeof data[key][value] == 'string'){
+                    shopUpgrades[key][value] = new Decimal(data[key][value]);
                 } else {
-                    shopUpgrades[item][key] = data[item][key];
+                    shopUpgrades[key][value] = data[key][value];
                 }
-            }
         }
     }
 }
