@@ -1,6 +1,7 @@
 import { updateLevels } from "../display.js";
 import { increaseCost, setAutoFeed, setSpeed, setDotMulti } from "../util.js";
 import { upgrades, gameState, shopUpgrades } from "../data.js";
+import { updateNomScoreBoost } from "../score.js";
 
 //NOM Upgrades
 
@@ -137,18 +138,14 @@ export function keepAutofeed(){
     updateLevels();
 }
 
-export function increaseNomDotMulti(){
-    const upgradeData = upgrades.increaseNomDotMulti;
-    // if (gameState.nomCoins.greaterThanOrEqualTo(upgradeData.cost)){
-    //     //Purchase upgrade
-    //     gameState.nomCoins = gameState.nomCoins.minus(upgradeData.cost);
-    //     //Upgrade effect
-    //         gameState.dotMulti = gameState.dotMulti.plus(gameState.nomscendDotVal);
-    //     gameState.nomscendDotVal = gameState.nomscendDotVal.plus(upgradeData.increase);
-    //     gameState.dotMulti = gameState.dotMulti.plus(gameState.nomscendDotVal);
-    //     //Increase cost
-    //     upgrades.increaseNomDotMulti.cost = new Decimal(upgradeData.baseCost.times(Math.pow(upgradeData.upgradeScale, upgradeData.level)).toFixed(2));
-    //     //Increase upgrade level
-    //     upgrades.increaseNomDotMulti.level = upgradeData.level+1;
-    // }
+export function nomCoinScoreBoost(){
+    const upgradeData = upgrades.nomCoinScoreBoost;
+    if (gameState.nomCoins.greaterThanOrEqualTo(upgradeData.cost)){
+        gameState.nomCoins = gameState.nomCoins.minus(upgradeData.cost);
+        upgradeData.level = upgradeData.level+1;
+        upgradeData.bought = true;
+        //Upgrade Effect
+        updateNomScoreBoost();
+    }
+    updateLevels();
 }
