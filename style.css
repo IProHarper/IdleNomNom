@@ -13,15 +13,40 @@
   --shadow: rgba(0, 0, 0, 0.3);
 }
 
-
-
 body {
     background-color: var(--bg-primary);
     color: white;
     text-align: center;
     font-family: pixleFont, Arial, sans-serif;
 }
+
 /* Containers */
+#gameContainer {
+  position: relative;
+  width: 60vw;             /* 60% of viewport width */
+  height: 60vh;            /* 60% of viewport height */
+  margin:auto;          /* horizontally center */
+  top: 50%;
+  background-color: #111;  /* dark background (change to fit your theme) */
+  border: 2px solid #33ecff; /* cool neon blue border */
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(51, 236, 255, 0.4);
+  overflow: hidden;
+}
+#centreDot{
+  position: relative;
+  width: 5em;  
+  height: 5em; 
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
+
 .nomnom-container {
     position: relative;
     width: 80%;
@@ -31,22 +56,34 @@ body {
     border-radius: 25px;
     overflow: hidden;
 }
-#menu-container {
-    position: relative;
-    display: flex;
-    background-color: #E3E374;
-    width:auto;
-    padding: 0.2em;
+ #menu-container {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+  width: auto;
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  border-bottom: 3px solid var(--border-color);
+  box-shadow: 0 4px 12px var(--shadow);
+  backdrop-filter: blur(10px);
 }
+
 #menu-left {
-    width: 50%;
-    display: flex;
-    justify-content: left;
+  width: 50%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
 }
+
 #menu-right {
-    width:50%;
-    display: flex;
-    justify-content: right;
+  width: 50%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
 }
 .upgrades{
     margin-top: 1em;
@@ -88,6 +125,31 @@ body {
     padding-top: 5px;
     width: 100%;
 }
+.resources{
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.resource-amount {
+  font-size: 18px;
+  font-weight: 600;
+  color: aqua;
+}
+.resource-item {
+  display: flex;
+  columns: 1;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-secondary);
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 2px solid var(--border-color);
+}
+.resource-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
 
 /* Mr NomNOm */
 .nomnom {
@@ -125,6 +187,47 @@ body {
     z-index: 15;
     pointer-events: none;
     user-select: none;
+}
+.megaDot {
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    z-index: 15;
+    pointer-events: none;
+    user-select: none;
+}
+.square {
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border-radius: 0px;
+    transform: translateY(-50%);
+    z-index: 15;
+    pointer-events: none;
+    user-select: none;
+}
+/* Optional: Add slight rounded corners to squares */
+.dot.rounded {
+  border-radius: 2px;
+}
+
+/* Optional: Triangle dots (if using triangle character) */
+.square.triangle {
+  width: 0;
+  height: 0;
+  background-color: transparent;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 10px solid white;
+  border-radius: 0;
 }
 
 .floating-text {
@@ -310,50 +413,7 @@ button:disabled {
   cursor: pointer;
 }
 
-@media only screen and (max-width: 600px) {
-    button{
-        user-select: none;
-    }
-  #menu-container button{
-        border-radius: 5px;
-        font-size: 0.75em;
-        display:block;
-        width: 10em;
-        margin:auto;
-    }
-    #menu-container{
-        overflow: scroll;
-    }
-    #menu-left {
-        width: 100%;
-        display: block;
-        justify-content: left;
-    }
-    #menu-right {
-        width:100%;
-        display: block;
-        margin:auto;
-    }
-    #left-container{
-        display: contents;
-        width: 100%;
-    }
-    #right-container{
-        display: contents;
-        width: 100%;
-    }
-    #upgrades-container {
-        width:100%;
-        overflow: scroll;
-        margin:auto;
-    }
-    #shop-container {
-        width:100%;
-        overflow: scroll;
-        margin:auto;
-    }
 
-}
 
 /* Claude ai css code - ADAPTED*/
 
@@ -395,7 +455,7 @@ button:disabled {
 .upgrade-card {
   background: var(--bg-card);
   border-radius: 12px;
-  padding: 20px;
+  padding: 5px;
   border: 2px solid var(--border-color);
   box-shadow: 0 4px 6px var(--shadow);
   transition: all 0.3s ease;
@@ -468,17 +528,50 @@ button:disabled {
 }
 
 
-/* pallet
-Dark
-#0080FF
-#3399FF
-#66B3FF
-#99CCFF
-Light */
+@media only screen and (max-width: 600px) {
+    button{
+        user-select: none;
+    }
+  #menu-container button{
+        border-radius: 5px;
+        font-size: 0.75em;
+        display:block;
+        width: 10em;
+        margin:auto;
+    }
+    #menu-container{
+        overflow: scroll;
+    }
+    #menu-left {
+        width: 100%;
+        display: block;
+        justify-content: left;
+    }
+    #menu-right {
+        width:100%;
+        display: block;
+        margin:auto;
+    }
+    #left-container{
+        display: contents;
+        width: 100%;
+    }
+    #right-container{
+        display: contents;
+        width: 100%;
+    }
+    #upgrades-container {
+        width:100%;
+        overflow: scroll;
+        margin:auto;
+    }
+    #shop-container {
+        width:100%;
+        overflow: scroll;
+        margin:auto;
+    }
 
-
-
-
+}
 
 
 /*
