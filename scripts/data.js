@@ -3,14 +3,6 @@ import { keepAutofeed } from "./Upgrades/nomupgrades.js";
 
 
 
-// class upgrade {
-//     constructor(id,type){
-    //     this.id = id;
-    //     this.type = type
-    // }
-// }
-
-
 export const gameStages = [
     {
         name: "Beginning",
@@ -42,6 +34,7 @@ export var gameState = {
     dotSpeed: new Decimal(4),
     dotsEaten: new Decimal(0),
     nomscensionCount: new Decimal(0),
+    nomScoreBoostAmount: new Decimal(1),
     stage: 0,
     stageReached: false,
     nomsecScoreReq: new Decimal(100000),
@@ -53,7 +46,13 @@ export var gameState = {
     nomscentionUnlocked: false,
     nomCoinMulti: new Decimal(1),
     nomCoinBestGain: new Decimal(0),
-    dotIntervalID: 99919
+    dotIntervalID: 99919,
+    //Squares
+    squares: new Decimal(0),
+    squareCount: new Decimal(0),
+    lifetimeSquares: new Decimal(0),
+    squareValue : new Decimal(1),
+    squareSpeed : 4,
 }
 
 
@@ -61,11 +60,12 @@ export var upgrades = {
     //Standard Upgrades
     autoFeed : {
         id: "upgradeAutoFeedSpeed",
-        desc: "Send some dots automatically to Mr Nom Nom. Starts slow but a new upgrade is unlocked!",
+        name: "Auto Feed Speed",
+        desc: "Increase the frequency at which dots are send automatically!",
         type: "score",
         enabled: false,
         increase: new Decimal(0.5),
-        baseSpeed: new Decimal(10),
+        baseSpeed: new Decimal(9.95),
         speed: new Decimal(10),
         baseCost: new Decimal(25),
         cost: new Decimal(25),
@@ -77,11 +77,12 @@ export var upgrades = {
     },
     increaseDotValue : {
         id: "upgradeDotValue",
+        name: "Dot Base Value",
         desc: "Increase the base dot value.",
         type: "score",
         increase: new Decimal(1),
-        baseCost: new Decimal(50),
-        cost: new Decimal(50),
+        baseCost: new Decimal(25),
+        cost: new Decimal(25),
         upgradeScale: 1.05,
         level: 1,
         minlevel: 1,
@@ -90,6 +91,7 @@ export var upgrades = {
     },
     increaseDotSpeed : {
         id: "upgradeDotSpeed",
+        name: "Dot Speed +",
         desc: "Send those dots faster and faster!",
         type: "score",
         increase: new Decimal(0.2),
@@ -104,6 +106,7 @@ export var upgrades = {
     },
     increaseDotMulti : {
         id: "upgradeDotMulti",
+        name: "Dot Multiplier X",
         desc: "Did someone say multiplication?",
         type: "score",
         increase: new Decimal(2),
@@ -118,6 +121,7 @@ export var upgrades = {
     //Nom Upgrades
     increaseNomDotMulti : {
         id: "upgradeNomDotMulti",
+        name: "NULL",
         desc: "",
         type: "nomCoins",
         increase: new Decimal(10),
@@ -130,6 +134,7 @@ export var upgrades = {
     },
     increaseNomDotVal : {
         id: "upgradeNomDotVal",
+        name: "Permanent Dot Base Value",
         desc: "Increase the base dot value permanently",
         type: "nomCoins",
         increase: new Decimal(10),
@@ -142,6 +147,7 @@ export var upgrades = {
     },
     increaseDotMultiMax : {
         id: "upgradeDotMultiMax",
+        name: "Dot Multi Max Level+",
         desc: "Increase the max number of upgrades purchaseable for Dot Multiplier X",
         type: "nomCoins",
         increase: new Decimal(3),
@@ -154,6 +160,7 @@ export var upgrades = {
     },
     increaseDotValMax : {
         id: "upgradeDotValMax",
+        name: "Dot Value Max Level+",
         desc: "Increase the max number of upgrades purchaseable for base upgrade Dot Value",
         type: "nomCoins",
         increase: new Decimal(25),
@@ -166,7 +173,8 @@ export var upgrades = {
     },
     increaseAutoFeedMax : {
         id: "upgradeAutoFeedMax",
-        desc: "Increase the auto feeding max speed!",
+        name: "Auto Feed Speed +",
+        desc: "Increase the auto feeding speed even more!",
         type: "nomCoins",
         increase: new Decimal(0.1),
         baseCost: new Decimal(10),
@@ -178,6 +186,7 @@ export var upgrades = {
     },
     increaseDotSpeedBase : {
         id: "upgradeDotSpeedBase",
+        name: "Base Dot Speed+",
         desc: "Send those dots just that bit quicker!",
         type: "nomCoins",
         increase: new Decimal(0.1),
@@ -190,6 +199,7 @@ export var upgrades = {
     },
     increaseNomCoinMulti : {
         id: "upgradeNomCoinMulti",
+        name: "Nom Coin x2",
         desc: "Nom coin gain x2 per level!",
         type: "nomCoins",
         increase: 2,
@@ -202,6 +212,7 @@ export var upgrades = {
     },
     increaseStartDotSpeedLevel : {
         id: "upgradeStartDotSpeedLevel",
+        name: "Starting Dot Speed Level+",
         desc: "Increase the starting level of the base upgrade Dot Speed on Nomscension",
         type: "nomCoins",
         increase: 1,
@@ -214,6 +225,7 @@ export var upgrades = {
     },
     increaseStartDotMultiLevel : {
         id: "upgradeStartDotMultiLevel",
+        name: "Starting Multi Level+",
         desc: "Increase the starting level of the base upgrade Dot Multiplier on Nomscension",
         type: "nomCoins",
         increase: 1,
@@ -226,6 +238,7 @@ export var upgrades = {
     },
     keepAutoFeed : {
         id: "keepAutoFeed",
+        name: "Permanent Auto Feed",
         desc: "Keep auto feeding upgrades on Nomscension.",
         bought: false,
         type: "nomCoins",
@@ -236,8 +249,48 @@ export var upgrades = {
         maxlevel: 2,
         resetTier: 1
     },
+    unlockMrSquare : {
+        id: "unlockSquare",
+        name: "Unlock Mr.Square",
+        desc: "Unlock Mr.Square to gain squares! (These will boost your dots gain A LOT)",
+        bought: false,
+        type: "nomCoins",
+        baseCost: new Decimal(100000),
+        cost: new Decimal(100000),
+        upgradeScale: 1,
+        level: 1,
+        maxlevel: 2,
+        resetTier: 1
+    },
+    moreShopUpgrades : {
+        id: "unlockMoreShopUpgrades",
+        name: "More Shop Upgrades",
+        desc: "Unlock some more shop upgrades to help boost your score!",
+        bought: false,
+        type: "nomCoins",
+        baseCost: new Decimal(10),
+        cost: new Decimal(10),
+        upgradeScale: 1,
+        level: 1,
+        maxlevel: 2,
+        resetTier: 1
+    },
+    nomCoinScoreBoost : {
+        id: "unlocknomCoinScoreBoost",
+        name: "Score Boost",
+        desc: "Your score is now boosted by your lifetime NomCoin's! /100",
+        bought: false,
+        type: "nomCoins",
+        baseCost: new Decimal(1),
+        cost: new Decimal(1),
+        upgradeScale: 1,
+        level: 1,
+        maxlevel: 2,
+        resetTier: 1
+    },
     increaseBigDotChance : {
         id: "upgradeBigDotChance",
+        name: "Big Dot Spawn Chance",
         desc: "Adds a chance to send a mega dot woth 10x!",
         type: "nomCoins",
         increase: 1,
@@ -261,13 +314,6 @@ export var shopUpgrades = {
     },
     unlockBigDots : {
         id: "unlockBigDots",
-        bought: false,
-        cost: new Decimal(10000),
-        resetTier: 1
-    },
-    scoreBoost : {
-        id : "scoreBoostNomCoins",
-        type: "nomCoins",
         bought: false,
         cost: new Decimal(10000),
         resetTier: 1
