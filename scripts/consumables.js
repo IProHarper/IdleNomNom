@@ -24,12 +24,42 @@ export function createDot() {
     dot.addEventListener("transitionend", (event) => {
         dot.remove();
         if (event.propertyName == 'left'){
-            increaseScore();
-            showFloatingText(gameState.dotValue.times(gameState.dotMulti), position/2+20, gameContainer.clientHeight/2-22);
+            showFloatingText(increaseScore(),position/2+20, gameContainer.clientHeight/2-22);
+            // showFloatingText(gameState.dotValue.times(gameState.dotMulti), position/2+20, gameContainer.clientHeight/2-22);
             //playEatDotSound();
         } 
     });
 }
+
+export function createSquare() {
+    //Create dot on the page far right hand side.
+    let mrSquare = $("#mrSquareContainer");
+    console.log($("#mrSquareContainer"));
+    const square = document.createElement('div');
+    square.classList.add('square');    
+    $("#mrSquareContainer").append(square);
+    square.style.backgroundColor = $("#mrNomNom").css('fill');
+    let position = $("#mrSquareContainer").width()
+    square.style.left = position + 'px';
+
+    // Apply dynamic animation duration
+    square.style.transition = `1s`;
+    square.style.transitionTimingFunction = `linear`;
+    square.style.translate = `-${position/2}px`;
+    
+    square.addEventListener("transitionend", (event) => {
+        square.remove();
+        if (event.propertyName == 'left'){
+            showFloatingText(gameState.squareValue, position/2+20, $("#mrSquareContainer").height);
+        } 
+    });
+}
+
+
+
+
+
+// $('<div class="dot rounded"></div>')
 
 function showFloatingText(text, x, y) {
     const gameContainer = document.querySelector('.nomnom-container');
