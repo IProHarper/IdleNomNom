@@ -23,6 +23,9 @@ $(document).ready(function(){
     }
 
     function progressGameStage(){
+        if (gameState.stage > gameStages.length-1){
+        return
+    }
         if (gameStages[gameState.stage].statType == "score"){
             var stat = gameState.liftimeScore;
         } else if (gameStages[gameState.stage].statType == "nomscend"){
