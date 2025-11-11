@@ -37,7 +37,7 @@ export function initDisplay(){
     $("#mrHexContainer").hide();
     $("#mrTriangleContainer").hide();
     $("#mrSquareContainer").hide();
-    // $("#mrNomNomContainer").hide();
+    $("#mrNomNomContainer").hide();
 
     // updateLevels();
     
@@ -85,6 +85,9 @@ export function updateStats(){
 
     //Upgrade progressBar based on score
 export function updateProgressBar() {
+    if (gameState.stage > gameStages.length-1){
+        return
+    }
     if (gameStages[gameState.stage].statType == "score"){
         var stat = gameState.liftimeScore;
     } else if (gameStages[gameState.stage].statType == "nomscend"){
