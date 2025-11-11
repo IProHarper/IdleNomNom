@@ -1,6 +1,6 @@
 import { gameState, upgrades, gameStages } from "./data.js";
 import { createDot } from "./consumables.js";
-import { formatNum, increaseCost } from "./util.js";
+import { calcNomGain, formatNum, increaseCost } from "./util.js";
 
 const scoreDisplay = document.getElementById('score');
 
@@ -21,7 +21,6 @@ export function updateLevels(){
     $("#upgradeStartDotMultiLevelLvl").text(`Level: ${upgrades.increaseStartDotMultiLevel.level}/${upgrades.increaseStartDotMultiLevel.maxlevel}`);
     $("#upgradeDotSpeedBaseLvl").text(`Level: ${upgrades.increaseDotSpeedBase.level}/${upgrades.increaseDotSpeedBase.maxlevel}`);
     $("#upgradeAutoFeedMaxLvl").text(`Level: ${upgrades.increaseAutoFeedMax.level}/${upgrades.increaseAutoFeedMax.maxlevel}`);
-
 }
 
 export function initDisplay(){
@@ -29,31 +28,19 @@ export function initDisplay(){
     $("#upgrades-container").show();
     $("#stats-container").hide();
     $("#nomscendUpgradesBttn").hide(); 
-    $("#nomCoinGainText").text(formatNum(gameState.nomscendScore.divide(100000).times(gameState.nomCoinMulti)));
+    $("#nomCoinGainText").text(calcNomGain());
     $("#nomscensionBttn").hide();
     $("#nomCoinDisplay").hide();
     $("#upgradeAutoFeedSpeed").parent().hide();
 
-    updateLevels();
+    //Hide other noms
+    $("#mrHexContainer").hide();
+    $("#mrTriangleContainer").hide();
+    $("#mrSquareContainer").hide();
+    // $("#mrNomNomContainer").hide();
 
-    // Update Descriptions:
-    //Set Base Desc
-    $("#upgradeDotValueDesc").text(upgrades.increaseDotValue.desc);
-    $("#upgradeDotSpeedDesc").text(upgrades.increaseDotSpeed.desc);
-    $("#upgradeDotMultiDesc").text(upgrades.increaseDotMulti.desc);
-    $("#upgradeAutoFeedSpeedDesc").text(upgrades.autoFeed.desc);
-
-    //Nom Upgrades
-    $("#upgradeNomDotValDesc").text(upgrades.increaseNomDotVal.desc);
-    $("#upgradeNomCoinMultiDesc").text(upgrades.increaseNomCoinMulti.desc);
-    $("#upgradeDotMultiMaxDesc").text(upgrades.increaseDotMultiMax.desc);
-    $("#upgradeDotValMaxDesc").text(upgrades.increaseDotValMax.desc);
-    $("#upgradeStartDotSpeedLevelDesc").text(upgrades.increaseStartDotSpeedLevel.desc);
-    $("#upgradeStartDotMultiLevelDesc").text(upgrades.increaseStartDotMultiLevel.desc);
-    $("#upgradeDotSpeedBaseDesc").text(upgrades.increaseDotSpeedBase.desc);
-    $("#upgradeAutoFeedMaxDesc").text(upgrades.increaseAutoFeedMax.desc);
-    $("#keepAutoFeedDesc").text(upgrades.keepAutoFeed.desc);
-
+    // updateLevels();
+    
      // Shop Upgrades
     $("#upgradeAutoFeedSpeedDesc").text(upgrades.autoFeed.desc);
 
@@ -82,16 +69,17 @@ export function updateStats(){
     $("#dotMultiText").text(formatNum(gameState.dotMulti));
     $("#autofeedSpeedText").text(upgrades.autoFeed.speed.toFixed(2));
     $("#nomscensionCountText").text(formatNum(gameState.nomscensionCount));
-    $("#LifetimeNomCoinsText").text(formatNum(gameState.nomCoins));
+    $("#LifetimeNomCoinsText").text(formatNum(gameState.lifetimeNomCoins));
     $("#nomCoinStatText").text(formatNum(gameState.nomCoins));
 
     $("#nomCoinsText").text(formatNum(gameState.nomCoins));
+    $("#nomScoreBoostAmountText").text(formatNum(gameState.nomScoreBoostAmount));
 
     //Update Nomsension coins
     //Stats version
-    $("#nomCoinGainText").text(formatNum(gameState.nomscendScore.divide(100000).times(gameState.nomCoinMulti)));
+    $("#nomCoinGainText").text(calcNomGain());
     //Modal version
-    $("#nomCoinGainsText").text(formatNum(gameState.nomscendScore.divide(100000).times(gameState.nomCoinMulti)));
+    $("#nomCoinGainsText").text(calcNomGain());
 }
 
 
@@ -111,4 +99,24 @@ export function updateProgressBar() {
 
     progressBar.style.width = progress + "%";
     progressBarText.innerHTML = `${gameStages[gameState.stage].progressText} - (${progress.toFixed(2)}%)`;
+}
+
+export function addUpgrade(upgradePosition, upgradeData){
+
+    let newUpgrade = document.createElement('div');
+    newUpgrade.classList.add("upgrade-card");
+
+    newUpgrade.innerHTML +=
+    `<div class="upgrade-header">
+        <span class="upgrade-icon"></span>
+        <div class="upgrade-info">
+            <h3 class="upgrade-name">${upgradeData.name}</h3>
+            <p class="upgrade-description" id="${upgradeData.id}Desc">Desc</p>
+        </div>
+    </div>
+    <button id="${upgradeData.id}" class="nomBttn"><span id="${upgradeData.id}Text">100</span>
+        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+    </button>`;
+
+    $(upgradePosition).find(".upgrades-grid").append(newUpgrade);
 }
