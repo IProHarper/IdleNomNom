@@ -1,11 +1,12 @@
-import { createDot } from './consumables.js';
+import { createDot, createSquare } from './consumables.js';
 import { enableAutofeed, createKids, nomscend } from './features.js';
 import { upgradeDotValue, upgradeDotSpeed, upgradeAutoFeedSpeed, upgradeDotMulti} from './upgradeButtons.js';
-import { increaseNomDotMulti, increaseDotMultiMax, increaseDotValMax, increaseNomCoinMulti, increaseNomDotVal, increaseStartDotSpeedLevel, increaseAutoFeedMax, increaseStartDotMultiLevel, increaseDotSpeedBase, keepAutofeed } from './Upgrades/nomupgrades.js'
+import { increaseDotMultiMax, increaseDotValMax, increaseNomCoinMulti, increaseNomDotVal, increaseStartDotSpeedLevel, increaseAutoFeedMax, increaseStartDotMultiLevel, increaseDotSpeedBase, keepAutofeed, nomCoinScoreBoost } from './Upgrades/nomupgrades.js'
 import { upgrades, gameState, shopUpgrades } from './data.js';
 import { calcBuyMax, formatNum, increaseCost, setDotValue, setSpeed, setAutoFeed, setDotMulti  } from './util.js';
 
 import { saveGame } from './gameFiles.js';
+import { addUpgrade } from './display.js';
 
 let holdInterval;
 
@@ -137,6 +138,9 @@ $("#upgradeStartDotMultiLevel").on('click',function(){
 $("#keepAutoFeed").on('click',function(){
     keepAutofeed();
 });
+$("#unlocknomCoinScoreBoost").on('click',function(){
+    nomCoinScoreBoost();
+});
 
 
 //##############
@@ -235,9 +239,11 @@ $("#nomscendBttn").on('click',function(){
 });
 
 $("#debugBttn").on('click',function(){
-    gameState.dotValue = gameState.dotValue.plus(100);
-    
+    // gameState.dotValue = gameState.dotValue.plus(100);
+    // createSquare();
+    addUpgrade("#baseUpgrades", upgrades.increaseBigDotChance);
 });
+
 
 $("#ResetBttn").click(function(){
     if (confirm("Warning! You are about to Reset all progress and start from 0.\nAre you sure you wish to continue?")){
@@ -282,6 +288,12 @@ export function buttonCheck(){
         } else {
             $("#"+value.id).css("background", "");
             $("#"+value.id).css("color", "");
+        }
+        //Update Descriptions
+        $("#"+value.id+"Desc").text(value.desc);
+        //Update Levels
+        if ($("#"+value.id+"Lvl")){
+            $("#"+value.id+"Lvl").text(`Level: ${value.level}/${value.maxlevel}`);
         }
     }
 
