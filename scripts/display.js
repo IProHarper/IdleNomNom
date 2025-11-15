@@ -37,7 +37,7 @@ export function initDisplay(){
     $("#mrHexContainer").hide();
     $("#mrTriangleContainer").hide();
     $("#mrSquareContainer").hide();
-    $("#mrNomNomContainer").hide();
+    //$("#mrNomNomContainer").hide();
 
     // updateLevels();
     
