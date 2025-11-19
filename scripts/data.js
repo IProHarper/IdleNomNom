@@ -1,7 +1,22 @@
 import "./break_infinity.js";
-import { keepAutofeed } from "./Upgrades/nomupgrades.js";
 
+export var dotList = [];
+export var squareList = [];
+export var roboList = [];
+export var mousePos = {
+    x: 0,
+    y: 0
+}
 
+export var mouseNom = {
+    x: 0,
+    y: 0,
+    radius: 20,
+    open: true,
+    mouthAngle: 0,
+    chompSpeed: 60,
+    color: "yellow"
+}
 
 export const gameStages = [
     {
@@ -26,13 +41,16 @@ export const gameStages = [
 
 
 export var gameState = {
-    gameVersion: 0.8,
+    gameVersion: 0.9,
     score: new Decimal(0),
     liftimeScore: new Decimal(0),
     dotValue: new Decimal(1),
     dotMulti: new Decimal(1),
     dotSpeed: new Decimal(4),
     dotsEaten: new Decimal(0),
+    dotMaxCount: 10,
+    dotSpawnCount: 1,
+    dotSpawnInterval: 5,
     nomscensionCount: new Decimal(0),
     nomScoreBoostAmount: new Decimal(1),
     stage: 0,
@@ -49,15 +67,89 @@ export var gameState = {
     dotIntervalID: 99919,
     //Squares
     squares: new Decimal(0),
-    squareCount: new Decimal(0),
-    lifetimeSquares: new Decimal(0),
     squareValue : new Decimal(1),
-    squareSpeed : 4,
+    squareMulti : new Decimal(1),
+    squaresEaten: new Decimal(0),
+    squareMaxCount: 5,
+    squareSpawnCount: 1,
+    squareSpawnInterval: 10,
+    squareSpawnIntervalID: 999,
+    lifetimeSquares: new Decimal(0),
 }
 
 
 export var upgrades = {
     //Standard Upgrades
+    increaseDotValue : {
+        id: "upgradeDotValue",
+        name: "Dot Value",
+        desc: "Dot Value + 1.",
+        type: "score",
+        increase: new Decimal(1),
+        baseCost: new Decimal(25),
+        cost: new Decimal(25),
+        upgradeScale: 1.05,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 100,
+        resetTier: 0
+    },
+     increaseDotMulti : {
+        id: "upgradeDotMulti",
+        name: "Dot Multiplier X",
+        desc: "Multi + 2",
+        type: "score",
+        increase: new Decimal(2),
+        baseCost: new Decimal(1000),
+        cost: new Decimal(1000),
+        upgradeScale: 2,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 5,
+        resetTier: 0
+    },
+    increaseDotSpawnRate : {
+        id: "upgradeDotSpawnRate",
+        name: "Spawn Rate +",
+        desc: "Increase the spawn rate by 0.5s",
+        type: "score",
+        increase: 0.5,
+        baseCost: new Decimal(25),
+        cost: new Decimal(25),
+        upgradeScale: 1.36,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 10,
+        resetTier: 0
+    },
+    increaseDotSpawnCount : {
+        id: "upgradeDotSpawnCount",
+        name: "Dots Spawn Count",
+        desc: "Increase the amount of dots that spawn by 1",
+        type: "score",
+        increase: 1,
+        baseCost: new Decimal(25),
+        cost: new Decimal(25),
+        upgradeScale: 1.36,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 50,
+        resetTier: 0
+    },
+    increaseMaxDotCount : {
+        id: "upgradeMaxDotCount",
+        name: "Max Dots",
+        desc: "Increase the amount of dots that can exist at the same time",
+        type: "score",
+        increase: 5,
+        baseCost: new Decimal(50),
+        cost: new Decimal(50),
+        upgradeScale: 2.1,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 50,
+        resetTier: 0
+    },
     autoFeed : {
         id: "upgradeAutoFeedSpeed",
         name: "Auto Feed Speed",
@@ -75,20 +167,6 @@ export var upgrades = {
         maxlevel: 19,
         resetTier: 0
     },
-    increaseDotValue : {
-        id: "upgradeDotValue",
-        name: "Dot Base Value",
-        desc: "Increase the base dot value.",
-        type: "score",
-        increase: new Decimal(1),
-        baseCost: new Decimal(25),
-        cost: new Decimal(25),
-        upgradeScale: 1.05,
-        level: 1,
-        minlevel: 1,
-        maxlevel: 100,
-        resetTier: 0
-    },
     increaseDotSpeed : {
         id: "upgradeDotSpeed",
         name: "Dot Speed +",
@@ -102,20 +180,6 @@ export var upgrades = {
         level: 1,
         minlevel: 1,
         maxlevel: 16,
-        resetTier: 0
-    },
-    increaseDotMulti : {
-        id: "upgradeDotMulti",
-        name: "Dot Multiplier X",
-        desc: "Did someone say multiplication?",
-        type: "score",
-        increase: new Decimal(2),
-        baseCost: new Decimal(1000),
-        cost: new Decimal(1000),
-        upgradeScale: 2,
-        level: 1,
-        minlevel: 1,
-        maxlevel: 5,
         resetTier: 0
     },
     //Nom Upgrades
@@ -249,18 +313,88 @@ export var upgrades = {
         maxlevel: 2,
         resetTier: 1
     },
-    unlockMrSquare : {
+    unlockSquares : {
         id: "unlockSquare",
-        name: "Unlock Mr.Square",
-        desc: "Unlock Mr.Square to gain squares! (These will boost your dots gain A LOT)",
+        name: "Unlock Squares",
+        desc: "Unlock squares which give you access to more upgrades!",
         bought: false,
         type: "nomCoins",
-        baseCost: new Decimal(100000),
-        cost: new Decimal(100000),
+        baseCost: new Decimal(1e+6),
+        cost: new Decimal(1e+6),
         upgradeScale: 1,
         level: 1,
         maxlevel: 2,
         resetTier: 1
+    },
+    increaseSquareValue : {
+        id: "upgradeSquareValue",
+        name: "Square Value",
+        desc: "Square Value + 1.",
+        type: "square",
+        increase: new Decimal(1),
+        baseCost: new Decimal(25),
+        cost: new Decimal(25),
+        upgradeScale: 1.05,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 100,
+        resetTier: 0
+    },
+     increaseSquareMulti : {
+        id: "upgradeSquareMulti",
+        name: "Square Multiplier X",
+        desc: "Multi + 2",
+        type: "square",
+        increase: new Decimal(2),
+        baseCost: new Decimal(1000),
+        cost: new Decimal(1000),
+        upgradeScale: 2,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 5,
+        resetTier: 0
+    },
+    increaseSquareSpawnRate : {
+        id: "upgradeSquareSpawnRate",
+        name: "Spawn Rate +",
+        desc: "Increase the spawn rate by 0.5s",
+        type: "square",
+        increase: 0.5,
+        baseCost: new Decimal(25),
+        cost: new Decimal(25),
+        upgradeScale: 1.36,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 10,
+        resetTier: 0
+    },
+    increaseSquareSpawnCount : {
+        id: "upgradeSquareSpawnCount",
+        name: "Square Spawn Count",
+        desc: "Increase the amount of squares that spawn by 1",
+        type: "square",
+        increase: 1,
+        baseCost: new Decimal(25),
+        cost: new Decimal(25),
+        upgradeScale: 1.36,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 50,
+        resetTier: 0
+    },
+    increaseMaxSquareCount : {
+        id: "upgradeMaxSquareCountssssss",
+        name: "Max Square",
+        desc: "Increase the amount of square that can exist at the same time",
+        type: "square",
+        increase: 5,
+        baseCost: new Decimal(50),
+        cost: new Decimal(50),
+        upgradeScale: 2.1,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 50,
+        resetTier: 0
     },
     moreShopUpgrades : {
         id: "unlockMoreShopUpgrades",
@@ -287,6 +421,33 @@ export var upgrades = {
         level: 1,
         maxlevel: 2,
         resetTier: 1
+    },
+    unlockRoboNom : {
+        id: "unlockRoboNom",
+        name: "Unlock Robo-Noms!",
+        desc: "Unlock mini Robo-Nom that roams around for you eating dots",
+        type: "nomCoins",
+        increase: 1,
+        baseCost: new Decimal(25),
+        cost: new Decimal(25),
+        upgradeScale: 1,
+        level: 1,
+        maxlevel: 2,
+        resetTier: 1
+    },
+    addRoboNom : {
+        id: "addRoboNom",
+        name: "Spawn a Robo-Nom",
+        desc: "Spawn some Robo-Noms to collect for you!",
+        type: "score",
+        increase: 1,
+        baseCost: new Decimal(50),
+        cost: new Decimal(50),
+        upgradeScale: 1.75,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 4,
+        resetTier: 0
     },
     increaseBigDotChance : {
         id: "upgradeBigDotChance",
