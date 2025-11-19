@@ -1,22 +1,40 @@
-import { createDot, createSquare } from './consumables.js';
-import { enableAutofeed, createKids, nomscend } from './features.js';
-import { upgradeDotValue, upgradeDotSpeed, upgradeAutoFeedSpeed, upgradeDotMulti} from './upgradeButtons.js';
-import { increaseDotMultiMax, increaseDotValMax, increaseNomCoinMulti, increaseNomDotVal, increaseStartDotSpeedLevel, increaseAutoFeedMax, increaseStartDotMultiLevel, increaseDotSpeedBase, keepAutofeed, nomCoinScoreBoost } from './Upgrades/nomupgrades.js'
-import { upgrades, gameState, shopUpgrades } from './data.js';
+import { createDot, createSquare, spawnDot } from './consumables.js';
+import { enableAutofeed, createKids, nomscend, unlockSquares } from './features.js';
+import { upgradeDotValue, upgradeDotSpeed, upgradeAutoFeedSpeed, upgradeDotMulti, upgradeDotSpawnRate, upgradeDotSpawnCount, upgradeDotMaxCount, addRoboNom} from './upgradeButtons.js';
+import { increaseDotMultiMax, increaseDotValMax, increaseNomCoinMulti, increaseNomDotVal, increaseStartDotSpeedLevel, increaseAutoFeedMax, increaseStartDotMultiLevel, increaseDotSpeedBase, keepAutofeed, nomCoinScoreBoost, unlockRoboNoms } from './Upgrades/nomupgrades.js'
+import { upgrades, gameState, shopUpgrades, mouseNom, roboList, mousePos } from './data.js';
 import { calcBuyMax, formatNum, increaseCost, setDotValue, setSpeed, setAutoFeed, setDotMulti  } from './util.js';
 
 import { saveGame } from './gameFiles.js';
-import { addUpgrade } from './display.js';
 
-let holdInterval;
-
-$("#feedNomNom").on("mousedown touchstart", function () {
-    createDot();
-    holdInterval = setInterval(createDot, 150);
+//Spawn Dots with Feed button
+$("#feedNomNom").on("click", function () {
+    for (let i=0; i < gameState.dotSpawnCount; i++){
+        spawnDot();
+    }
 });
 
-$("#feedNomNom").on("mouseup mouseleave  touchend", function () {
-    clearInterval(holdInterval);
+//Highlight active menu
+document.querySelectorAll(".menu-toggle-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        if ($(btn).hasClass('active')){
+            btn.classList.remove("active");
+        } else {
+            document.querySelectorAll(".menu-toggle-btn").forEach(b => b.classList.remove("active"));
+            $(btn).addClass('active');
+        }
+    });
+});
+
+//Menu transition handling
+$("#toggleUpgrades").on("click", function() {
+    switchRMenu("#baseUpgrades");
+});
+$("#toggleNomUpgrades").on("click", function() {
+    switchRMenu("#nomUpgrades");
+});
+$("#toggleSquareUpgrades").on("click", function() {
+    switchRMenu("#squareUpgrades");
 });
 
 
@@ -43,40 +61,20 @@ $("#unlockAutoFeed").on('click',function(){
 //################
 //Customization buttons (Color)
 $("#enableDefaultMode").on('click',function(){
-    $("#mrNomNom").css("fill", "white");
-    $(".dot").css("background-color", "white");
-    if ($(".nomnomjr").children().length>0){
-        $(".nomnomjr").children().hide();
-    }
+    mouseNom.color = "white";
 });
 
 $("#enableLachlanMode").on('click',function(){
-    $("#mrNomNom").css("fill", "purple");
-    $(".dot").css("background-color", "purple");
-    if ($(".nomnomjr").children().length>0){
-        $(".nomnomjr").children().hide();
-    }
+    mouseNom.color = "purple";
 });
 $("#enableCillianMode").on('click',function(){
-    $("#mrNomNom").css("fill", "blue");
-    $(".dot").css("background-color", "blue");
-    if ($(".nomnomjr").children().length>0){
-        $(".nomnomjr").children().hide();
-    }
+    mouseNom.color = "blue";
 });
 $("#enableConallMode").on('click',function(){
-    $("#mrNomNom").css("fill", "yellow");
-    $(".dot").css("background-color", "yellow");
-    if ($(".nomnomjr").children().length>0){
-        $(".nomnomjr").children().hide();
-    }
+    mouseNom.color = "yellow";
 });
 $("#enableAidanMode").on('click',function(){
-    $("#mrNomNom").css("fill", "red");
-    $(".dot").css("background-color", "red");
-    if ($(".nomnomjr").children().length>0){
-        $(".nomnomjr").children().hide();
-    }
+    mouseNom.color = "red";
 });
 $("#enableDADMode").on('click',function(){
     $("#mrNomNom").css("fill", "green");
@@ -89,23 +87,131 @@ $("#enableDADMode").on('click',function(){
 });
 //####################
 
+//Toggle Right Menu
+function switchRMenu(activeMenu){
+    if (!$(activeMenu).hasClass('hidden')){
+        $(activeMenu).toggleClass('hidden');
+    } else {
+        $(".upgrades-container").each(function() {
+            if(!$(this).hasClass('hidden')){
+                $(this).toggleClass('hidden');
+            }
+    });
+    $(activeMenu).toggleClass('hidden');
+    }   
+}
+
+export function handleUpgrade(id) {
+    let nomOfupgrades = 0;
+    switch (id) {
+        //Dot Value
+        case "upgradeDotValue":
+            upgradeDotValue();
+            break;
+        case "upgradeDotValueMaxBttn":
+            dotValueBuyMax();
+            break;
+        //Dot Multi
+        case "upgradeDotMulti":
+            upgradeDotMulti();
+            break;
+        case "upgradeDotMultiMaxBttn":
+            dotMultiBuyMax();
+            break;
+        //Dot Spawn Rate
+        case "upgradeDotSpawnRate":
+            upgradeDotSpawnRate();
+            break;
+        case "upgradeDotSpawnRateMaxBttn":
+            dotSpawnRateBuyMax();
+            break;
+        //Dot Spawn Count
+        case "upgradeDotSpawnCount":
+            upgradeDotSpawnCount();
+            break;
+        case "upgradeDotSpawnCountMaxBttn":
+            dotSpawnCountBuyMax();
+            break;
+        //Dot Max Count
+        case "upgradeMaxDotCount":
+            upgradeDotMaxCount();
+            break;
+        case "upgradeMaxDotCountMaxBttn":
+            dotMaxCountBuyMax();
+            break;
+        
+        case "upgradeDotSpeed":
+            upgradeDotSpeed();
+            break;
+
+        case "unlockAutoFeed":
+            unlockAutoFeed();
+            break;
+
+        case "upgradeAutoFeedSpeed":
+            upgradeAutoFeedSpeed();
+            break;
+
+        //Robo Nom
+        case "unlockRoboNom":
+            unlockRoboNoms();
+            break;
+            
+        case "addRoboNom":
+            addRoboNom();
+            break;
+        case "addRoboNomMaxBttn":
+            addRoboNomBuyMax();
+            break;
+        case "unlockSquare":
+            unlockSquares();
+
+        default:
+            console.warn(`Unhandled upgrade ID: ${id}`);
+            break;
+    }
+}
+
+function dotValueBuyMax(){
+    const numOfupgrades = calcBuyMax(upgrades.increaseDotValue).count;
+    for (let i=1; i<numOfupgrades+1; i++){
+        upgradeDotValue();
+    }
+}
+function dotMultiBuyMax(){
+    //Do nothing if you can't afford an upgrade
+    const numOfupgrades = calcBuyMax(upgrades.increaseDotMulti).count;
+    for (let i=1; i<numOfupgrades+1; i++){
+        upgradeDotMulti();
+    }
+}
+function dotSpawnRateBuyMax(){
+    const numOfupgrades = calcBuyMax(upgrades.increaseDotSpawnRate).count;
+    for (let i=1; i<numOfupgrades+1; i++){
+        upgradeDotSpawnRate();
+    }
+}
+function dotSpawnCountBuyMax(){
+    const numOfupgrades = calcBuyMax(upgrades.increaseDotSpawnCount).count;
+    for (let i=1; i<numOfupgrades+1; i++){
+        upgradeDotSpawnCount();
+    }
+}
+function dotMaxCountBuyMax(){
+    const numOfupgrades = calcBuyMax(upgrades.increaseMaxDotCount).count;
+    for (let i=1; i<numOfupgrades+1; i++){
+        upgradeDotMaxCount();
+    }
+}
+function addRoboNomBuyMax(){
+    const numOfupgrades = calcBuyMax(upgrades.addRoboNom).count;
+    for (let i=1; i<numOfupgrades+1; i++){
+        addRoboNom();
+    }
+}
 
 
 
-
-//BASE UPGRADES
-$("#upgradeDotValue").on('click',function(){
-    upgradeDotValue();
-});
-$("#upgradeDotSpeed").on('click',function(){
-    upgradeDotSpeed();
-});
-$("#upgradeDotMulti").on('click',function(){
-    upgradeDotMulti();
-});
-$("#upgradeAutoFeedSpeed").on('click',function(){
-    upgradeAutoFeedSpeed();
-});
 //###############
 //Nom Upgrades
 $("#upgradeNomDotMulti").on('click',function(){
@@ -144,89 +250,47 @@ $("#unlocknomCoinScoreBoost").on('click',function(){
 
 
 //##############
-//Buy Maxes
-$("#dotValueMaxBttn").on('click', function(){
-    let results = calcBuyMax(upgrades.increaseDotValue);
-    if (results.count > 0){
-        upgrades.increaseDotValue.level = upgrades.increaseDotValue.level + results.count;
-        gameState.score = gameState.score.minus(results.cost);
-        upgrades.increaseDotValue.cost = increaseCost(upgrades.increaseDotValue);
-        setDotValue();
+
+// $("#upgradeDotValue-i").on("mouseenter", function(){
+//     showTooltip(upgrades.increaseDotValue.desc, mousePos.x, mousePos.y);
+//     });
+// $("#upgradeDotValue-i").on("mouseleave", function(){
+//     hideTooltip();
+//     });
+
+
+    
+//Tool tip
+//##############
+function showTooltip(htmlContent, x, y) {
+    let tooltip = document.createElement("div");
+    tooltip.className = "upgrade-tooltip";
+    document.body.appendChild(tooltip);
+    
+    tooltip.innerHTML = htmlContent;
+    tooltip.classList.add("show");
+
+    // Position with screen-bound protection
+    const padding = 18;
+    let left = x + 20;
+    let top = y + 20;
+
+    if (left + tooltip.offsetWidth > window.innerWidth - padding) {
+        left = x - tooltip.offsetWidth - 20;
     }
-});
-$("#dotSpeedMaxBttn").on('click', function(){
-    let results = calcBuyMax(upgrades.increaseDotSpeed);
-    if (results.count > 0){
-        upgrades.increaseDotSpeed.level = upgrades.increaseDotSpeed.level + results.count;
-        gameState.score = gameState.score.minus(results.cost);
-        upgrades.increaseDotSpeed.cost = increaseCost(upgrades.increaseDotSpeed);
-        setSpeed();
+    if (top + tooltip.offsetHeight > window.innerHeight - padding) {
+        top = y - tooltip.offsetHeight - 20;
     }
-});
-$("#dotMultiMaxBttn").on('click', function(){
-    let results = calcBuyMax(upgrades.increaseDotMulti);
-    if (results.count > 0){
-        upgrades.increaseDotMulti.level = upgrades.increaseDotMulti.level + results.count;
-        gameState.score = gameState.score.minus(results.cost);
-        upgrades.increaseDotMulti.cost = increaseCost(upgrades.increaseDotMulti);
-        setDotMulti();
-    }
-});
-$("#dotAFSpeedMaxBttn").on('click', function(){
-    let results = calcBuyMax(upgrades.autoFeed);
-    if (results.count > 0){
-        upgrades.autoFeed.level = upgrades.autoFeed.level + results.count;
-        gameState.score = gameState.score.minus(results.cost);
-        upgrades.autoFeed.cost = increaseCost(upgrades.autoFeed);
-        setAutoFeed();
-    }
-});
+
+    tooltip.style.left = left + "px";
+    tooltip.style.top = top + "px";
+}
+
+function hideTooltip() {
+    tooltip.classList.remove("show");
+}
 
 
-
-
-
-
-//Menu Buttons
-//Left
-$("#upgradesBttn").on('click',function(){
-    $("#baseUpgrades").show();
-    $("#shop-container").hide();
-    $("#nomUpgrades-container").hide();
-    $("#customize-container").hide();
-    $("#stats-container").hide();
-});
-$("#shopBttn").on('click',function(){
-    $("#baseUpgrades").hide();
-    $("#shop-container").show();
-    $("#nomUpgrades-container").hide();
-    $("#customize-container").hide();
-    $("#stats-container").hide();
-});
-
-//Right
-$("#nomscendUpgradesBttn").on('click',function(){
-    $("#baseUpgrades").hide();
-    $("#shop-container").hide();
-    $("#nomUpgrades-container").show();
-    $("#customize-container").hide();
-    $("#stats-container").hide();
-});
-$("#customizeBttn").on('click',function(){
-    $("#baseUpgrades").hide();
-    $("#shop-container").hide();
-    $("#nomUpgrades-container").hide();
-    $("#customize-container").show();
-    $("#stats-container").hide();
-
-});
-$("#statBttn").on('click',function(){
-    $("#baseUpgrades").hide();
-    $("#shop-container").hide();
-    $("#nomUpgrades-container").hide();
-    $("#customize-container").hide();
-    $("#stats-container").show();
-});
 //###############
 
 $("#nomscensionBttn").on('click',function(){
@@ -239,9 +303,8 @@ $("#nomscendBttn").on('click',function(){
 });
 
 $("#debugBttn").on('click',function(){
-    // gameState.dotValue = gameState.dotValue.plus(100);
-    // createSquare();
-    addUpgrade("#baseUpgrades", upgrades.increaseBigDotChance);
+    // gameState.score = gameState.score.plus(1000);
+    unlockSquares();
 });
 
 
@@ -260,29 +323,30 @@ $("#SaveBttn").click(function(){
 
 
 export function buttonBought(button_id, self){
-    //$(self).closest(".upgrade-row").remove();
     $("#"+button_id).css("background", "green");
     disableButton(button_id);
 }
 
 
-
+const nomCoinImgSrc = "./assets/images/NomCoin.png";
 //Check all game buttons and update their status
 export function buttonCheck(){
     for (let [key, value] of Object.entries(upgrades)){
+        value.cost = increaseCost(value);
         if (value.type == "nomCoins"){
-            value.cost = increaseCost(value);
             $("#"+value.id).prop("disabled", value.cost.greaterThan(gameState.nomCoins));
-            $("#"+value.id+"Text").text(formatNum(value.cost));
+            $("#"+value.id).html(`<img src="${nomCoinImgSrc}"class="icon-nomCoin">${formatNum(value.cost)}`);
         } else if (value.type == "score" ){
-            value.cost = increaseCost(value);
             $("#"+value.id).prop("disabled", value.cost.greaterThan(gameState.score));
-            $("#"+value.id).html(`Cost: ${formatNum(value.cost)}`);
+            $("#"+value.id).html(`<div class="icon-dot"></div>${formatNum(value.cost)}`);
+        } else if (value.type == "square"){
+            $("#"+value.id).prop("disabled", value.cost.greaterThan(gameState.squares));
+            $("#"+value.id).html(`<div class="icon-square"></div>${formatNum(value.cost)}`);
         }
 
         if (value.level >= value.maxlevel){
             $("#"+value.id).prop("disabled", true);
-            $("#"+value.id).html(`MAX LEVEL`);
+            $("#"+value.id).html(`MAXED`);
             $("#"+value.id).css("background", "green");
             $("#"+value.id).css("color", "black");
         } else {
@@ -293,21 +357,7 @@ export function buttonCheck(){
         $("#"+value.id+"Desc").text(value.desc);
         //Update Levels
         if ($("#"+value.id+"Lvl")){
-            $("#"+value.id+"Lvl").text(`Level: ${value.level}/${value.maxlevel}`);
-        }
-    }
-
-    for (let [key, value] of Object.entries(shopUpgrades)){
-        if (value.bought == true){
-            $("#"+value.id).prop("disabled", true);
-            $("#"+value.id).html(`OWNED`);
-            $("#"+value.id).css("background", "green");
-            $("#"+value.id).css("color", "black");
-        } else {
-            $("#"+value.id).prop("disabled", value.cost.greaterThan(gameState.score));
-            $("#"+value.id).html(`Cost: ${formatNum(value.cost)}`);
-            $("#"+value.id).css("background", "");
-            $("#"+value.id).css("color", "");
+            $("#"+value.id+"Lvl").text(`${value.level}/${value.maxlevel}`);
         }
     }
     $("#nomscendBttn").prop("disabled", 200000 > (gameState.nomscendScore))
