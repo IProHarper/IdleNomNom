@@ -1,5 +1,6 @@
 import { gameState } from './data.js';
 import { floatingTexts } from './display.js';
+import { formatNum } from './util.js';
 
 export function increaseScore(){
     //Score increase formula
@@ -32,7 +33,7 @@ export function updateNomScoreBoost(){
 export function showFloatingText(text, x, y, colour) {
     const transR = Math.random() * 720 - 360; // random rotation
     floatingTexts.push({
-        text: "+" + text.toFixed(0),
+        text: "+" + formatNum(text),
         x,
         y,
         colour,
