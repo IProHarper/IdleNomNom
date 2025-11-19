@@ -1,7 +1,6 @@
 import { gameState, upgrades, shopUpgrades } from './data.js'
 import { createDot } from './consumables.js';
-import { increaseCost, setAutoFeed, setDotMulti, setDotValue, setSpeed } from './util.js';
-import { updateLevels } from './display.js';
+import { increaseCost, setAutoFeed, setDotMaxCount, setDotMulti, setDotSpawnCount, setDotSpawnRate, setDotValue, setRoboNoms, setSpeed } from './util.js';
 
 export function saveGame(){
     //Set data into local storage
@@ -53,12 +52,10 @@ export function compareSaveData(data,name){
                     }
                 }
                 //Remove any extra upgrades that may have been removed.
-                if (data.length > upgrades.length){
-                    for (let item in data){
-                        if (data[item] && !upgrades[item]){
-                            //Splice the index of the extra items, 1 = number of items to splice.
-                            data.splice(data.indexOf(data[item], 1))
-                        }
+                for (let item in data){
+                    if (data[item] && !upgrades[item]){
+                        //Splice the index of the extra items, 1 = number of items to splice.
+                        delete data[item];
                     }
                 }
             loadUpgradeData(data, "upgrades"); 
@@ -135,7 +132,6 @@ export function loadUpgradeData(data, name){
         upgrades.increaseDotMulti.maxlevel = ((upgrades.increaseDotMultiMax.level-1)*upgrades.increaseDotMultiMax.increase)+5; //5 = base max level
         //increaseDotValMax
         upgrades.increaseDotValue.maxlevel = ((upgrades.increaseDotValMax.level-1)*upgrades.increaseDotValMax.increase)+100;//100 = base max level
-        updateLevels();
     }
 
     else if (name == "shopUpgrades"){
@@ -171,16 +167,13 @@ export function resetUpgrades(){
     setDotValue();
     setSpeed();
     setDotMulti();
+    setDotMaxCount();
+    setDotSpawnCount();
+    setDotSpawnRate();
+    setRoboNoms();
     for (let item in shopUpgrades){
         if (shopUpgrades[item].resetTier <= 0){
             shopUpgrades[item].bought = false;
         }
-    }
-    if (upgrades.autoFeed.resetTier == 0){
-        upgrades.autoFeed.speed = upgrades.autoFeed.baseSpeed;
-        upgrades.autoFeed.enabled = false;
-        clearInterval(gameState.dotIntervalID);
-    } else {
-            setAutoFeed();
     }
 }
