@@ -34,134 +34,81 @@
     <!-- <audio id="eatDot-audio" src="./assets/audio/dotEat.wav" preload="auto"></audio> -->
     <h1 style="text-decoration: underline;">IDLE NOM NOM</h1>
     
-    <!-- <button id="debugBttn">Debug</button> -->
+    <button id="debugBttn">Debug</button>
     <button id="ResetBttn">Reset</button>
     <button id="SaveBttn">Save</button>
     <div id="resource-container" class="resources">
         <span class="resource-item">
-                <div class="resource-label">Dots:</div>
-                <div id="score" class="resource-amount">0</div>
+            <div class="icon-dot"></div>
+            <div id="activeDots" class="resource-amount">0/0</div>
+        </span>
+        <span class="resource-item">
+            <div class="icon-dot"></div>
+            <div id="score" class="resource-amount">0</div>
+        </span>
+        <span id="activeSquareDisplay" class="resource-item" style="display:none;">
+            <div class="icon-square"></div>
+            <div id="activeSquares" class="resource-amount">0/0</div>
+        </span>
+        <span id="squareDisplay" class="resource-item" style="display:none">
+            <div class="icon-square"></div>
+            <div id="squares" class="resource-amount">0</div>
         </span>
         <div  class="resource-item">
-            <div class="resource-label">Nom Coins:</div>
-            <div id="nomCoinStatText" style="color:aqua">1</div>
             <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-            (+<span id="nomCoinGainText" style="color:aqua">1</span>)
+            <div id="nomCoinStatText" style="color:#33ecff">1</div>
+            <!-- (+<span id="nomCoinGainText" style="color:#33ecff">1</span>) -->
         </div>
-    </div>
-    <!-- <div id="gameContainer">
-        <div id="centreDot">
-        </div>
-    </div> -->
-    <div class="nomnom-container" kids=false id="mrNomNomContainer">
-        <svg class="nomnom" width="40" height="40" viewBox="0 0 100 100">
-            <circle id=mrNomNom cx="50" cy="50" r="50"/>
-            <polygon points="50,50 100,0 100,100" fill="black">
-                <animate attributeName="points" dur="0.25s" repeatCount="indefinite"
-                    values="50,50 100,0 100,100;
-                            50,50 100,45 100,55;
-                            50,50 100,0 100,100"/>
-            </polygon>
-        </svg>
-    </div>
-    <div class="nomnom-container" id="mrSquareContainer">
-    <svg class="nomnom" width="40" height="40" viewBox="0 0 100 100">
-        <!-- Square body -->
-        <rect id="mrSquare" x="0" y="0" width="100" height="100" style="fill:white;"/>
         
-        <!-- Animated mouth (eating motion) -->
-        <polygon points="50,50 100,0 100,100" fill="black">
-            <animate attributeName="points" dur="0.25s" repeatCount="indefinite"
-                values="50,50 100,0 100,100;
-                        50,50 100,45 100,55;
-                        50,50 100,0 100,100"/>
-        </polygon>
-    </svg>
     </div>
 
-    <div class="nomnom-container" id="mrHexContainer">
-    <svg class="nomnom" width="40" height="40" viewBox="0 0 100 100">
-        <!-- Square body -->
-        <rect id="mrHex" x="0" y="0" width="100" height="100" style="fill:white;"transform="rotate(45 50 50)"/>
-        
-        <!-- Animated mouth (eating motion) -->
-        <polygon points="50,50 100,0 100,100" fill="black">
-            <animate attributeName="points" dur="0.25s" repeatCount="indefinite"
-                values="50,50 100,0 100,100;
-                        50,50 100,45 100,55;
-                        50,50 100,0 100,100"/>
-        </polygon>
-    </svg>
-    </div>
-
-    <div class="nomnom-container" id="mrTriangleContainer">
-        <svg class="nomnom" width="40" height="40" viewBox="0 0 100 100">
-            <!-- Triangle body (pointing right) -->
-            <polygon id="mrTriangle" points="0,0 0,100 100,50" style="fill:white;"/>
-             <!-- <polygon id="mrTriangle" points="13,86.6 50,0 87,86.6" style="fill:white;"/> -->
-
-            <!-- Animated mouth (eating motion) -->
-            <polygon points="50,50 100,30 100,70" fill="black">
-                <animate attributeName="points" dur="0.25s" repeatCount="indefinite"
-                    values="40,50 100,-10 100,130;
-                            40,50 100,45 100,55;
-                            40,50 100,-10 100,130"/>
-            </polygon>
-        </svg>
-    </div>
-
+    <!-- GAME CANVAS -->
+    <canvas id="gameCanvas"></canvas>
 
     <div>
         <button id="feedNomNom">FEEEEEED</button>
         <button id="nomscensionBttn">NOMSCENSION</button>
-    </div>
-
-
+    </div>    
+    
     <!-- Menu Bar -->
-    <div id="menu-container">
-        <div id="menu-left">
-            <button id="upgradesBttn">Upgrades</button>&nbsp;
-            <button id="shopBttn">Shop</button>&nbsp;
-        </div>
-        <div id="menu-right">
-            <button id="nomscendUpgradesBttn">Nomscend Upgrades</button>&nbsp;
-            <button id="customizeBttn">Customize</button>&nbsp;
-            <button id="statBttn">Stats</button>
-            <!-- <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom coins"> -->
-        </div>
+    <div id="menu-right">
+        <button id="toggleUpgrades" class="menu-toggle-btn active">
+            <div class="icon-dot"></div>
+            Dots
+        </button>
+
+        <button id="toggleNomUpgrades" class="menu-toggle-btn">
+            <img class="buttonImg" style="width: 1em;height:1em;"src="./assets/images/NomCoin.png" alt="Nom">
+            Nom
+        </button>
+
+        <button id="toggleSquareUpgrades" class="menu-toggle-btn" style="display:none;">
+            <div class="icon-square"></div>
+            Square
+        </button>
     </div>
+    <div id="tooltip" class="upgrade-tooltip"></div>
 
     <!-- Display the upgrades -->
     <div id="baseUpgrades" class="upgrades-container">
-        <!-- <h2 style="color: var(--text-primary); margin: 20px 0;">Upgrades</h2> -->
+        <h2>Upgrades</h2>
         <div class="upgrades-grid">
             <!-- upgradeDotValue -->
             <div class="upgrade-card">
                 <div class="upgrade-header">
                     <span class="upgrade-icon">📈</span>
+                    <!-- <span id="upgradeDotValue-i" class="upgrade-i">I</span> -->
                     <div class="upgrade-info">
                         <h3 class="upgrade-name">Dot Base Value</h3>            
                         <p class="upgrade-description" id="upgradeDotValueDesc">Increases Dot Value</p>
-                        <span id="upgradeDotValueLvl" class="upgrade-level">Level: 0</span>
+                        <span id="upgradeDotValueLvl" class="upgrade-level">0</span>
                     </div>
                 </div>
-                <button id="upgradeDotValue" class="upgradeBttn">Cost: 100</button>
-                <button class="maxBttn" id="dotValueMaxBttn">Buy Max</button>
-            </div>
-            <!--  upgradeDotSpeed -->
-            <div class="upgrade-card">
-                <div class="upgrade-header">
-                    <span class="upgrade-icon">⚡</span>
-                    <div class="upgrade-info">
-                        <h3 class="upgrade-name">Dot Speed +</h3>
-                        <p class="upgrade-description" id="upgradeDotSpeedDesc">Desc</p>
-                        <span id="upgradeDotSpeedLvl" class="upgrade-level">Level: 0</span>
-                    </div>
+                <div class="upgrade-actions">
+                    <button id="upgradeDotValue" class="upgradeBttn">Cost: 100</button>
+                    <button class="maxBttn" id="upgradeDotValueMaxBttn">Max</button>
                 </div>
-                <button id="upgradeDotSpeed" class="upgradeBttn">Cost: 100</button>
-                <button class="maxBttn" id="dotSpeedMaxBttn">Max</button>
             </div>
-
             <!-- upgradeDotMulti -->
             <div class="upgrade-card">
                 <div class="upgrade-header">
@@ -172,38 +119,10 @@
                         <span id="upgradeDotMultiLvl" class="upgrade-level">Level: 0</span>
                     </div>
                 </div>
-                <button id="upgradeDotMulti" class="upgradeBttn">Cost: 1000</button>
-                <button class="maxBttn" id="dotMultiMaxBttn">Max</button>
-            </div>
-            <!-- upgradeAutoFeedSpeed -->
-            <div class="upgrade-card">
-                <div class="upgrade-header">
-                    <span class="upgrade-icon">🤖</span>
-                    <div class="upgrade-info">
-                        <h3 class="upgrade-name">Auto Feed Speed</h3>
-                        <p class="upgrade-description" id="upgradeAutoFeedSpeedDesc">Desc</p>
-                        <span id="upgradeAutoFeedSpeedLvl" class="upgrade-level">Level: 0</span>
-                    </div>
+                <div class="upgrade-actions">
+                    <button id="upgradeDotMulti" class="upgradeBttn">Cost: 1000</button>
+                    <button class="maxBttn" id="upgradeDotMultiMaxBttn">Max</button>
                 </div>
-                <button id="upgradeAutoFeedSpeed" class="upgradeBttn">Cost: 200</button>
-                <button class="maxBttn" id="dotAFSpeedMaxBttn">Max</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Display the shop items -->
-     <div id="shop-container" class="upgrades-container">
-        <div class="upgrades-grid">
-            <div class="upgrade-card">
-                <div class="upgrade-header">
-                    <span class="upgrade-icon">🔓</span>
-                    <div class="upgrade-info">
-                        <h3 class="upgrade-name">Unlock Auto Feeding</h3>
-                        <p class="upgrade-description" id="Desc">Allow dots to automatically appear! They'll start slow but a new upgrade is unlocked!</p>
-                        <!-- <span id="autoFeedText">Unlock Auto Feeding</span> -->
-                    </div>
-                </div>
-                <button id="unlockAutoFeed" class="shopBttn">Cost: 200</button>
             </div>
         </div>
     </div>
@@ -211,12 +130,13 @@
 
 <!-- RIGHT main options -->
         <!-- Display the NomscendUpgrades items -->
-        <div id="nomUpgrades-container" class="upgrades-container">
-        <h2 style="color: var(--text-primary); margin: 10px 0; font-size: 20px;">Base Upgrades</h2>
+        <div id="nomUpgrades" class="upgrades-container" class="hidden">
+        <h2>Base Upgrades</h2>
             <div class="upgrades-grid">
                 <!-- upgradeNomDotVal -->
                 <div class="upgrade-card">
                     <div class="upgrade-header">
+                        <!-- <button class="minmax-button">-</button> -->
                         <span class="upgrade-icon"></span>
                         <div class="upgrade-info">
                             <h3 class="upgrade-name">Dot Base Value</h3>
@@ -224,9 +144,9 @@
                             <span id="upgradeNomDotValLvl" class="upgrade-level">Level: 0</span>
                         </div>
                     </div>
-                    <button id="upgradeNomDotVal" class="nomBttn"><span id="upgradeNomDotValText">0</span>
-                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                    </button>
+                    <div class="upgrade-actions">
+                        <button id="upgradeNomDotVal" class="upgradeBttn">0</button>
+                    </div>
                 </div>
                 <!-- upgradeNomCoinMulti -->
                 <div class="upgrade-card">
@@ -238,13 +158,12 @@
                             <span id="upgradeNomCoinMultiLvl" class="upgrade-level">Level: 0</span>
                         </div>
                     </div>
-                    <button id="upgradeNomCoinMulti" class="nomBttn"><span id="upgradeNomCoinMultiText">0</span>
-                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                    </button>
+                    <div class="upgrade-actions">
+                        <button id="upgradeNomCoinMulti" class="upgradeBttn">0</button>
+                    </div>
                 </div>
-            </div>
+            <!-- Max levels -->
             <h2 style="color: var(--text-primary); margin: 10px 0; font-size: 20px;">Max Level +</h2>
-            <div class="upgrades-grid">
                 <!-- Dot Multi Max Level+ -->
                 <div class="upgrade-card">
                     <div class="upgrade-header">
@@ -255,9 +174,9 @@
                             <span id="upgradeDotMultiMaxLvl" class="upgrade-level">Level: 0</span>
                         </div>
                     </div>
-                    <button id="upgradeDotMultiMax" class="nomBttn"><span id="upgradeDotMultiMaxText">5</span>
-                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                    </button>
+                    <div class="upgrade-actions">
+                        <button id="upgradeDotMultiMax" class="upgradeBttn">0</button>
+                    </div>
                 </div>
                 <!-- Dot Value Max Level+ -->
                 <div class="upgrade-card">
@@ -269,86 +188,38 @@
                             <span id="upgradeDotValMaxLvl" class="upgrade-level">Level: 0</span>
                         </div>
                     </div>
-                    <button id="upgradeDotValMax" class="nomBttn"><span id="upgradeDotValMaxText">5</span>
-                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                    </button>
-                </div>
-            </div>
-            <h2 style="color: var(--text-primary); margin: 10px 0; font-size: 20px;">Starting Levels +</h2>
-            <div class="upgrades-grid">
-            <!-- Starting Dot Speed Level + 1 -->
-                <div class="upgrade-card">
-                    <div class="upgrade-header">
-                        <span class="upgrade-icon"></span>
-                        <div class="upgrade-info">
-                            <h3 class="upgrade-name">Starting Dot Speed Level + 1</h3>
-                            <p class="upgrade-description" id="upgradeStartDotSpeedLevelDesc">Desc</p>
-                            <span id="upgradeStartDotSpeedLevelLvl" class="upgrade-level">Level: 0</span>
-                        </div>
+                    <div class="upgrade-actions">
+                        <button id="upgradeDotValMax" class="upgradeBttn">0</button>
                     </div>
-                    <button id="upgradeStartDotSpeedLevel" class="nomBttn"><span id="upgradeStartDotSpeedLevelText">5</span>
-                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                    </button>
                 </div>
-                <!-- Starting Dot Multi Level + 1 -->
-                <div class="upgrade-card">
-                    <div class="upgrade-header">
-                        <span class="upgrade-icon"></span>
-                        <div class="upgrade-info">
-                            <h3 class="upgrade-name">Starting Dot Multi Level + 1</h3>
-                            <p class="upgrade-description" id="upgradeStartDotMultiLevelDesc">Desc</p>
-                            <span id="upgradeStartDotMultiLevelLvl" class="upgrade-level">Level: 0</span>
-                        </div>
-                    </div>
-                    <button id="upgradeStartDotMultiLevel" class="nomBttn"><span id="upgradeStartDotMultiLevelText">5</span>
-                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                    </button>
-                </div>
-                <!-- Permanent AutoFeed -->
-                <div class="upgrade-card">
-                    <div class="upgrade-header">
-                        <span class="upgrade-icon"></span>
-                        <div class="upgrade-info">
-                            <h3 class="upgrade-name">Permanent AutoFeed</h3>
-                            <p class="upgrade-description" id="keepAutoFeedDesc">Desc</p>
-                        </div>
-                    </div>
-                    <button id="keepAutoFeed" class="nomBttn"><span id="keepAutoFeedText">200</span>
-                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                    </button>
-                </div>
-            </div>
                 <!-- Misc Upgrades -->
             <h2 style="color: var(--text-primary); margin: 10px 0; font-size: 20px;">Misc</h2>
-            <div class="upgrades-grid">
-                <!-- Auto Feed Speed+ -->
+                <!-- Unlock Robo Nom -->
                 <div class="upgrade-card">
                     <div class="upgrade-header">
-                        <span class="upgrade-icon"></span>
+                        <span class="upgrade-icon">🤖</span>
                         <div class="upgrade-info">
-                            <h3 class="upgrade-name">Auto Feed Speed+</h3>
-                            <p class="upgrade-description" id="upgradeAutoFeedMaxDesc">Desc</p>
-                            <span id="upgradeAutoFeedMaxLvl" class="upgrade-level">Level: 0</span>
+                            <h3 class="upgrade-name">Unlock Robo-Noms</h3>
+                            <p class="upgrade-description" id="unlockRoboNomDesc">Desc</p>
                         </div>
                     </div>
-                    <button id="upgradeAutoFeedMax" class="nomBttn"><span id="upgradeAutoFeedMaxText">10</span>
-                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                    </button>
+                    <div class="upgrade-actions">
+                        <button id="unlockRoboNom" class="upgradeBttn">0</button>
+                    </div>
                 </div>
-                <!-- Dot Feed speed+ -->
                 <div class="upgrade-card">
                     <div class="upgrade-header">
-                        <span class="upgrade-icon"></span>
+                        <span class="upgrade-icon"><div class="icon-square"></div></span>
                         <div class="upgrade-info">
-                            <h3 class="upgrade-name">Dot Feed speed+</h3>
-                            <p class="upgrade-description" id="upgradeDotSpeedBaseDesc">Desc</p>
-                            <span id="upgradeDotSpeedBaseLvl" class="upgrade-level">Level: 0</span>
+                            <h3 class="upgrade-name">Unlock Squares</h3>
+                            <p class="upgrade-description" id="unlockSquareDesc">Desc</p>
                         </div>
                     </div>
-                    <button id="upgradeDotSpeedBase" class="nomBttn"><span id="upgradeDotSpeedBaseText">10</span>
-                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                    </button>
+                    <div class="upgrade-actions">
+                        <button id="unlockSquare" class="upgradeBttn">0</button>
+                    </div>
                 </div>
+
                 <!-- Score Boost from Nom Coins -->
                 <div class="upgrade-card">
                     <div class="upgrade-header">
@@ -358,23 +229,17 @@
                             <p class="upgrade-description" id="unlocknomCoinScoreBoostDesc">Desc</p>
                         </div>
                     </div>
-                    <button id="unlocknomCoinScoreBoost" class="nomBttn"><span id="unlocknomCoinScoreBoostText">10</span>
-                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                    </button>
-                </div>
-                <!-- Unlock Mr Square -->
-                <!-- <div class="upgrade-card">
-                    <div class="upgrade-header">
-                        <span class="upgrade-icon"></span>
-                        <div class="upgrade-info">
-                            <h3 class="upgrade-name">Unlock Mr Square</h3>
-                            <p class="upgrade-description" id="unlockSquareDesc">Desc</p>
-                        </div>
+                    <div class="upgrade-actions">
+                        <button id="unlocknomCoinScoreBoost" class="upgradeBttn">0</button>
                     </div>
-                    <button id="unlockSquare" class="nomBttn"><span id="unlockSquareText">100</span>
-                        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-                    </button>
-                </div> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Square Upgrade panel -->
+        <div id="squareUpgrades" class="upgrades-container" class="hidden">
+            <h2>Square Upgrades</h2>
+            <div class="upgrades-grid">
             </div>
         </div>
         
@@ -449,33 +314,41 @@
                 </div>
             </div>
         </div>
-
-        <!-- <div id="stats-container">
-            <p>Lifetime Score: <span id="lifetimeScoreText"></span></p>
-            <p>Dots Eaten: <span id="dotsEatenText"></span></p>
-            <br>
-            <p>Base Dot Value: <span id="dotBaseValueText"></span></p>
-            <p>Dot Speed: <span id="dotSpeedText"></span></p>
-            <p>Dot Multiplier: <span  id="dotMultiText"></span></p>
-            <p>Auto Feed Speed every :<span id="autofeedSpeedText"></span>s</p>
-            <br>
-            <p>Nomscensions: <span id="nomscensionCountText"></span></p>
-            <p>Nom Coins: <span id="nomCoinsText"></span></p>
-            <p>Lifetime Nom Coins <span id="LifetimeNomCoinsText"></span></p>
-        </div> -->
         
          <!-- STATS SECTION -->
         <div id="stats-container" style="pointer-events: none;">
-            <h2 style="color: var(--text-primary); margin: 20px 0;">Statistics</h2>
+            <h2>Statistics</h2>
             <div class="upgrades-grid">
                 <div class="upgrade-card">
                     <div class="upgrade-header">
                         <span class="upgrade-icon">📊</span>
                         <div class="upgrade-info">
-                            <h3 class="upgrade-name">Game Stats</h3>
+                            <h3 class="stat-name">Dots</h3>
                         </div>
                     </div>
-                    <div class="upgrade-stats" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                    <div class="upgrade-stats">
+                        <div style="width: 100%; display: flex; justify-content: space-between;">
+                            <span class="stat-label">Base Value:</span>
+                            <span class="stat-value" id="dotBaseValueText">0</span>
+                        </div>
+                        <div style="width: 100%; display: flex; justify-content: space-between;">
+                            <span class="stat-label">Multiplier:</span>
+                            <span class="stat-value" id="dotMultiText">0</span>
+                        </div>
+                        <div style="width: 100%; display: flex; justify-content: space-between;">
+                            <span class="stat-label">Spawn Amount:</span>
+                            <span class="stat-value" id="dotSpawnAmountText">0</span>
+                        </div>
+                        <div style="width: 100%; display: flex; justify-content: space-between;">
+                            <span class="stat-label">Spawn Rate:</span>
+                            <span class="stat-value" id="dotSpawnRateText">0</span>
+                        </div>
+                        <div style="width: 100%; display: flex; justify-content: space-between;">
+                            <span class="stat-label">Max Spawn:</span>
+                            <span class="stat-value" id="dotMaxSpawnText">0</span>
+                        </div>
+                    </div>
+                        <div class="upgrade-stats">
                         <div style="width: 100%; display: flex; justify-content: space-between;">
                             <span class="stat-label">Lifetime Score:</span>
                             <span class="stat-value" id="lifetimeScoreText">0</span>
@@ -484,40 +357,64 @@
                             <span class="stat-label">Dots Eaten:</span>
                             <span class="stat-value" id="dotsEatenText">0</span>
                         </div>
-                        <div style="width: 100%; display: flex; justify-content: space-between;">
-                            <span class="stat-label">Base Dot Value:</span>
-                            <span class="stat-value" id="dotBaseValueText">0</span>
+                    </div>
+                    </div>
+                    <!-- Squares Stats -->
+                    <div class="upgrade-card" id="squareStats" style="display:none;">
+                        <div class="upgrade-header">
+                            <span class="icon-square" style="margin-right: 10px;"></span>
+                            <div class="upgrade-info">
+                                <h3 class="stat-name">Squares</h3>
+                            </div>
                         </div>
+                    <div class="upgrade-stats">
                         <div style="width: 100%; display: flex; justify-content: space-between;">
-                            <span class="stat-label">Dot Multiplier:</span>
-                            <span class="stat-value" id="dotMultiText">0</span>
-                        </div>
-                        <div style="width: 100%; display: flex; justify-content: space-between;">
-                            <span class="stat-label">Dot Speed:</span>
-                            <span class="stat-value" id="dotSpeedText">0</span>
-                        </div>
-                        <div style="width: 100%; display: flex; justify-content: space-between;">
-                            <span class="stat-label">Auto Feed Speed every:</span>
-                            <span class="stat-value" id="autofeedSpeedText">0</span>
-                        </div>
-                        <br>
-                        <div style="width: 100%; display: flex; justify-content: space-between;">
-                            <span class="stat-label">Nomscensions:</span>
-                            <span class="stat-value" id="nomscensionCountText">0</span>
-                        </div>
-                        <div style="width: 100%; display: flex; justify-content: space-between;">
-                            <span class="stat-label">Lifetime Nom Coins:</span>
-                            <span class="stat-value" id="LifetimeNomCoinsText">0</span>
-                        </div>
-                        <div style="width: 100%; display: flex; justify-content: space-between;">
-                            <span class="stat-label">Nom Coins:</span>
-                            <span class="stat-value" id="nomCoinsText">0</span>
-                        </div>
-                        <div style="width: 100%; display: flex; justify-content: space-between;">
-                            <span class="stat-label">Nom Coin Boost Value:</span>
-                            <span class="stat-value" id="nomScoreBoostAmountText">0</span>
+                                <span class="stat-label">Base Value:</span>
+                                <span class="stat-value" id="squareBaseValueText">0</span>
+                            </div>
+                            <div style="width: 100%; display: flex; justify-content: space-between;">
+                                <span class="stat-label">Multiplier:</span>
+                                <span class="stat-value" id="squareMultiText">0</span>
+                            </div>
+                            <div style="width: 100%; display: flex; justify-content: space-between;">
+                                <span class="stat-label">Spawn Amount:</span>
+                                <span class="stat-value" id="squareSpawnAmountText">0</span>
+                            </div>
+                            <div style="width: 100%; display: flex; justify-content: space-between;">
+                                <span class="stat-label">Spawn Rate:</span>
+                                <span class="stat-value" id="squareSpawnRateText">0</span>
+                            </div>
+                            <div style="width: 100%; display: flex; justify-content: space-between;">
+                                <span class="stat-label">Max Spawn:</span>
+                                <span class="stat-value" id="squareMaxSpawnText">0</span>
+                            </div>
                         </div>
                     </div>
+                    <div class="upgrade-card">
+                        <div class="upgrade-header">
+                            <span class="upgrade-icon">📊</span>
+                            <div class="upgrade-info">
+                                <h3 class="stat-name">Nomsension</h3>
+                            </div>
+                        </div>
+                        <div class="upgrade-stats">
+                            <div style="width: 100%; display: flex; justify-content: space-between;">
+                                <span class="stat-label">Nomscensions:</span>
+                                <span class="stat-value" id="nomscensionCountText">0</span>
+                            </div>
+                            <div style="width: 100%; display: flex; justify-content: space-between;">
+                                <span class="stat-label">Nom Coins:</span>
+                                <span class="stat-value" id="nomCoinsText">0</span>
+                            </div>
+                            <div style="width: 100%; display: flex; justify-content: space-between;">
+                                <span class="stat-label">Lifetime Nom Coins:</span>
+                                <span class="stat-value" id="LifetimeNomCoinsText">0</span>
+                            </div>
+                            <div style="width: 100%; display: flex; justify-content: space-between;">
+                                <span class="stat-label">Nom Coin Boost Value:</span>
+                                <span class="stat-value" id="nomScoreBoostAmountText">0</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
