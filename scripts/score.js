@@ -1,11 +1,9 @@
 import { gameState } from './data.js';
+import { floatingTexts } from './display.js';
 
 export function increaseScore(){
     //Score increase formula
     const value =  gameState.dotValue.times(gameState.dotMulti).times(gameState.nomScoreBoostAmount);
-    if (gameState.squares.greaterThan(0)) {
-        value = value.times(gameState.squares);
-    }
     //Add score and update stats
     gameState.score = gameState.score.plus(value);
     gameState.liftimeScore = gameState.liftimeScore.plus(value);
@@ -16,9 +14,12 @@ export function increaseScore(){
 }
 
 export function eatSquare(){
-    gameState.squares = gameState.squares.plus(gameState.squareValue);
-    gameState.squareCount = gameState.squareCount.plus(1);
+    const value = gameState.squareValue.times(gameState.squareMulti)
+    gameState.squares = gameState.squares.plus(value);
+    gameState.squaresEaten = gameState.squaresEaten.plus(1);
     gameState.lifetimeSquares = gameState.lifetimeSquares.plus(1);
+    
+    return value
 }
 
 export function updateNomScoreBoost(){
@@ -28,3 +29,16 @@ export function updateNomScoreBoost(){
     }
 }
 
+export function showFloatingText(text, x, y, colour) {
+    const transR = Math.random() * 720 - 360; // random rotation
+    floatingTexts.push({
+        text: "+" + text.toFixed(0),
+        x,
+        y,
+        colour,
+        rotation: transR * Math.PI / 180,
+        opacity: 1,
+        lifetime: 1000, // milliseconds
+        createdAt: performance.now()
+    });
+}
