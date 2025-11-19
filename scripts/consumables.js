@@ -1,7 +1,25 @@
 import { increaseScore } from './score.js'
-import { upgrades } from './data.js';
-import { gameState } from './data.js';
-import { playEatDotSound } from './soundHandler.js';
+import { gameState, dotList, squareList } from './data.js';
+// import { playEatDotSound } from './soundHandler.js';
+import { getCanvasCentre } from './util.js';
+import Dot from './dots.js';
+import Square from './squares.js';
+
+
+export function spawnDot(){
+        if (dotList.length < gameState.dotMaxCount){
+            const { x, y } = getCanvasCentre();
+            dotList.push(new Dot(x, y));
+        }
+    }
+
+export function spawnSquare(){
+        if (squareList.length < gameState.squareMaxCount){
+            const { x, y } = getCanvasCentre();
+            squareList.push(new Square(x, y));
+        }
+    }
+
 
 
 //Create the nomnom dot. Move to nomnom position with dotspeed transition.
@@ -55,26 +73,9 @@ export function createSquare() {
     });
 }
 
-
-
+function returnRandNumber(min, max){
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 
 // $('<div class="dot rounded"></div>')
-
-function showFloatingText(text, x, y) {
-    const gameContainer = document.querySelector('.nomnom-container');
-    const floatingText = document.createElement('div');
-    floatingText.classList.add('floating-text');
-    gameContainer.appendChild(floatingText);
-
-    floatingText.textContent = "+" + text.toFixed(0);
-    floatingText.style.left = `${x-20}px`;
-    floatingText.style.top = `${y}px`;
-    const transR = Math.floor(Math.random() * (360 - -360 + 1)) + 360;
-
-    floatingText.style.rotate = `${transR}deg`;
-    // Remove after animation
-    floatingText.addEventListener("animationend", () => {
-        floatingText.remove();
-    });
-}
