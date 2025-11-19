@@ -1,45 +1,34 @@
-import { gameState, upgrades, gameStages } from "./data.js";
-import { createDot } from "./consumables.js";
-import { calcNomGain, formatNum, increaseCost } from "./util.js";
+import { gameState, upgrades, gameStages, dotList, mouseNom, roboList, squareList } from "./data.js";
+import { unlockSquares } from "./features.js";
+import { calcNomGain, formatNum, getCanvasCentre } from "./util.js";
 
 const scoreDisplay = document.getElementById('score');
+export let floatingTexts = [];
 
-export function updateLevels(){
-
-    //Set Base Upgrades Levels
-    $("#upgradeDotValueLvl").text(`Level: ${upgrades.increaseDotValue.level}/${upgrades.increaseDotValue.maxlevel}`);
-    $("#upgradeDotSpeedLvl").text(`Level: ${upgrades.increaseDotSpeed.level}/${upgrades.increaseDotSpeed.maxlevel}`);
-    $("#upgradeDotMultiLvl").text(`Level: ${upgrades.increaseDotMulti.level}/${upgrades.increaseDotMulti.maxlevel}`);
-    $("#upgradeAutoFeedSpeedLvl").text(`Level: ${upgrades.autoFeed.level}/${upgrades.autoFeed.maxlevel}`);
-
-    //Nom Upgrades
-    $("#upgradeNomDotValLvl").text(`Level: ${upgrades.increaseNomDotVal.level}/${upgrades.increaseNomDotVal.maxlevel}`);
-    $("#upgradeNomCoinMultiLvl").text(`Level: ${upgrades.increaseNomCoinMulti.level}/${upgrades.increaseNomCoinMulti.maxlevel}`);
-    $("#upgradeDotMultiMaxLvl").text(`Level: ${upgrades.increaseDotMultiMax.level}/${upgrades.increaseDotMultiMax.maxlevel}`);
-    $("#upgradeDotValMaxLvl").text(`Level: ${upgrades.increaseDotValMax.level}/${upgrades.increaseDotValMax.maxlevel}`);
-    $("#upgradeStartDotSpeedLevelLvl").text(`Level: ${upgrades.increaseStartDotSpeedLevel.level}/${upgrades.increaseStartDotSpeedLevel.maxlevel}`);
-    $("#upgradeStartDotMultiLevelLvl").text(`Level: ${upgrades.increaseStartDotMultiLevel.level}/${upgrades.increaseStartDotMultiLevel.maxlevel}`);
-    $("#upgradeDotSpeedBaseLvl").text(`Level: ${upgrades.increaseDotSpeedBase.level}/${upgrades.increaseDotSpeedBase.maxlevel}`);
-    $("#upgradeAutoFeedMaxLvl").text(`Level: ${upgrades.increaseAutoFeedMax.level}/${upgrades.increaseAutoFeedMax.maxlevel}`);
-}
 
 export function initDisplay(){
     //Set display to only have upgrades at first
     $("#upgrades-container").show();
-    $("#stats-container").hide();
+    $("#nomUpgrades").toggleClass("hidden");
+    $("#squareUpgrades").toggleClass("hidden");
+
+    //Add extra upgrades to page:
+    addUpgrade("#baseUpgrades", upgrades.increaseDotSpawnRate);
+    addUpgrade("#baseUpgrades", upgrades.increaseDotSpawnCount);
+    addUpgrade("#baseUpgrades", upgrades.increaseMaxDotCount);
+
     $("#nomscendUpgradesBttn").hide(); 
+    $("#toggleNomUpgrades").hide();
     $("#nomCoinGainText").text(calcNomGain());
     $("#nomscensionBttn").hide();
     $("#nomCoinDisplay").hide();
     $("#upgradeAutoFeedSpeed").parent().hide();
 
-    //Hide other noms
+    //Hide other noms - Not in use yet.
     $("#mrHexContainer").hide();
     $("#mrTriangleContainer").hide();
     $("#mrSquareContainer").hide();
     $("#mrNomNomContainer").hide();
-
-    // updateLevels();
     
      // Shop Upgrades
     $("#upgradeAutoFeedSpeedDesc").text(upgrades.autoFeed.desc);
@@ -50,28 +39,44 @@ export function initDisplay(){
         $("#nomscendUpgradesBttn").show(); 
         $("#nomscensionBttn").show();
         $("#nomCoinDisplay").show();
+        $("#toggleNomUpgrades").show();
+    }
+    if (upgrades.unlockRoboNom.level > 1){
+        addUpgrade("#baseUpgrades", upgrades.addRoboNom);
+    }
+    if (upgrades.unlockSquares.bought){
+        unlockSquares();
     }
 
-    //Enable autofeed interval if the upgrade is already purchased.
-    if (upgrades.autoFeed.enabled){
-        $("#upgradeAutoFeedSpeed").parent().show();
-        gameState.dotIntervalID = setInterval(createDot, upgrades.autoFeed.speed*1000);
-    }
 }
-
 
 export function updateStats(){
     scoreDisplay.textContent = formatNum(gameState.score);
-    $("#lifetimeScoreText").text(formatNum(gameState.liftimeScore));
+    $("#squares").text(formatNum(gameState.squares));
+    $("#activeDots").text(dotList.length+"/"+gameState.dotMaxCount)
+    $("#activeSquares").text(squareList.length+"/"+gameState.squareMaxCount)
+    
+    //Dots
     $("#dotBaseValueText").text(formatNum(gameState.dotValue));
-    $("#dotSpeedText").text(gameState.dotSpeed.toFixed(2));
-    $("#dotsEatenText").text(formatNum(gameState.dotsEaten));
     $("#dotMultiText").text(formatNum(gameState.dotMulti));
-    $("#autofeedSpeedText").text(upgrades.autoFeed.speed.toFixed(2));
+    $("#dotSpawnAmountText").text(gameState.dotSpawnCount);
+    $("#dotSpawnRateText").text(gameState.dotSpawnInterval+"s");
+    $("#dotMaxSpawnText").text(gameState.dotMaxCount);
+    
+    //Squares Stats:
+    $("#squareBaseValueText").text(formatNum(gameState.squareValue));
+    $("#squareMultiText").text(formatNum(gameState.squareMulti));
+    $("#squareSpawnAmountText").text(gameState.squareSpawnCount);
+    $("#squareSpawnRateText").text(gameState.squareSpawnInterval+"s");
+    $("#squareMaxSpawnText").text(gameState.squareMaxCount);
+
+    $("#dotsEatenText").text(formatNum(gameState.dotsEaten));
+    $("#lifetimeScoreText").text(formatNum(gameState.liftimeScore));
+    $("#squaresEatenText").text(formatNum(gameState.squaresEaten));
+    $("#lifetimeSquaresText").text(formatNum(gameState.lifetimeSquares));
     $("#nomscensionCountText").text(formatNum(gameState.nomscensionCount));
     $("#LifetimeNomCoinsText").text(formatNum(gameState.lifetimeNomCoins));
     $("#nomCoinStatText").text(formatNum(gameState.nomCoins));
-
     $("#nomCoinsText").text(formatNum(gameState.nomCoins));
     $("#nomScoreBoostAmountText").text(formatNum(gameState.nomScoreBoostAmount));
 
@@ -113,13 +118,137 @@ export function addUpgrade(upgradePosition, upgradeData){
     `<div class="upgrade-header">
         <span class="upgrade-icon"></span>
         <div class="upgrade-info">
-            <h3 class="upgrade-name">${upgradeData.name}</h3>
-            <p class="upgrade-description" id="${upgradeData.id}Desc">Desc</p>
+            <h3 class="upgrade-name">${upgradeData.name}</h3>            
+            <p class="upgrade-description" id="${upgradeData.id}Desc">Increases Dot Value</p>
+            <span id="${upgradeData.id}Lvl" class="upgrade-level">0</span>
         </div>
     </div>
-    <button id="${upgradeData.id}" class="nomBttn"><span id="${upgradeData.id}Text">100</span>
-        <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-    </button>`;
+    <div class="upgrade-actions">
+        <button id="${upgradeData.id}" class="upgradeBttn">Cost: 100</button>
+        <button class="maxBttn" id="${upgradeData.id}MaxBttn">Max</button>
+    </div`;
 
     $(upgradePosition).find(".upgrades-grid").append(newUpgrade);
+}
+
+export function addNomUpgrade(upgradePosition, upgradeData){
+
+    let newUpgrade = document.createElement('div');
+    newUpgrade.classList.add("upgrade-card");
+
+    newUpgrade.innerHTML +=
+    `<div class="upgrade-card">
+        <div class="upgrade-header">
+            <span class="upgrade-icon"></span>
+            <div class="upgrade-info">
+                <h3 class="upgrade-name">${upgradeData.name}</h3>
+                <p class="upgrade-description" id="${upgradeData.id}Desc">Desc</p>
+            </div>
+        </div>
+        <button id="${upgradeData.id}" class="nomBttn"><span id="${upgradeData.id}Text">0</span>
+            <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
+        </button>
+                </div>`;
+
+    $(upgradePosition).find(".upgrades-grid").append(newUpgrade);
+}
+
+
+
+export function updateCanvas(){
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    drawCentreDot(ctx);
+
+
+    //Draw Dots
+    for (const dot of dotList) {
+        dot.update();
+        dot.draw(ctx);
+    }
+    // Remove eaten dots
+    dotList.splice(0, dotList.length, ...dotList.filter(dot => !dot.eaten));
+
+    //Draw Squares
+    for (const square of squareList) {
+        square.update(canvas);
+        square.draw(ctx);
+    }
+    //Remove eaten squares
+    squareList.splice(0, squareList.length, ...squareList.filter(square => !square.eaten));
+
+    //Draw RoboNoms
+    for (const robo of roboList) {
+        robo.update(canvas, dotList);
+        robo.draw(ctx);
+    }
+
+    drawFloatingTexts(ctx);
+    drawMouseNom(ctx);
+    requestAnimationFrame(updateCanvas);
+}
+
+function drawMouseNom(ctx) {
+    const time = performance.now();
+    //Mouth animation settings
+    const maxMouthAngle = Math.PI / 5; // how wide he opens
+    // Smooth open/close animation
+    const mouthAngle = Math.abs(Math.sin(time / mouseNom.chompSpeed)) * maxMouthAngle;
+    // Determine facing direction from movement
+    // (Assumes you store previous frame position in mouseNom.prevX / prevY)
+    const dx = mouseNom.x - (mouseNom.prevX ?? mouseNom.x);
+    const dy = mouseNom.y - (mouseNom.prevY ?? mouseNom.y);
+    const angle = Math.atan2(dy, dx); // direction Pac-Man should face
+
+    // Store for next frame
+    mouseNom.prevX = mouseNom.x;
+    mouseNom.prevY = mouseNom.y;
+
+    // 🟡 Draw Pac-Man
+    ctx.save();
+    ctx.translate(mouseNom.x, mouseNom.y);
+    ctx.rotate(angle);
+
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.arc(0, 0, mouseNom.radius, mouthAngle, Math.PI * 2 - mouthAngle);
+    ctx.closePath();
+
+    ctx.fillStyle = mouseNom.color;
+    ctx.fill();
+    ctx.restore();
+}
+
+function drawCentreDot(ctx){
+    const centre = getCanvasCentre();
+    // Draw big central dot
+    ctx.beginPath();
+    ctx.arc(centre.x, centre.y, 25, 0, Math.PI * 2);
+    ctx.fillStyle = "#33ecff";
+    ctx.fill();
+}
+
+function drawFloatingTexts(ctx) {
+    const now = performance.now();
+
+    // Keep only active texts
+    floatingTexts = floatingTexts.filter(ft => now - ft.createdAt < ft.lifetime);
+
+    floatingTexts.forEach(ft => {
+        const progress = (now - ft.createdAt) / ft.lifetime;
+        const rise = progress * 40; // how far the text rises up
+        const alpha = 1 - progress; // fade out over time
+
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.translate(ft.x, ft.y - rise);
+        ctx.rotate(ft.rotation);
+        ctx.fillStyle = ft.colour;
+        ctx.font = "bold 15px pixleFont";
+        ctx.textAlign = "center";
+        ctx.fillText(ft.text, 0, 0);
+        ctx.restore();
+    });
 }
