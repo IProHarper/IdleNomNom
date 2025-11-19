@@ -1,4 +1,4 @@
-import { updateLevels } from "../display.js";
+import { addUpgrade } from "../display.js";
 import { increaseCost, setAutoFeed, setSpeed, setDotMulti } from "../util.js";
 import { upgrades, gameState, shopUpgrades } from "../data.js";
 import { updateNomScoreBoost } from "../score.js";
@@ -17,7 +17,6 @@ export function increaseNomCoinMulti(){
         //Update upgrade cost
         upgrades.increaseNomCoinMulti.cost = increaseCost(upgradeData);
     }
-    updateLevels();
 }
 
 export function increaseNomDotVal(){
@@ -34,7 +33,6 @@ export function increaseNomDotVal(){
         //Increase cost
         upgrades.increaseNomDotVal.cost = increaseCost(upgradeData);
     }
-    updateLevels();
 }
 
 export function increaseDotMultiMax(){
@@ -46,8 +44,6 @@ export function increaseDotMultiMax(){
         upgrades.increaseDotMultiMax.level = upgrades.increaseDotMultiMax.level+1;
         upgrades.increaseDotMultiMax.cost = increaseCost(upgradeData);
     }
-    updateLevels();
-
 }
 export function increaseDotValMax(){
     const upgradeData = upgrades.increaseDotValMax;
@@ -58,7 +54,6 @@ export function increaseDotValMax(){
         upgrades.increaseDotValMax.level = upgrades.increaseDotValMax.level+1;
         upgrades.increaseDotValMax.cost = increaseCost(upgradeData);
     }
-    updateLevels();
 }
 
 export function increaseStartDotSpeedLevel(){
@@ -76,7 +71,6 @@ export function increaseStartDotSpeedLevel(){
         }
         setSpeed();
     }
-    updateLevels();
 }
 
 export function increaseStartDotMultiLevel(){
@@ -94,7 +88,6 @@ export function increaseStartDotMultiLevel(){
         }
         setDotMulti();
     }
-    updateLevels();
 }
 
 
@@ -109,7 +102,6 @@ export function increaseAutoFeedMax(){
     upgrades.autoFeed.baseSpeed = upgrades.autoFeed.baseSpeed.minus(upgradeData.increase);
     setAutoFeed();
     }
-    updateLevels();
 }
 
 export function increaseDotSpeedBase(){
@@ -122,7 +114,6 @@ export function increaseDotSpeedBase(){
     upgrades.increaseDotSpeed.baseSpeed = upgrades.increaseDotSpeed.baseSpeed.minus(upgradeData.increase);
     setSpeed();
     }
-    updateLevels();
 }
 
 export function keepAutofeed(){
@@ -135,7 +126,6 @@ export function keepAutofeed(){
     upgrades.autoFeed.resetTier = 1;
     shopUpgrades.unlockAutoFeed.resetTier = 1;
     }
-    updateLevels();
 }
 
 export function nomCoinScoreBoost(){
@@ -147,5 +137,15 @@ export function nomCoinScoreBoost(){
         //Upgrade Effect
         updateNomScoreBoost();
     }
-    updateLevels();
+}
+
+export function unlockRoboNoms(){
+    const upgradeData = upgrades.unlockRoboNom;
+    if (gameState.nomCoins.greaterThanOrEqualTo(upgradeData.cost)){
+        gameState.nomCoins = gameState.nomCoins.minus(upgradeData.cost);
+        upgradeData.level = upgradeData.level+1;
+        upgradeData.bought = true;
+        //Upgrade Effect
+        addUpgrade("#baseUpgrades", upgrades.addRoboNom);
+    }
 }
