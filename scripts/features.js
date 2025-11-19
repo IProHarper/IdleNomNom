@@ -1,9 +1,24 @@
-import { gameState, shopUpgrades, upgrades } from './data.js'
-import { createDot } from './consumables.js';
+import { dotList, gameState, roboList, shopUpgrades, upgrades } from './data.js'
+import { createDot, spawnSquare } from './consumables.js';
 import { resetUpgrades } from './gameFiles.js';
-import { calcNomGain } from './util.js';
+import { calcNomGain, setSquareSpawnRate } from './util.js';
 import { updateNomScoreBoost } from './score.js';
+import { addUpgrade } from './display.js';
 
+
+export function unlockSquares(){
+    $("#toggleSquareUpgrades").show();
+    $("#squareDisplay").show();
+    $("#squareStats").show();
+    $("#activeSquareDisplay").show();
+    spawnSquare();
+    setSquareSpawnRate();
+    addUpgrade("#squareUpgrades", upgrades.increaseSquareValue);
+    addUpgrade("#squareUpgrades", upgrades.increaseSquareSpawnCount);
+    addUpgrade("#squareUpgrades", upgrades.increaseSquareSpawnRate);
+    addUpgrade("#squareUpgrades", upgrades.increaseMaxSquareCount);
+    addUpgrade("#squareUpgrades", upgrades.increaseSquareMulti);
+}
 
 //Enable the Auto feed Button
 export function enableAutofeed(){
@@ -24,29 +39,27 @@ export function unlockNomscend(){
     $("#nomscendUpgradesBttn").show();
     $("#nomscensionBttn").show();
     $("#popUpModal").show();
-
+     $("#toggleNomUpgrades").show();
 }
 
 //Nomscend - Reset progress but start with a base 10 multiplier
 export function nomscend(){
     //Pop up disclaimer and 
     $("#popUpModal").hide();
-    // $("#nomsecReqText").text(formatNum(gameState.nomsecScoreReq));
     const gs = gameState;
-    gameState.nomCoins = gameState.nomCoins.plus(calcNomGain());
-    if (gameState.nomCoinBestGain.lessThan(calcNomGain())){
-        gameState.nomCoinBestGain = new Decimal(calcNomGain());
+    const gainedCoins = calcNomGain();
+    gameState.nomCoins = gameState.nomCoins.plus(gainedCoins);
+    if (gameState.nomCoinBestGain.lessThan(gainedCoins)){
+        gameState.nomCoinBestGain = new Decimal(gainedCoins);
     }
-    gameState.lifetimeNomCoins = gameState.lifetimeNomCoins.plus(calcNomGain());
+    gameState.lifetimeNomCoins = gameState.lifetimeNomCoins.plus(gainedCoins);
     gameState.score = new Decimal(0);
     gameState.nomscensionCount = gs.nomscensionCount.plus(1);
     gameState.nomscendScore = new Decimal(0);
     clearInterval(gameState.dotIntervalID);
-    $('.dot').remove();
+    dotList.length = 0;
+    roboList.length = 0;
     gameState.nomsecScoreReq = gs.nomsecScoreReq.times(11);
-    if (upgrades.autoFeed.resetTier == 0){
-            $("#upgradeAutoFeedSpeed").parent().hide();
-    }
     resetUpgrades();
     updateNomScoreBoost();
 }
