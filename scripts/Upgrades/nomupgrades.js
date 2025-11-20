@@ -5,7 +5,7 @@ import { updateNomScoreBoost } from "../score.js";
 
 //NOM Upgrades
 
-export function increaseNomCoinMulti(){
+export function upgradeNomCoinMulti(){
    let upgradeData = upgrades.increaseNomCoinMulti;
     if (gameState.nomCoins.greaterThanOrEqualTo(upgradeData.cost)){
         //Purchase upgrade
@@ -19,7 +19,7 @@ export function increaseNomCoinMulti(){
     }
 }
 
-export function increaseNomDotVal(){
+export function upgradeNomDotVal(){
     const upgradeData = upgrades.increaseNomDotVal;
     if (gameState.nomCoins.greaterThanOrEqualTo(upgradeData.cost)){
         //Purchase upgrade
@@ -35,17 +35,18 @@ export function increaseNomDotVal(){
     }
 }
 
-export function increaseDotMultiMax(){
+export function upgradeDotMultiMax(){
     const upgradeData = upgrades.increaseDotMultiMax;
     if (gameState.nomCoins.greaterThanOrEqualTo(upgradeData.cost)){
         gameState.nomCoins = gameState.nomCoins.minus(upgradeData.cost);
-        //Effect
+        //Effect (Needs to happen first as calculation uses upgrade level)
         upgrades.increaseDotMulti.maxlevel = (upgradeData.level*upgradeData.increase)+5; //5 = base max level
+        //Increase cost and level
         upgrades.increaseDotMultiMax.level = upgrades.increaseDotMultiMax.level+1;
         upgrades.increaseDotMultiMax.cost = increaseCost(upgradeData);
     }
 }
-export function increaseDotValMax(){
+export function upgradeDotValMax(){
     const upgradeData = upgrades.increaseDotValMax;
     if (gameState.nomCoins.greaterThanOrEqualTo(upgradeData.cost)){
         gameState.nomCoins = gameState.nomCoins.minus(upgradeData.cost);
@@ -128,7 +129,7 @@ export function keepAutofeed(){
     }
 }
 
-export function nomCoinScoreBoost(){
+export function unlockNomCoinScoreBoost(){
     const upgradeData = upgrades.nomCoinScoreBoost;
     if (gameState.nomCoins.greaterThanOrEqualTo(upgradeData.cost)){
         gameState.nomCoins = gameState.nomCoins.minus(upgradeData.cost);
