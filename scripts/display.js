@@ -1,8 +1,7 @@
 import { gameState, upgrades, gameStages, dotList, mouseNom, roboList, squareList } from "./data.js";
-import { unlockSquares } from "./features.js";
+import { unlockSquare } from "./features.js";
 import { calcNomGain, formatNum, getCanvasCentre } from "./util.js";
 
-const scoreDisplay = document.getElementById('score');
 export let floatingTexts = [];
 
 
@@ -45,13 +44,13 @@ export function initDisplay(){
         addUpgrade("#baseUpgrades", upgrades.addRoboNom);
     }
     if (upgrades.unlockSquares.bought){
-        unlockSquares();
+        unlockSquare();
     }
 
 }
 
 export function updateStats(){
-    scoreDisplay.textContent = formatNum(gameState.score);
+    $("#score").text(formatNum(gameState.score))
     $("#squares").text(formatNum(gameState.squares));
     $("#activeDots").text(dotList.length+"/"+gameState.dotMaxCount)
     $("#activeSquares").text(squareList.length+"/"+gameState.squareMaxCount)
