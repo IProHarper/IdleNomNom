@@ -183,19 +183,6 @@ export var upgrades = {
         resetTier: 0
     },
     //Nom Upgrades
-    increaseNomDotMulti : {
-        id: "upgradeNomDotMulti",
-        name: "NULL",
-        desc: "",
-        type: "nomCoins",
-        increase: new Decimal(10),
-        baseCost: new Decimal(3),
-        cost: new Decimal(3),
-        upgradeScale: 5.12,
-        level: 1,
-        maxlevel: 100,
-        resetTier: 1
-    },
     increaseNomDotVal : {
         id: "upgradeNomDotVal",
         name: "Permanent Dot Base Value",
@@ -383,7 +370,7 @@ export var upgrades = {
         resetTier: 0
     },
     increaseMaxSquareCount : {
-        id: "upgradeMaxSquareCountssssss",
+        id: "upgradeMaxSquareCount",
         name: "Max Square",
         desc: "Increase the amount of square that can exist at the same time",
         type: "square",
@@ -410,7 +397,7 @@ export var upgrades = {
         resetTier: 1
     },
     nomCoinScoreBoost : {
-        id: "unlocknomCoinScoreBoost",
+        id: "unlockNomCoinScoreBoost",
         name: "Score Boost",
         desc: "Your score is now boosted by your lifetime NomCoin's! /100",
         bought: false,
@@ -423,7 +410,7 @@ export var upgrades = {
         resetTier: 1
     },
     unlockRoboNom : {
-        id: "unlockRoboNom",
+        id: "unlockRoboNoms",
         name: "Unlock Robo-Noms!",
         desc: "Unlock mini Robo-Nom that roams around for you eating dots",
         type: "nomCoins",
