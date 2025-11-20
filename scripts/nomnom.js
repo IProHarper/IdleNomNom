@@ -64,7 +64,7 @@ export class RoboNom {
 
         ctx.arc(0, 0, this.radius, mouthAmount, Math.PI * 2 - mouthAmount);
         ctx.lineTo(0, 0);
-        ctx.fillStyle = "pink";
+        ctx.fillStyle = "#FF2E96";
         ctx.fill();
 
         ctx.restore();
