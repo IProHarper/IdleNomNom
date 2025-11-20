@@ -62,7 +62,7 @@ export default class Square {
     }
 
     draw(ctx) {
-        ctx.fillStyle = "rgb(227, 0, 227)";
+        ctx.fillStyle = "#6F07F0";
         ctx.fillRect(this.x, this.y, this.size, this.size);
     }
     
@@ -79,7 +79,7 @@ export default class Square {
 
         if (dist < eaterRadius) {
             this.eaten = true;
-            showFloatingText(eatSquare(), this.x, this.y, "rgb(227, 0, 227)");
+            showFloatingText(eatSquare(), this.x, this.y, "#6F07F0");
         }
     }
 }
