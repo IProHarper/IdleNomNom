@@ -1,7 +1,7 @@
 import { saveGame,checkSaveFile } from './gameFiles.js';
-import { gameState, upgrades, shopUpgrades, gameStages, mouseNom, mousePos } from './data.js'
+import { gameState, gameStages, mouseNom, mousePos } from './data.js'
 import { setDotSpawnRate, setRoboNoms } from './util.js';
-import { buttonCheck, handleUpgrade } from './buttonHandling.js';
+import { buttonCheck, handleBuyMax, handleUpgrade } from './buttonHandling.js';
 import { unlockNomscend } from './features.js';
 import { initDisplay, updateStats, updateProgressBar, updateCanvas } from './display.js';
 
@@ -21,12 +21,7 @@ $(document).ready(function(){
     $(document).on("click", ".maxBttn", function() {
         const id = $(this).attr("id");
         // console.log(`Upgrade clicked: ${id}`);
-        handleUpgrade(id);
-    });
-    $(document).on("click", ".nomBttn", function() {
-        const id = $(this).attr("id");
-        // console.log(`Upgrade clicked: ${id}`);
-        handleUpgrade(id);
+        handleBuyMax(id);
     });
 
 
