@@ -9,7 +9,7 @@ export function formatNum(num){
         if (num.greaterThan(1000000)) {
             return num.toExponential(2);
         } else {
-          return num.round();
+          return Math.round(num);
         }
 }
 
@@ -25,11 +25,19 @@ export function calcBuyMax(upgradeData){
 
     //Check if the cost is score or nomCoins
     let moneyType;
-    if (upgradeData.type == "score"){
+    switch (upgradeData.type) {
+      case "score":
         moneyType = gameState.score;
-    } else if (upgradeData.type == "nomCoins"){
+        break;
+      case "nomCoins":
         moneyType = gameState.nomCoins;
+      case "square":
+        moneyType = gameState.squares;
+        break;
+      default:
+        console.warn("Unknown handler for moneyType:"+upgradeData.type);
     }
+
 
     let totalCost;
     //return 0 if they can't affort anything
@@ -82,7 +90,7 @@ export function setDotSpawnRate(){
 }
 
 export function setSquareSpawnRate(){
-  gameState.squareSpawnIntervalID = 5.5 - (upgrades.increaseSquareSpawnRate.level * (upgrades.increaseSquareSpawnRate.increase));
+  gameState.squareSpawnInterval = 5.5 - (upgrades.increaseSquareSpawnRate.level * (upgrades.increaseSquareSpawnRate.increase));
   clearInterval(gameState.squareSpawnIntervalID);
   if (gameState.squareSpawnInterval <= 0){
     gameState.squareSpawnInterval = 0.5;
