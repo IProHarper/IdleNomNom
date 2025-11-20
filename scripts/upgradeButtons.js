@@ -80,7 +80,7 @@ export function upgradeDotSpawnCount(){
     }
 }
 
-export function upgradeDotMaxCount(){
+export function upgradeMaxDotCount(){
     const upgrade = upgrades.increaseMaxDotCount;
     if (gameState.score.greaterThanOrEqualTo(upgrade.cost)){
         //Reduce score
