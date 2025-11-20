@@ -511,16 +511,19 @@ button:disabled {
   height: 12px;
   border-radius: 50%;
   background: white;
+  pointer-events: none;
 }
 /* Square Icon */
 .icon-square {
   width: 12px;
   height: 12px;
-  background: rgb(227, 0, 227);
+  background: #6F07F0;
+  pointer-events: none;
 }
 .icon-nomCoin {
   width: 12px;
   height: 12px;
+  pointer-events: none;
 }
 
 /* Rounded light styling for icons */
@@ -710,6 +713,7 @@ button:disabled {
 .upgrade-icon {
   font-size: 20px;
   margin-right: 12px;
+  pointer-events: none;
 }
 
 .upgrade-info {
