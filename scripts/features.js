@@ -6,7 +6,15 @@ import { updateNomScoreBoost } from './score.js';
 import { addUpgrade } from './display.js';
 
 
-export function unlockSquares(){
+export function unlockSquare(){
+    const upgrade = upgrades.unlockSquares;
+    if (!upgrade.bought && gameState.nomCoins.greaterThanOrEqualTo(upgrade.cost)){
+        //Reduce coins
+        gameState.nomCoins = gameState.nomCoins.minus(upgrade.cost);
+        //Update level
+        upgrades.unlockSquares.level = upgrades.increaseSquareValue.level +1;
+        upgrades.unlockSquares.bought = true;
+    }
     $("#toggleSquareUpgrades").show();
     $("#squareDisplay").show();
     $("#squareStats").show();
