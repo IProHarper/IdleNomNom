@@ -200,10 +200,10 @@ $("#nomscendBttn").on('click',function(){
 });
 
 $("#debugBttn").on('click',function(){
-    gameState.score = gameState.score.plus(10000);
-    gameState.nomCoins = gameState.nomCoins.plus(1000);
-    handleBuyMax("upgradeDotValueMaxBttn");
-    unlockSquare();
+    // gameState.score = gameState.score.plus(10000);
+    // gameState.nomCoins = gameState.nomCoins.plus(1000);
+    // handleBuyMax("upgradeDotValueMaxBttn");
+    // unlockSquare();
 });
 
 
