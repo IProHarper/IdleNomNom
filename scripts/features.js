@@ -4,6 +4,7 @@ import { resetUpgrades } from './gameFiles.js';
 import { calcNomGain, setSquareSpawnRate } from './util.js';
 import { updateNomScoreBoost } from './score.js';
 import { addUpgrade } from './display.js';
+import { progressGameStage } from './main.js';
 
 
 export function unlockSquare(){
@@ -70,6 +71,7 @@ export function nomscend(){
     gameState.nomsecScoreReq = gs.nomsecScoreReq.times(11);
     resetUpgrades();
     updateNomScoreBoost();
+    progressGameStage();
 }
 
 export function createKids(){
