@@ -7,6 +7,13 @@ export let floatingTexts = [];
 
 
 export function initDisplay(){
+
+    //Mobile handling
+    if ($(document).width() < 768){
+        $("#baseUpgrades").toggleClass("hidden");
+        $("#stats-container").toggleClass("hidden");
+    }
+
     //Set display to only have upgrades at first
     $("#nomUpgrades").toggleClass("hidden");
     $("#squareUpgrades").toggleClass("hidden");
