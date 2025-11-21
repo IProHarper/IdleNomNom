@@ -27,21 +27,21 @@ export const gameStages = [
     },
     {
         name: "Nomcension",
-        progressText: "Nomscend 10 times",
+        progressText: "Nomscend 5 times",
         statType: "nomscend",
-        requirement: new Decimal(10)
+        requirement: new Decimal(5)
     },
     {
-        name: "Next level",
-        progressText: "Reach Score Goa... Well I haven't implemented this yet actually",
-        statType: "cap",
-        requirement: new Decimal(10000000000000000000000000)
+        name: "Unlock Squares",
+        progressText: "Eat 10 Squares",
+        statType: "square",
+        requirement: new Decimal(10)
     }
 ]
 
 
 export var gameState = {
-    gameVersion: 0.9,
+    gameVersion: 1.0,
     score: new Decimal(0),
     liftimeScore: new Decimal(0),
     dotValue: new Decimal(1),
@@ -319,9 +319,9 @@ export var upgrades = {
         desc: "Square Value + 1.",
         type: "square",
         increase: new Decimal(1),
-        baseCost: new Decimal(25),
-        cost: new Decimal(25),
-        upgradeScale: 1.05,
+        baseCost: new Decimal(5),
+        cost: new Decimal(5),
+        upgradeScale: 1.1,
         level: 1,
         minlevel: 1,
         maxlevel: 100,
@@ -333,8 +333,8 @@ export var upgrades = {
         desc: "Multi + 2",
         type: "square",
         increase: new Decimal(2),
-        baseCost: new Decimal(1000),
-        cost: new Decimal(1000),
+        baseCost: new Decimal(500),
+        cost: new Decimal(500),
         upgradeScale: 2,
         level: 1,
         minlevel: 1,
@@ -361,8 +361,8 @@ export var upgrades = {
         desc: "Increase the amount of squares that spawn by 1",
         type: "square",
         increase: 1,
-        baseCost: new Decimal(25),
-        cost: new Decimal(25),
+        baseCost: new Decimal(10),
+        cost: new Decimal(10),
         upgradeScale: 1.36,
         level: 1,
         minlevel: 1,
@@ -375,9 +375,9 @@ export var upgrades = {
         desc: "Increase the amount of square that can exist at the same time",
         type: "square",
         increase: 5,
-        baseCost: new Decimal(50),
-        cost: new Decimal(50),
-        upgradeScale: 2.1,
+        baseCost: new Decimal(25),
+        cost: new Decimal(25),
+        upgradeScale: 2.02,
         level: 1,
         minlevel: 1,
         maxlevel: 50,
