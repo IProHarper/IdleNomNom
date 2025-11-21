@@ -18,6 +18,7 @@ body {
     color: white;
     text-align: center;
     font-family: pixleFont, Arial, sans-serif;
+    padding-bottom: 20%;
 }
 
 
@@ -57,13 +58,12 @@ body {
 }
 
 .progress-container {
-    position: fixed;
-    bottom: 0;
-    margin-bottom: 0%;
-    left: 0;
-    width: 100%;
-    height: 30px;
-    background-color: #999; 
+  position: fixed;
+  bottom: 0;
+  margin-left: 16vw;
+  width: 67vw;
+  height: 30px;
+  background-color: #999; 
 } 
 
 /* Progress Bar */
@@ -205,6 +205,14 @@ body {
 
 /* Buttons */
 #ResetBttn {
+    float: right;
+    background-color: Red;
+    position: absolute;
+    z-index: 5;
+    left:20vw;
+    top:10px;
+}
+#resetProgressModal {
     float: right;
     background-color: Red;
     position: absolute;
@@ -355,7 +363,7 @@ button:disabled {
 
 /* Modal backdrop */
 .modal {
-  display: none; /* Hidden by default */
+  display: block; /* Hidden by default */
   position: fixed;
   z-index: 999;
   left: 0;
@@ -385,55 +393,59 @@ button:disabled {
 
 /* Close button */
 .closeBttn {
-  position: absolute;
+  position:fixed;
   top: 10px;
   right: 15px;
-  color: white;
+  width:30px;
+  color: black;
   font-size: 24px;
   font-weight: bold;
   cursor: pointer;
+  background-color: white;
+  border:5px solid black;
+  border-radius: 25%;
 }
 
-/* Hide sections by default (controlled by JS) */
-#shop-container,
-#customize-container,
-#stats-container {
-  display: none;
+#customize-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 16vw;
+  background: var(--bg-panel, rgba(20, 20, 20, 0.95));
+  border-left: none;
+  border-right: 2px solid var(--border-color);
+  box-shadow: 0 0 20px rgba(51, 236, 255, 0.4);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
 }
-/* Shop Container */
+
+#customize-container.hidden{
+  transform: translateX(-100%);
+}
 
 
-.upgrades-container h2{
-  text-align: left;
-  font-size: 28px;
-  margin: 0px 0px 20px 0px;
-  color: var(--text-primary);
-  border-bottom: 2px solid var(--border-color);
-  padding-bottom: 10px;
-}
 #stats-container {
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;                /* Full viewport height */
-  width: 16vw;                 /* Adjust width as needed */
+  height: 100vh;
+  width: 16vw;
   background: var(--bg-panel, rgba(20, 20, 20, 0.95));
+  border-left: none;
   border-right: 2px solid var(--border-color);
   box-shadow: 0 0 20px rgba(51, 236, 255, 0.4);
-  overflow-y: auto;             /* Scroll vertically */
+  overflow-y: auto;
   overflow-x: hidden;
-  padding: 10px;
   display: flex;
   flex-direction: column;
-  z-index: 100;                 /* Stays above other game elements */
+  z-index: 100;
 }
-#stats-container h2{
-  text-align: left;
-  font-size: 28px;
-  margin: 0px 0px 20px 0px;
-  color: var(--text-primary);
-  border-bottom: 2px solid var(--border-color);
-  padding-bottom: 10px;
+#stats-container.hidden{
+  transform: translateX(-100%);
 }
 .stat-value{
   color: #33ecff;
@@ -445,7 +457,7 @@ button:disabled {
   height: 40px;
   width: fit-content;
   background: rgba(20, 20, 20, 0.85);
-  border-left: 2px solid var(--border-color);
+  border-right: 2px solid var(--border-color);
   border-bottom: 2px solid var(--border-color);
   border-bottom-right-radius: 8px;
   display: flex;
@@ -505,6 +517,8 @@ button:disabled {
   box-shadow: 0 0 18px rgba(0, 30, 255, 0.7);
 }
 
+
+
 /* Dot Icon*/
 .icon-dot {
   width: 12px;
@@ -533,18 +547,16 @@ button:disabled {
   object-fit: contain;
   filter: drop-shadow(0px 0px 3px rgba(255, 255, 255, 0.6));
 }
-
-/* Sidebar container for upgrades */
-.upgrades-container{
+.upgrades-container-left{
   position: fixed;
   top: 0;
-  right: 0;
+  left: 0;
   height: 100vh;           
   width: 16vw;                 
   background: var(--bg-panel, rgba(20, 20, 20, 0.95));
-  border-left: 2px solid var(--border-color);
+  border-right: 2px solid var(--border-color);
   box-shadow: 0 0 20px rgba(51, 236, 255, 0.4);
-  overflow-y: auto;             /* Scroll vertically */
+  overflow-y: auto;
   overflow-x: hidden;
   padding: 10px;
   padding-top: 40px;
@@ -554,9 +566,45 @@ button:disabled {
   transition: transform 0.4s ease-in-out;
   transform: translateX(0);
 }
-.upgrades-container h2{
+.upgrades-container-left h2{
     margin-top:25px;
     font-size: x-large;
+    text-align: left;
+    font-size: 28px;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+
+/* Sidebar container for upgrades */
+.upgrades-container-right{
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;           
+  width: 16vw;                 
+  background: var(--bg-panel, rgba(20, 20, 20, 0.95));
+  border-left: 2px solid var(--border-color);
+  box-shadow: 0 0 20px rgba(51, 236, 255, 0.4);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+  padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;                 
+  transition: transform 0.4s ease-in-out;
+  transform: translateX(0);
+}
+.upgrades-container-right h2{
+    margin-top:25px;
+    font-size: x-large;
+    text-align: left;
+    font-size: 28px;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
 }
 /* Hidden (slid out) state */
 #baseUpgrades.hidden {
@@ -579,20 +627,21 @@ button:disabled {
 
 
 /* Make scrollbar subtle */
-.upgrades-container::-webkit-scrollbar {
+.upgrades-container-left::-webkit-scrollbar {
   width: 8px;
 }
-.upgrades-container::-webkit-scrollbar-thumb {
+.upgrades-container-left::-webkit-scrollbar-thumb {
   background-color: var(--border-color);
   border-radius: 4px;
 }
-#baseUpgrades::-webkit-scrollbar {
+.upgrades-container-right::-webkit-scrollbar {
   width: 8px;
 }
-#baseUpgrades::-webkit-scrollbar-thumb {
+.upgrades-container-right::-webkit-scrollbar-thumb {
   background-color: var(--border-color);
   border-radius: 4px;
 }
+
 #nomUpgrades{
   position: fixed;
   top: 0;
