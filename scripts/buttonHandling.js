@@ -29,19 +29,26 @@ document.querySelectorAll(".menu-toggle-btn").forEach(btn => {
 
 //Menu transition handling
 $("#toggleUpgrades").on("click", function() {
-    switchRMenu("#baseUpgrades");
+    switchMenu("#baseUpgrades","right");
 });
 $("#toggleNomUpgrades").on("click", function() {
-    switchRMenu("#nomUpgrades");
+    switchMenu("#nomUpgrades","right");
 });
 $("#toggleSquareUpgrades").on("click", function() {
-    switchRMenu("#squareUpgrades");
+    switchMenu("#squareUpgrades","right");
+});
+$("#toggleStats").on("click", function() {
+    switchMenu("#stats-container","left");
+});
+$("#toggleCustomize").on("click", function() {
+    switchMenu("#customize-container","left");
 });
 
 
 // Modal Handling
 $(".closeBttn").on("click", () => {
     $("#popUpModal").hide();
+    $("#patchModal").hide();
 });
 export function openModal() {
     $("#popUpModal").show();
@@ -49,6 +56,9 @@ export function openModal() {
 $(window).on("click", function(event) {
     if (event.target === $("#popUpModal")[0]) {
         $("#popUpModal").hide();
+    }
+    if (event.target === $("#patchModal")[0]) {
+        $("#patchModal").hide();
     }
 });
 
@@ -74,22 +84,23 @@ $("#enableAidanMode").on('click',function(){
     mouseNom.color = "red";
 });
 $("#enableDADMode").on('click',function(){
-    $("#mrNomNom").css("fill", "green");
-    if ($(".nomnomjr").children().length == 0){
-        createKids()
-    } else {
-        $(".nomnomjr").children().show();
-    }
+     mouseNom.color = "green";
+    // $("#mrNomNom").css("fill", "green");
+    // if ($(".nomnomjr").children().length == 0){
+    //     createKids()
+    // } else {
+    //     $(".nomnomjr").children().show();
+    // }
     
 });
 //####################
 
 //Toggle Right Menu
-function switchRMenu(activeMenu){
+function switchMenu(activeMenu,side){
     if (!$(activeMenu).hasClass('hidden')){
         $(activeMenu).toggleClass('hidden');
     } else {
-        $(".upgrades-container").each(function() {
+        $(".upgrades-container-"+side).each(function() {
             if(!$(this).hasClass('hidden')){
                 $(this).toggleClass('hidden');
             }
@@ -215,6 +226,15 @@ $("#ResetBttn").click(function(){
         location.reload();
     }    
 });
+$("#resetProgressModal").click(function() {
+    if (confirm("Confirming this will Reset your progress. Hope it wasn't too much. Sorry...")){
+        localStorage.removeItem("gameState");
+        localStorage.removeItem("Upgrades");
+        localStorage.removeItem("shopUpgrades");
+        location.reload();
+    }  
+});
+
 $("#SaveBttn").click(function(){
     saveGame(); 
 });
