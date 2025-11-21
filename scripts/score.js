@@ -1,5 +1,6 @@
 import { gameState } from './data.js';
-import { floatingTexts } from './display.js';
+import { floatingTexts, updateProgressBar } from './display.js';
+import { progressGameStage } from './main.js';
 import { formatNum } from './util.js';
 
 export function increaseScore(){
@@ -10,6 +11,7 @@ export function increaseScore(){
     gameState.liftimeScore = gameState.liftimeScore.plus(value);
     gameState.dotsEaten = gameState.dotsEaten.plus(1);
     gameState.nomscendScore = gameState.nomscendScore.plus(value);
+    progressGameStage();
 
     return value;
 }
@@ -19,7 +21,7 @@ export function eatSquare(){
     gameState.squares = gameState.squares.plus(value);
     gameState.squaresEaten = gameState.squaresEaten.plus(1);
     gameState.lifetimeSquares = gameState.lifetimeSquares.plus(1);
-    
+    progressGameStage();
     return value
 }
 
