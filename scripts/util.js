@@ -29,11 +29,15 @@ export function calcBuyMax(upgradeData){
       case "score":
         moneyType = gameState.score;
         break;
+
       case "nomCoins":
         moneyType = gameState.nomCoins;
+        break;
+
       case "square":
         moneyType = gameState.squares;
         break;
+
       default:
         console.warn("Unknown handler for moneyType:"+upgradeData.type);
     }
@@ -90,7 +94,7 @@ export function setDotSpawnRate(){
 }
 
 export function setSquareSpawnRate(){
-  gameState.squareSpawnInterval = 5.5 - (upgrades.increaseSquareSpawnRate.level * (upgrades.increaseSquareSpawnRate.increase));
+  gameState.squareSpawnInterval = 10.5 - (upgrades.increaseSquareSpawnRate.level * (upgrades.increaseSquareSpawnRate.increase));
   clearInterval(gameState.squareSpawnIntervalID);
   if (gameState.squareSpawnInterval <= 0){
     gameState.squareSpawnInterval = 0.5;
