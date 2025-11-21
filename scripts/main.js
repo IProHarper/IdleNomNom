@@ -12,6 +12,16 @@ $(document).ready(function(){
     checkSaveFile();
     initDisplay();
 
+    const canvas = document.getElementById("gameCanvas");
+
+    // Match canvas pixel size to display size
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+    
+    updateCanvas();
+    setDotSpawnRate();
+    setRoboNoms();
+
     //Add event handler to all upgrade buttons
     $(document).on("click", ".upgradeBttn", function() {
         const id = $(this).attr("id");
@@ -23,22 +33,58 @@ $(document).ready(function(){
         handleBuyMax(id);
     });
 
+    canvas.addEventListener('touchstart', handleTouchStart, false);
+    canvas.addEventListener('touchmove', handleTouchMove, false);
+    canvas.addEventListener('touchend', handleTouchEnd, false);
 
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
 
-    // Match canvas pixel size to display size
+    setInterval(updateDisplay, 100);
+    var saveGameLoop = window.setInterval(function() {
+        saveGame();
+      }, 30000);
+
     function resizeCanvas() {
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
     }
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
     
-    updateCanvas();
-    setDotSpawnRate();
-    setRoboNoms();
+    function drawTouchNom (touchEvent) {
+
+        mousePos.x = touchEvent.clientX ;
+        mousePos.y = touchEvent.clientY;
+
+        const rect = canvas.getBoundingClientRect();
+        const newX = touchEvent.clientX - rect.left;
+        const newY = touchEvent.clientY - rect.top;
+
+        // calculate direction angle (facing the cursor movement)
+        const dx = newX - lastMousePos.x;
+        const dy = newY - lastMousePos.y;
+        if (Math.abs(dx) + Math.abs(dy) > 1) { // only update if moved
+            mouseNom.mouthAngle = Math.atan2(dy, dx);
+            lastMousePos = { x: newX, y: newY };
+        }
+
+        mouseNom.x = newX;
+        mouseNom.y = newY;
+        
+    }
     
+    function handleTouchStart(e) {
+        e.preventDefault(); // Prevent default browser behavior like scrolling
+        const touch = e.changedTouches[0]; // Get the first touch point
+        drawTouchNom(touch);
+    }
+
+    function handleTouchMove(e) {
+        e.preventDefault();
+        const touch = e.changedTouches[0];
+        drawTouchNom(touch);
+    }
+
+    function handleTouchEnd(e) {
+        e.preventDefault();
+    }
 
     //Mouse Movement
     let lastMousePos = { x: canvas.width / 2, y: canvas.height / 2 };
@@ -68,11 +114,6 @@ $(document).ready(function(){
         updateStats();
     }
 
-
-    setInterval(updateDisplay, 100);
-    var saveGameLoop = window.setInterval(function() {
-        saveGame();
-      }, 30000);
 
 
 });
