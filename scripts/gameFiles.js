@@ -84,11 +84,20 @@ export function compareSaveData(data,name){
         loadUpgradeData(data, "shopUpgrades"); 
     }
 }
+function checkGameVersion(gameData){
+    //Pre overhaul requires a reset.
+    if (gameData.gameVersion < 1.0){
+        console.log(`Game Version old. Your version:${gameData.gameVersion}. New version:${gameState.gameVersion}`);
+        $("#patchModal").show();
+        gameData.gameVersion = gameState.gameVersion;
+    }
+}
 
 //Check Game files for existing save
 export function checkSaveFile(){
     if (localStorage.getItem("gameState")){
         const data = JSON.parse(localStorage.getItem("gameState"));
+        checkGameVersion(data);
         compareSaveData(data, "gameState")
     } else { localStorage.setItem("gameState", JSON.stringify(gameState));}
 
@@ -151,6 +160,7 @@ export function loadGameStateData(data){
         if (typeof gameState[key] == 'object' && typeof data[key] == 'string'){
             gameState[key] = new Decimal(data[key]);
         } else {
+            //Read all player gamestate values
             gameState[key] = data[key];
         }
     }
