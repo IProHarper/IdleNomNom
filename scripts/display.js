@@ -1,5 +1,6 @@
 import { gameState, upgrades, gameStages, dotList, mouseNom, roboList, squareList } from "./data.js";
 import { unlockSquare } from "./features.js";
+import { progressGameStage } from "./main.js";
 import { calcNomGain, formatNum, getCanvasCentre } from "./util.js";
 
 export let floatingTexts = [];
@@ -7,9 +8,9 @@ export let floatingTexts = [];
 
 export function initDisplay(){
     //Set display to only have upgrades at first
-    $("#upgrades-container").show();
     $("#nomUpgrades").toggleClass("hidden");
     $("#squareUpgrades").toggleClass("hidden");
+    $("#customize-container").toggleClass("hidden");
 
     //Add extra upgrades to page:
     addUpgrade("#baseUpgrades", upgrades.increaseDotSpawnRate);
@@ -46,7 +47,7 @@ export function initDisplay(){
     if (upgrades.unlockSquares.bought){
         unlockSquare();
     }
-
+    progressGameStage();
 }
 
 export function updateStats(){
@@ -92,12 +93,15 @@ export function updateProgressBar() {
     if (gameState.stage > gameStages.length-1){
         return
     }
+    let stat = new Decimal
     if (gameStages[gameState.stage].statType == "score"){
-        var stat = gameState.liftimeScore;
+        stat = gameState.liftimeScore;
     } else if (gameStages[gameState.stage].statType == "nomscend"){
-        var stat = gameState.nomscensionCount;
-    } else if (gameStages[gameState.stage].statType == "cap"){
-        var stat = gameState.liftimeScore;
+        stat = gameState.nomscensionCount;
+    } else if (gameStages[gameState.stage].statType == "square"){
+        stat = gameState.squares
+    }else if (gameStages[gameState.stage].statType == "cap"){
+        stat = gameState.liftimeScore;
     }
     let progressBar = document.querySelector('.progress-bar');
     let progressBarText = document.getElementById('progress-text');
