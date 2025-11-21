@@ -12,13 +12,14 @@
 </head>
 <body>
     <!-- Modal  -->
-    <div id="popUpModal" class="modal">
+    <div id="popUpModal" class="modal" style="display:none;">
         <div class="modal-container">
             <span class="closeBttn">&times;</span>
             <h2>Welcome to Nomscension!</h2>
             <p>You've unlocked Nomscension! This means you can reset all your progress in exchange for some Nom Coins!</p>
             <p>Nom Coins can be used to buy upgrades that will help you get to your next Nomscension a LOT quicker.
-            Checkout the Nomscension Upgrades to see what you might want before you Nomscend</p>
+            Checkout the Nom button in the top right to see what you might want before you Nomscend</p>
+            <p>It's recommended to have at least <span style="color:blue; font-weight: bold;">5</span> coins before you reset!</p>
             <p style="text-align:center">Nomscension Score Required: <span id="nomsecReqText" style="color:blue">200000</span></p>
             <p style="text-align: center;">By Nomscending now, you'll get</p>
             <div class="nomCoinDisplay">
@@ -27,6 +28,25 @@
             </div>
             <br>
             <button id="nomscendBttn">NOMSCEND</button>
+        </div>
+    </div>
+
+    <div id="patchModal" class="modal" style="display:none;">
+        <div class="modal-container">
+            <span class="closeBttn">&times;</span>
+            <h2>Whoops!</h2>
+            <p>Looks like you were playing on an old version. Due to a massive overhaul of the game. You will unfortunately need to reset all your progress...</p>
+            <br>
+            <button id="resetProgressModal">RESET</button>
+        </div>
+    </div>
+    <div id="optionsModal" class="modal" style="display:none;">
+        <div class="modal-container">
+            <span class="closeBttn">&times;</span>
+            <h2>Options</h2>
+            <p></p>
+            <br>
+            <button id="resetProgressModal">RESET</button>
         </div>
     </div>
 
@@ -87,10 +107,21 @@
             Square
         </button>
     </div>
+    <div id="menu-left">
+        <button id="toggleStats" class="menu-toggle-btn active">
+            <span style="width: 1em;height:1em;">📊</span>
+            Stats
+        </button>
+
+        <button id="toggleCustomize" class="menu-toggle-btn">
+            <span style="width: 1em;height:1em;">🎨</span>
+            Customize
+        </button>
+    </div>
     <div id="tooltip" class="upgrade-tooltip"></div>
 
     <!-- Display the upgrades -->
-    <div id="baseUpgrades" class="upgrades-container">
+    <div id="baseUpgrades" class="upgrades-container-right">
         <h2>Upgrades</h2>
         <div class="upgrades-grid">
             <!-- upgradeDotValue -->
@@ -130,7 +161,7 @@
 
 <!-- RIGHT main options -->
         <!-- Display the NomscendUpgrades items -->
-        <div id="nomUpgrades" class="upgrades-container" class="hidden">
+        <div id="nomUpgrades" class="upgrades-container-right" class="hidden">
         <h2>Base Upgrades</h2>
             <div class="upgrades-grid">
                 <!-- upgradeNomDotVal -->
@@ -205,7 +236,7 @@
                             <img src="./assets/images/NomCoin.png"class="icon-nomCoin">
                             <span class="cost-text">0</span>
                         </button>
-                        <button class="maxBttn" id="upgradeDotValMax">Max</button>
+                        <button class="maxBttn" id="upgradeDotValMaxMaxBttn">Max</button>
                     </div>
                 </div>
                 <!-- Misc Upgrades -->
@@ -262,14 +293,14 @@
         </div>
 
         <!-- Square Upgrade panel -->
-        <div id="squareUpgrades" class="upgrades-container" class="hidden">
+        <div id="squareUpgrades" class="upgrades-container-right" class="hidden">
             <h2>Square Upgrades</h2>
             <div class="upgrades-grid">
             </div>
         </div>
         
         <!-- CUSTOMIZE SECTION -->
-        <div id="customize-container">
+        <div id="customize-container" class="upgrades-container-left">
             <h2 style="color: var(--text-primary); margin: 20px 0;">Customize</h2>
             <div class="upgrades-grid">
                 <div class="upgrade-card">
@@ -277,10 +308,12 @@
                         <span class="upgrade-icon">🎨</span>
                         <div class="upgrade-info">
                             <h3 class="upgrade-name">DEFAULT Mode</h3>
+                            <p class="upgrade-description">Classic look and feel</p>
                         </div>
                     </div>
-                    <p class="upgrade-description">Classic look and feel</p>
-                    <button id="enableDefaultMode" class="buy-button" style="background: white;color:black;">FREE</button>
+                    <div class="upgrade-actions">
+                        <button id="enableDefaultMode" class="buy-button" style="background: white;color:black;">FREE</button>
+                    </div>
                 </div>
 
                 <div class="upgrade-card">
@@ -288,10 +321,12 @@
                         <span class="upgrade-icon">🎨</span>
                         <div class="upgrade-info">
                             <h3 class="upgrade-name">CILLIAN Mode</h3>
+                            <p class="upgrade-description">I'm Blue Da Ba Dee</p>
                         </div>
                     </div>
-                    <p class="upgrade-description">I'm Blue Da Ba Dee</p>
-                    <button id="enableCillianMode" class="buy-button" style="background: blue;">FREE</button>
+                    <div class="upgrade-actions">
+                        <button id="enableCillianMode" class="buy-button" style="background: blue;">FREE</button>
+                    </div>
                 </div>
 
                 <div class="upgrade-card">
@@ -299,10 +334,12 @@
                         <span class="upgrade-icon">🎨</span>
                         <div class="upgrade-info">
                             <h3 class="upgrade-name">CONALL Mode</h3>
+                            <p class="upgrade-description">Mr Pineapple</p>
                         </div>
                     </div>
-                    <p class="upgrade-description">Mr Pineapple</p>
-                    <button id="enableConallMode" class="buy-button" style="background: yellow;color:black">FREE</button>
+                    <div class="upgrade-actions">
+                        <button id="enableConallMode" class="buy-button" style="background: yellow;color:black">FREE</button>
+                    </div>
                 </div>
 
                 <div class="upgrade-card">
@@ -310,10 +347,12 @@
                         <span class="upgrade-icon">🎨</span>
                         <div class="upgrade-info">
                             <h3 class="upgrade-name">AIDAN Mode</h3>
+                            <p class="upgrade-description">NOW I'M ANGRY!</p>
                         </div>
                     </div>
-                    <p class="upgrade-description">NOW I'M ANGRY!</p>
-                    <button id="enableAidanMode" class="buy-button" style="background: red;">FREE</button>
+                    <div class="upgrade-actions">
+                        <button id="enableAidanMode" class="buy-button" style="background: red;">FREE</button>
+                    </div> 
                 </div>
 
                 <div class="upgrade-card">
@@ -321,10 +360,12 @@
                         <span class="upgrade-icon">🎨</span>
                         <div class="upgrade-info">
                             <h3 class="upgrade-name">DAD Mode</h3>
+                            <p class="upgrade-description">Just a Dad and missing his 3 sons</p>
                         </div>
                     </div>
-                    <p class="upgrade-description">Just a Dad and his 3 sons</p>
-                    <button id="enableDADMode" class="buy-button" style="background: green;">FREE</button>
+                    <div class="upgrade-actions">
+                        <button id="enableDADMode" class="buy-button" style="background: green;">FREE</button>
+                    </div>
                 </div>
 
                 <div class="upgrade-card">
@@ -332,16 +373,18 @@
                         <span class="upgrade-icon">🎨</span>
                         <div class="upgrade-info">
                             <h3 class="upgrade-name">LACHLAN Mode</h3>
+                            <p class="upgrade-description">Waruilachlan</p>
                         </div>
                     </div>
-                    <p class="upgrade-description">Waruilachlan</p>
-                    <button id="enableLachlanMode" class="buy-button" style="background: purple;">FREE</button>
+                    <div class="upgrade-actions">
+                        <button id="enableLachlanMode" class="buy-button" style="background: purple;">FREE</button>
+                    </div>
                 </div>
             </div>
         </div>
         
          <!-- STATS SECTION -->
-        <div id="stats-container" style="pointer-events: none;">
+        <div id="stats-container" class="upgrades-container-left">
             <h2>Statistics</h2>
             <div class="upgrades-grid">
                 <div class="upgrade-card">
