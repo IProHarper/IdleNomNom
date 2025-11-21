@@ -1,0 +1,206 @@
+/* =========================================
+   MOBILE ONLY — triggers at ≤ 768px width
+   ========================================= */
+@media screen and (max-width: 768px) {
+
+    /* ------------------------------
+       GENERAL LAYOUT FIXES
+       ------------------------------ */
+    body {
+        padding-top: 50px;
+        padding-bottom: 150px;
+        font-size: 14px;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+        margin-top: 60px;
+    }
+
+    /* Canvas scales full width */
+    #gameCanvas {
+        width: 95vw !important;
+        height: 45vh !important;
+        margin-top: 10px;
+    }
+
+    /* ------------------------------
+       TOP BUTTONS
+       ------------------------------ */
+    #ResetBttn,
+    #SaveBttn {
+        position: fixed;
+        top: 5px;
+        z-index: 999;
+        transform: scale(1.1);
+    }
+
+    #ResetBttn {
+        left: 10px !important;
+    }
+
+    #SaveBttn {
+        left: auto !important;
+        right: 10px !important;
+    }
+
+
+    /* ------------------------------
+       RESOURCE BAR
+       ------------------------------ */
+    .resources {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .resource-item {
+        padding: 6px 10px;
+        transform: scale(0.9);
+    }
+
+
+    /* ------------------------------
+       FEED + NOMSCENSION BUTTONS
+       ------------------------------ */
+    #feedNomNom,
+    #nomscensionBttn {
+        width: 90vw;
+        font-size: 1.2rem;
+        margin-top: 10px;
+    }
+
+
+    /* ------------------------------
+       TOP MENUS (Left & Right tabs)
+       ------------------------------ */
+    #menu-left,
+    #menu-right {
+        width: 100vw;
+        height: auto;
+        justify-content: center;
+        gap: 8px;
+        padding: 6px 0;
+        border-radius: 0;
+        border-bottom: 2px solid #33ecff;
+        position: fixed;
+        top: 0;
+    }
+
+    #menu-left {
+        left: 0;
+        right: 0;
+    }
+    #menu-right {
+        top: 38px;
+        left: 0;
+        right: 0;
+    }
+
+    .menu-toggle-btn {
+        font-size: 0.8rem;
+        padding: 4px 10px;
+        transform: scale(0.95);
+    }
+
+    #nomUpgrades,
+    #baseUpgrades,
+    #squareUpgrades,
+    #stats-container,
+    #customize-container{
+        top:50px;
+    }
+
+
+    /* ------------------------------
+       SIDE PANELS (Upgrades, Stats, Customize)
+       becomes full-screen slide-in panels
+       ------------------------------ */
+    .upgrades-container-left,
+    .upgrades-container-right {
+        width: 95vw !important;
+        height: calc(100vh - 50px);
+        top: 50px;
+        padding-bottom: 60px;
+    }
+
+    
+
+
+    /* Slide OUT horizontally */
+    .hidden {
+        transform: translateX(100%) !important;
+    }
+
+
+    /* ------------------------------
+       UPGRADE CARDS
+       ------------------------------ */
+    .upgrade-card {
+        width: 95vw;
+        margin: auto;
+    }
+
+    .upgrade-name {
+        font-size: 1rem;
+    }
+
+    .upgrade-description {
+        font-size: 0.8rem;
+    }
+
+    .upgrade-actions button {
+        font-size: 0.8rem;
+        padding: 4px 8px;
+    }
+
+
+    /* ------------------------------
+       MODALS
+       ------------------------------ */
+    .modal-container {
+        width: 90vw !important;
+        margin-top: 30%;
+        padding: 15px !important;
+        border-radius: 10px;
+    }
+
+    .modal-container p {
+        font-size: 0.9rem;
+    }
+
+    .closeBttn {
+        width: 28px;
+        height: 28px;
+        font-size: 20px;
+        top: 5px;
+        right: 5px;
+    }
+
+
+    /* ------------------------------
+       PROGRESS BAR (Bottom)
+       ------------------------------ */
+    .progress-container {
+        bottom: 0;
+        left: 0;
+        margin-left: 0 !important;
+        width: 100vw !important;
+    }
+
+    #progress-text {
+        font-size: 0.8rem;
+        padding-top: 6px;
+    }
+
+
+    /* ------------------------------
+       SAVE POPUP
+       ------------------------------ */
+    #savePopup {
+        right: 10px !important;
+        top: 80px !important;
+    }
+}
