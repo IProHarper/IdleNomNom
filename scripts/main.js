@@ -20,7 +20,6 @@ $(document).ready(function(){
     });
     $(document).on("click", ".maxBttn", function() {
         const id = $(this).attr("id");
-        // console.log(`Upgrade clicked: ${id}`);
         handleBuyMax(id);
     });
 
@@ -65,30 +64,10 @@ $(document).ready(function(){
     });
 
     function updateDisplay(){
-        // updateProgressBar();
         buttonCheck();
         updateStats();
-        progressGameStage();
     }
 
-
-    function progressGameStage(){
-        if (gameState.stage > gameStages.length-1){
-        return
-    }
-        if (gameStages[gameState.stage].statType == "score"){
-            var stat = gameState.liftimeScore;
-        } else if (gameStages[gameState.stage].statType == "nomscend"){
-            var stat = gameState.nomscensionCount;
-        } else if (gameStages[gameState.stage].statType == "cap"){
-            var stat = gameState.liftimeScore;
-        }
-        if (stat.greaterThanOrEqualTo(gameStages[gameState.stage].requirement)){
-            gameState.stage = gameState.stage+1;
-            gameState.nomscentionUnlocked = true;
-            unlockNomscend();
-        }
-    }
 
     setInterval(updateDisplay, 100);
     var saveGameLoop = window.setInterval(function() {
@@ -97,3 +76,25 @@ $(document).ready(function(){
 
 
 });
+
+export function progressGameStage(){
+        if (gameState.stage > gameStages.length-1){
+        return
+    }
+        let stat = new Decimal(0);
+        if (gameStages[gameState.stage].statType == "score"){
+            stat = gameState.liftimeScore;
+        } else if (gameStages[gameState.stage].statType == "nomscend"){
+            stat = gameState.nomscensionCount;
+        } else if (gameStages[gameState.stage].statType == "square"){
+            stat = gameState.squares;
+        }else if (gameStages[gameState.stage].statType == "cap"){
+            stat = gameState.liftimeScore;
+        }
+        if (stat.greaterThanOrEqualTo(gameStages[gameState.stage].requirement)){
+            gameState.stage = gameState.stage+1;
+            gameState.nomscentionUnlocked = true;
+            unlockNomscend();
+        }
+        updateProgressBar();
+    }
