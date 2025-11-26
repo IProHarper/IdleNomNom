@@ -1,4 +1,4 @@
-import { mouseNom } from "./data.js";
+import { mouseNom, options } from "./data.js";
 import { eatSquare, showFloatingText } from "./score.js";
 import { getCanvasCentre, randomDirection } from "./util.js";
 
@@ -7,7 +7,7 @@ export default class Square {
         const { vx, vy } = randomDirection();
         this.x = x;
         this.y = y;
-        this.size = 10;
+        this.size = 15;
 
         this.vx = vx;
         this.vy = vy;
@@ -49,7 +49,7 @@ export default class Square {
             this.vy = this.vy - 2 * dot * ny;
 
             // Push square out of circle slightly
-            const overlap = 30 - dist;
+            const overlap = 35 - dist;
             this.x += nx * overlap;
             this.y += ny * overlap;
         }
@@ -79,7 +79,12 @@ export default class Square {
 
         if (dist < eaterRadius) {
             this.eaten = true;
-            showFloatingText(eatSquare(), this.x, this.y, "#6F07F0");
+
+            if(options.drawFloatingSquareText) {
+                showFloatingText(eatSquare(), this.x, this.y, "#6F07F0");
+            } else {
+                eatSquare();
+            }
         }
     }
 }
