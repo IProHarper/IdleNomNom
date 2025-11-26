@@ -1,4 +1,4 @@
-import { gameState, upgrades, gameStages, dotList, mouseNom, roboList, squareList } from "./data.js";
+import { gameState, upgrades, gameStages, dotList, mouseNom, roboList, squareList, options } from "./data.js";
 import { unlockSquare } from "./features.js";
 import { progressGameStage } from "./main.js";
 import { calcNomGain, formatNum, getCanvasCentre } from "./util.js";
@@ -49,6 +49,7 @@ export function initDisplay(){
         $("#toggleNomUpgrades").show();
     }
     if (upgrades.unlockRoboNom.level > 1){
+        $("#baseUpgrades").find(".upgrades-grid").append(`<h2 style="margin-top:auto;">Other</h2>`);
         addUpgrade("#baseUpgrades", upgrades.addRoboNom);
     }
     if (upgrades.unlockSquares.bought){
@@ -66,26 +67,29 @@ export function updateStats(){
     //Dots
     $("#dotBaseValueText").text(formatNum(gameState.dotValue));
     $("#dotMultiText").text(formatNum(gameState.dotMulti));
+    $("#dotAwardText").text(formatNum(gameState.dotValue.times(gameState.dotMulti)));
     $("#dotSpawnAmountText").text(gameState.dotSpawnCount);
     $("#dotSpawnRateText").text(gameState.dotSpawnInterval+"s");
     $("#dotMaxSpawnText").text(gameState.dotMaxCount);
+
+    $("#dotsEatenText").text(formatNum(gameState.dotsEaten));
+    $("#lifetimeScoreText").text(formatNum(gameState.liftimeScore));
     
     //Squares Stats:
     $("#squareBaseValueText").text(formatNum(gameState.squareValue));
     $("#squareMultiText").text(formatNum(gameState.squareMulti));
+    $("#squareAwardText").text(formatNum(gameState.squareValue.times(gameState.squareMulti)));
     $("#squareSpawnAmountText").text(gameState.squareSpawnCount);
     $("#squareSpawnRateText").text(gameState.squareSpawnInterval+"s");
     $("#squareMaxSpawnText").text(gameState.squareMaxCount);
-
-    $("#dotsEatenText").text(formatNum(gameState.dotsEaten));
-    $("#lifetimeScoreText").text(formatNum(gameState.liftimeScore));
     $("#squaresEatenText").text(formatNum(gameState.squaresEaten));
     $("#lifetimeSquaresText").text(formatNum(gameState.lifetimeSquares));
+
+    //Nomscensions
     $("#nomscensionCountText").text(formatNum(gameState.nomscensionCount));
     $("#LifetimeNomCoinsText").text(formatNum(gameState.lifetimeNomCoins));
     $("#nomCoinStatText").text(formatNum(gameState.nomCoins));
     $("#nomCoinsText").text(formatNum(gameState.nomCoins));
-    $("#nomScoreBoostAmountText").text(formatNum(gameState.nomScoreBoostAmount));
 
     //Update Nomsension coins
     //Stats version
@@ -106,9 +110,9 @@ export function updateProgressBar() {
     } else if (gameStages[gameState.stage].statType == "nomscend"){
         stat = gameState.nomscensionCount;
     } else if (gameStages[gameState.stage].statType == "square"){
-        stat = gameState.squares
+        stat = gameState.lifetimeSquares;
     }else if (gameStages[gameState.stage].statType == "cap"){
-        stat = gameState.liftimeScore;
+        stat = new Decimal(0);
     }
     let progressBar = document.querySelector('.progress-bar');
     let progressBarText = document.getElementById('progress-text');
@@ -134,7 +138,7 @@ export function addUpgrade(upgradePosition, upgradeData){
         </div>
     </div>
     <div class="upgrade-actions">
-        <button id="${upgradeData.id}" class="upgradeBttn">Cost: 100</button>
+        <button id="${upgradeData.id}" class="upgradeBttn">100</button>
         <button class="maxBttn" id="${upgradeData.id}MaxBttn">Max</button>
     </div`;
 
@@ -147,18 +151,19 @@ export function addNomUpgrade(upgradePosition, upgradeData){
     newUpgrade.classList.add("upgrade-card");
 
     newUpgrade.innerHTML +=
-    `<div class="upgrade-card">
-        <div class="upgrade-header">
-            <span class="upgrade-icon"></span>
+    `<div class="upgrade-header">
+            <span class="upgrade-icon"><div class="icon-nom"></div></span>
             <div class="upgrade-info">
                 <h3 class="upgrade-name">${upgradeData.name}</h3>
                 <p class="upgrade-description" id="${upgradeData.id}Desc">Desc</p>
             </div>
         </div>
-        <button id="${upgradeData.id}" class="nomBttn"><span id="${upgradeData.id}Text">0</span>
-            <img class="buttonImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-        </button>
-                </div>`;
+        <div class="upgrade-actions">
+            <button id="${upgradeData.id}" class="upgradeBttn">
+                <img src="./assets/images/NomCoin.png"class="icon-nomCoin">
+                <span class="cost-text">0</span>
+            </button>
+        </div>`;
 
     $(upgradePosition).find(".upgrades-grid").append(newUpgrade);
 }
@@ -174,26 +179,47 @@ export function updateCanvas(){
 
 
     //Draw Dots
-    for (const dot of dotList) {
-        dot.update();
-        dot.draw(ctx);
+    if (options.drawDots){
+        for (const dot of dotList) {
+            dot.update();
+            dot.draw(ctx);
+        }
+    } else {
+       for (const dot of dotList) {
+            dot.update();
+        } 
     }
+    
     // Remove eaten dots
     dotList.splice(0, dotList.length, ...dotList.filter(dot => !dot.eaten));
 
     //Draw Squares
-    for (const square of squareList) {
-        square.update(canvas);
-        square.draw(ctx);
+    if (options.drawSquares){
+        for (const square of squareList) {
+            square.update(canvas);
+            square.draw(ctx);
+        }
+    } else {
+        for (const square of squareList) {
+            square.update(canvas);
+        }
     }
+    
     //Remove eaten squares
     squareList.splice(0, squareList.length, ...squareList.filter(square => !square.eaten));
 
     //Draw RoboNoms
-    for (const robo of roboList) {
-        robo.update(canvas, dotList);
-        robo.draw(ctx);
-    }
+    if (options.drawRoboNoms){
+        for (const robo of roboList) {
+            robo.update(canvas, dotList);
+            robo.draw(ctx);
+        }
+    } else {
+        for (const robo of roboList) {
+            robo.update(canvas, dotList);
+        }
+    } 
+    
 
     drawFloatingTexts(ctx);
     drawMouseNom(ctx);
