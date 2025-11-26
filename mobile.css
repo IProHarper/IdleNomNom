@@ -28,7 +28,8 @@
        TOP BUTTONS
        ------------------------------ */
     #ResetBttn,
-    #SaveBttn {
+    #SaveBttn,
+    #OptionsBttn {
         position: fixed;
         top: 5px;
         z-index: 999;
@@ -42,6 +43,12 @@
     #SaveBttn {
         left: auto !important;
         right: 10px !important;
+    }
+    #OptionsBttn{
+        left: auto !important;
+        right: 10px !important;
+        top:80px;
+        z-index: 99999;
     }
 
 
@@ -203,4 +210,8 @@
         right: 10px !important;
         top: 80px !important;
     }
+
+  .prestige-inner { padding: 20px; border-radius: 12px; }
+  .prestige-close { top: 8px; right: 8px; }
+
 }
