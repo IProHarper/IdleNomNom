@@ -1,4 +1,4 @@
-import { squareList } from "./data.js";
+import { options, squareList } from "./data.js";
 import { increaseScore, showFloatingText } from "./score.js";
 import { distance, randomDirection } from "./util.js";
 
@@ -13,6 +13,12 @@ export class RoboNom {
         this.vx = vx;
         this.vy = vy;
 
+        // How often to change direction (ms)
+        this.directionChangeMin = 800;
+        this.directionChangeMax = 5000;
+
+        this.scheduleDirectionChange();
+
         this.mouthTimer = 0;
         this.mouthSpeed = 0.06;
     }
@@ -23,13 +29,23 @@ export class RoboNom {
         this.x += this.vx;
         this.y += this.vy;
 
-        // Bounce on walls
-        if (this.x < this.radius || this.x > canvas.width - this.radius) {
+        // Bounce off walls + hanlding for getting stuck in walls
+        if (this.x < 0) {
+            this.x += 5;
             this.vx *= -1;
         }
-        if (this.y < this.radius || this.y > canvas.height - this.radius) {
-            this.vy *= -1;
+        if (this.x > canvas.width){
+            this.x -= 5;
+            this.vx *= -1;
         }
+        if (this.y < 0){
+            this.y += 5;
+            this.vy *= -1;
+        } 
+        if (this.y > canvas.height){
+            this.y -= 5;
+            this.vy *= -1;
+        } 
 
         // Mouth animation timer
         this.mouthTimer += this.mouthSpeed;
@@ -39,7 +55,11 @@ export class RoboNom {
             const distToDot = distance(this.x, this.y, dot.x, dot.y);
             if (distToDot < this.radius + dot.r) {
                 dot.eaten = true;
-                showFloatingText(increaseScore(), this.x, this.y, "white");
+                if (options.drawFloatingDotText){
+                        showFloatingText(increaseScore(), this.x, this.y, "white");
+                } else {
+                increaseScore();
+                }
             }
         }
         //Check for collision with squares
@@ -68,5 +88,25 @@ export class RoboNom {
         ctx.fill();
 
         ctx.restore();
+    }
+
+    scheduleDirectionChange() {
+        // pick a random time between min and max
+        const delay = Math.random() * 
+            (this.directionChangeMax - this.directionChangeMin) + this.directionChangeMin;
+
+        setTimeout(() => {
+            this.randomizeDirection();
+            this.scheduleDirectionChange(); // schedule again
+        }, delay);
+    }
+
+    randomizeDirection() {
+        // Slight directional nudge (keeps movement smooth)
+        const angle = Math.random() * Math.PI * 2; // anywhere on 360°
+        const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy); // keep original speed
+
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
     }
 }
