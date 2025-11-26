@@ -5,7 +5,7 @@ import { formatNum } from './util.js';
 
 export function increaseScore(){
     //Score increase formula
-    const value =  gameState.dotValue.times(gameState.dotMulti).times(gameState.nomScoreBoostAmount);
+    const value =  gameState.dotValue.times(gameState.dotMulti);
     //Add score and update stats
     gameState.score = gameState.score.plus(value);
     gameState.liftimeScore = gameState.liftimeScore.plus(value);
@@ -17,7 +17,7 @@ export function increaseScore(){
 }
 
 export function eatSquare(){
-    const value = gameState.squareValue.times(gameState.squareMulti)
+    const value = gameState.squareValue.times(gameState.squareMulti);
     gameState.squares = gameState.squares.plus(value);
     gameState.squaresEaten = gameState.squaresEaten.plus(1);
     gameState.lifetimeSquares = gameState.lifetimeSquares.plus(1);
