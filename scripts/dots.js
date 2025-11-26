@@ -1,4 +1,4 @@
-import {  mouseNom } from "./data.js";
+import {  gameState, mouseNom, options } from "./data.js";
 import { increaseScore, showFloatingText } from "./score.js";
 import { distance, getCanvasCentre, randomDirection } from "./util.js";
 
@@ -12,12 +12,13 @@ export default class Dot {
         this.vx = vx;
         this.vy = vy;
         this.r = 5;
-        this.color = "white";
+        this.color = gameState.dotColor;
     }
 
     updateColor(newColor) {
         this.color = newColor;
     }
+
     update() {
         this.x += this.vx;
         this.y += this.vy;
@@ -52,7 +53,11 @@ export default class Dot {
     const distToNom = distance(this.x, this.y, mouseNom.x, mouseNom.y);
     if (distToNom < this.r + mouseNom.radius) {
       this.eaten = true;
-      showFloatingText(increaseScore(), this.x, this.y, "white");
+      if (options.drawFloatingDotText){
+              showFloatingText(increaseScore(), this.x, this.y, "white");
+      } else {
+        increaseScore();
+      }
     }
 }
 
