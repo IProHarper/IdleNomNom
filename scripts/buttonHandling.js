@@ -2,11 +2,11 @@ import { createDot, createSquare, spawnDot } from './consumables.js';
 import { enableAutofeed, createKids, nomscend, unlockSquare } from './features.js';
 import { upgradeDotValue, upgradeDotMulti, upgradeDotSpawnRate, upgradeDotSpawnCount, addRoboNom, upgradeMaxDotCount} from './upgradeButtons.js';
 import { unlockNomCoinScoreBoost, unlockRoboNoms, upgradeDotMultiMax, upgradeDotValMax, upgradeNomCoinMulti, upgradeNomDotVal } from './Upgrades/nomupgrades.js'
-import { upgrades, gameState, mouseNom, roboList, mousePos } from './data.js';
+import { upgrades, gameState, mouseNom, roboList, mousePos, options } from './data.js';
 import { calcBuyMax, formatNum, increaseCost  } from './util.js';
 
 import { saveGame } from './gameFiles.js';
-import { upgradeMaxSquareCount, upgradeSquareMulti, upgradeSquareSpawnCount, upgradeSquareSpawnRate, upgradeSquareValue } from './Upgrades/squareUpgrades.js';
+import { keepSquareUpgradesOnNom, setSquareResetTier, upgradeDotValMaxSquare, upgradeMaxRoboNoms, upgradeMaxSquareCount, upgradeSquareDotMulti, upgradeSquareMulti, upgradeSquareSpawnCount, upgradeSquareSpawnRate, upgradeSquareValue } from './Upgrades/squareUpgrades.js';
 
 //Spawn Dots with Feed button
 $("#feedNomNom").on("click", function () {
@@ -49,6 +49,7 @@ $("#toggleCustomize").on("click", function() {
 $(".closeBttn").on("click", () => {
     $("#popUpModal").hide();
     $("#patchModal").hide();
+    $("#optionsModal").hide();
 });
 export function openModal() {
     $("#popUpModal").show();
@@ -60,29 +61,128 @@ $(window).on("click", function(event) {
     if (event.target === $("#patchModal")[0]) {
         $("#patchModal").hide();
     }
+    if (event.target === $("#optionsModal")[0]) {
+        $("#optionsModal").hide();
+    }
 });
 
 //###############
-
+// Options
+$("#toggleDrawDots").on("click", function() {
+    if ($("#toggleDrawDots").hasClass('on')){
+        options.drawDots = false;
+        $("#toggleDrawDots").toggleClass('on');
+        $("#toggleDrawDots").toggleClass('off');
+    } else if ($("#toggleDrawDots").hasClass('off')){
+        options.drawDots = true;
+        $("#toggleDrawDots").toggleClass('on');
+        $("#toggleDrawDots").toggleClass('off');
+    }
+});
+$("#toggleDrawSquares").on("click", function() {
+    if ($("#toggleDrawSquares").hasClass('on')){
+        options.drawSquares = false;
+        $("#toggleDrawSquares").toggleClass('on');
+        $("#toggleDrawSquares").toggleClass('off');
+    } else if ($("#toggleDrawSquares").hasClass('off')){
+        options.drawSquares = true;
+        $("#toggleDrawSquares").toggleClass('on');
+        $("#toggleDrawSquares").toggleClass('off');
+    }
+});
+$("#toggleDrawTriangles").on("click", function() {
+    if ($("#toggleDrawTriangles").hasClass('on')){
+        options.drawTriangles = false;
+        $("#toggleDrawTriangles").toggleClass('on');
+        $("#toggleDrawTriangles").toggleClass('off');
+    } else if ($("#toggleDrawTriangles").hasClass('off')){
+        options.drawTriangles = true;
+        $("#toggleDrawTriangles").toggleClass('on');
+        $("#toggleDrawTriangles").toggleClass('off');
+    }
+});
+$("#toggleDrawDotsText").on("click", function() {
+    if ($("#toggleDrawDotsText").hasClass('on')){
+        options.drawFloatingDotText = false;
+        $("#toggleDrawDotsText").toggleClass('on');
+        $("#toggleDrawDotsText").toggleClass('off');
+    } else if ($("#toggleDrawDotsText").hasClass('off')){
+        options.drawFloatingDotText = true;
+        $("#toggleDrawDotsText").toggleClass('on');
+        $("#toggleDrawDotsText").toggleClass('off');
+    }
+});
+$("#toggleDrawSquaresText").on("click", function() {
+    if ($("#toggleDrawSquaresText").hasClass('on')){
+        options.drawFloatingSquareText = false;
+        $("#toggleDrawSquaresText").toggleClass('on');
+        $("#toggleDrawSquaresText").toggleClass('off');
+    } else if ($("#toggleDrawSquaresText").hasClass('off')){
+        options.drawFloatingSquareText = true;
+        $("#toggleDrawSquaresText").toggleClass('on');
+        $("#toggleDrawSquaresText").toggleClass('off');
+    }
+});
+$("#toggleDrawTriangleText").on("click", function() {
+    if ($("#toggleDrawTriangleText").hasClass('on')){
+        options.drawFloatingTriangleText = false;
+        $("#toggleDrawTriangleText").toggleClass('on');
+        $("#toggleDrawTriangleText").toggleClass('off');
+    } else if ($("#toggleDrawTriangleText").hasClass('off')){
+        options.drawFloatingTriangleText = true;
+        $("#toggleDrawTriangleText").toggleClass('on');
+        $("#toggleDrawTriangleText").toggleClass('off');
+    }
+});
+$("#toggleRoboNoms").on("click", function() {
+    if ($("#toggleRoboNoms").hasClass('on')){
+        options.drawRoboNoms = false;
+        $("#toggleRoboNoms").toggleClass('on');
+        $("#toggleRoboNoms").toggleClass('off');
+    } else if ($("#toggleRoboNoms").hasClass('off')){
+        options.drawRoboNoms = true;
+        $("#toggleRoboNoms").toggleClass('on');
+        $("#toggleRoboNoms").toggleClass('off');
+    }
+});
 
 //################
 //Customization buttons (Color)
 $("#enableDefaultMode").on('click',function(){
     mouseNom.color = "white";
+    gameState.dotColor = "white";
 });
 
 $("#enableLachlanMode").on('click',function(){
     mouseNom.color = "purple";
+    gameState.dotColor = "white";
 });
 $("#enableCillianMode").on('click',function(){
     mouseNom.color = "blue";
+    gameState.dotColor = "white";
 });
 $("#enableConallMode").on('click',function(){
     mouseNom.color = "yellow";
+    gameState.dotColor = "white";
 });
 $("#enableAidanMode").on('click',function(){
     mouseNom.color = "red";
+    gameState.dotColor = "white";
 });
+$("#enableRinoMode").on('click',function(){
+    mouseNom.color = "rgb(255, 75, 165)";
+    gameState.dotColor = "rgb(255, 75, 165)";
+});
+$("#enableMichanMode").on('click',function(){
+    mouseNom.color = "orange";
+    gameState.dotColor = "white";
+});
+$("#enableKinsanMode").on('click',function(){
+    mouseNom.color = "grey";
+    gameState.dotColor = "white";
+});
+
+
 $("#enableDADMode").on('click',function(){
      mouseNom.color = "green";
     // $("#mrNomNom").css("fill", "green");
@@ -127,8 +227,11 @@ const upgradeActions = {
     upgradeSquareMulti,
     upgradeSquareSpawnRate,
     upgradeSquareSpawnCount,
-    upgradeMaxSquareCount
-    
+    upgradeMaxSquareCount,
+    upgradeMaxRoboNoms,
+    upgradeSquareDotMulti,
+    keepSquareUpgradesOnNom,
+    upgradeDotValMaxSquare
 };
 
 export function handleUpgrade(id) {
@@ -208,13 +311,17 @@ $("#nomscensionBttn").on('click',function(){
 
 $("#nomscendBttn").on('click',function(){
     nomscend();
+    $("#popUpModal").hide();
+    
 });
 
 $("#debugBttn").on('click',function(){
     // gameState.score = gameState.score.plus(10000);
     // gameState.nomCoins = gameState.nomCoins.plus(1000);
-    // handleBuyMax("upgradeDotValueMaxBttn");
-    // unlockSquare();
+});
+
+$("#OptionsBttn").on('click', function(){
+    $("#optionsModal").show();
 });
 
 
@@ -251,7 +358,6 @@ const nomCoinImgSrc = "./assets/images/NomCoin.png";
 //Check all game buttons and update their status
 export function buttonCheck(){
     for (let [key, value] of Object.entries(upgrades)){
-        value.cost = increaseCost(value);
         if (value.type == "nomCoins"){
             $("#"+value.id).prop("disabled", value.cost.greaterThan(gameState.nomCoins));
             $("#"+value.id+" .cost-text").html(formatNum(value.cost));
