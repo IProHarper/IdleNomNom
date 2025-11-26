@@ -1,9 +1,9 @@
-import { dotList, gameState, roboList, shopUpgrades, upgrades } from './data.js'
+import { dotList, gameState, roboList, shopUpgrades, squareList, upgrades } from './data.js'
 import { createDot, spawnSquare } from './consumables.js';
 import { resetUpgrades } from './gameFiles.js';
-import { calcNomGain, setSquareSpawnRate } from './util.js';
+import { calcNomGain, setSquareSpawnRate, formatNum, setSquaresALL } from './util.js';
 import { updateNomScoreBoost } from './score.js';
-import { addUpgrade } from './display.js';
+import { addNomUpgrade, addUpgrade } from './display.js';
 import { progressGameStage } from './main.js';
 
 
@@ -20,13 +20,22 @@ export function unlockSquare(){
     $("#squareDisplay").show();
     $("#squareStats").show();
     $("#activeSquareDisplay").show();
+    //Set all upgrades
     spawnSquare();
-    setSquareSpawnRate();
+    setSquaresALL();
+
+    //Add upgrades to html
     addUpgrade("#squareUpgrades", upgrades.increaseSquareValue);
-    addUpgrade("#squareUpgrades", upgrades.increaseSquareSpawnCount);
-    addUpgrade("#squareUpgrades", upgrades.increaseSquareSpawnRate);
-    addUpgrade("#squareUpgrades", upgrades.increaseMaxSquareCount);
     addUpgrade("#squareUpgrades", upgrades.increaseSquareMulti);
+    addUpgrade("#squareUpgrades", upgrades.increaseSquareSpawnRate);
+    addUpgrade("#squareUpgrades", upgrades.increaseSquareSpawnCount);
+    addUpgrade("#squareUpgrades", upgrades.increaseMaxSquareCount);
+    $("#squareUpgrades").find(".upgrades-grid").append(`<h2>Other</h2>`);
+    addUpgrade("#squareUpgrades", upgrades.increaseMaxRoboNoms);
+    addUpgrade("#squareUpgrades", upgrades.increaseSquareDotMulti);
+    addUpgrade("#squareUpgrades", upgrades.increaseDotValMaxSquare);
+    addNomUpgrade("#nomUpgrades", upgrades.keepSquareUpgrades);
+    addNomUpgrade("#nomUpgrades", upgrades.unlockTriangles);
 }
 
 //Enable the Auto feed Button
@@ -53,10 +62,10 @@ export function unlockNomscend(){
 
 //Nomscend - Reset progress but start with a base 10 multiplier
 export function nomscend(){
-    //Pop up disclaimer and 
     $("#popUpModal").hide();
     const gs = gameState;
     const gainedCoins = calcNomGain();
+    showPrestigeAnimation({ gain: gainedCoins, subtitle: "Prestige Reward", duration: 2000});
     gameState.nomCoins = gameState.nomCoins.plus(gainedCoins);
     if (gameState.nomCoinBestGain.lessThan(gainedCoins)){
         gameState.nomCoinBestGain = new Decimal(gainedCoins);
@@ -67,6 +76,7 @@ export function nomscend(){
     gameState.nomscendScore = new Decimal(0);
     clearInterval(gameState.dotIntervalID);
     dotList.length = 0;
+    squareList.length = 0;
     roboList.length = 0;
     gameState.nomsecScoreReq = gs.nomsecScoreReq.times(11);
     resetUpgrades();
