@@ -2,6 +2,7 @@ import { gameState, roboList, upgrades } from "./data.js";
 import { createDot, spawnDot, spawnSquare } from "./consumables.js";
 import "./break_infinity.js";
 import { RoboNom } from "./nomnom.js";
+import { setDotValueMaxLvl, setRoboNomMaxLevel, setSquareDotMulti, setSquareMaxCount, setSquareMulti, setSquareResetTier, setSquareSpawnCount, setSquareValue } from "./Upgrades/squareUpgrades.js";
 
 
 //Utils
@@ -77,7 +78,11 @@ export function increaseCost(upgrade){
 }
 
 export function setDotValue(){
-    gameState.dotValue = gameState.nomscendDotVal.plus(upgrades.increaseDotValue.increase.times(upgrades.increaseDotValue.level));
+  const increase = upgrades.increaseDotValue.increase;
+  const lvl = upgrades.increaseDotValue.level;
+  const squareBoost = gameState.squareScoreBoost;
+  let nomBoost = new Decimal(upgrades.increaseNomDotVal.level * upgrades.increaseNomDotVal.increase);
+  gameState.dotValue = new Decimal(increase * lvl).plus(nomBoost).pow(squareBoost);
 }
 
 export function setDotSpawnRate(){
@@ -91,6 +96,32 @@ export function setDotSpawnRate(){
               spawnDot();
           }
       }, gameState.dotSpawnInterval*1000);
+}
+
+
+export function setDotsALL(){
+  setDotValue();
+  setSpeed();
+  setDotMulti();
+  setDotMaxCount();
+  setDotSpawnCount();
+  setDotSpawnRate();
+  setRoboNoms();
+  setDotValueMaxLvl();
+}
+
+export function setSquaresALL(){
+  if (!upgrades.unlockSquares.bought){return;}
+  spawnSquare();
+  setSquareSpawnRate();
+  setRoboNomMaxLevel();
+  setSquareDotMulti();
+  setSquareMaxCount();
+  setSquareSpawnCount();
+  setSquareValue();
+  setSquareMulti();
+  setSquareResetTier();
+  setDotValueMaxLvl();
 }
 
 export function setSquareSpawnRate(){
@@ -140,7 +171,7 @@ export function setAutoFeed(){
 }
 export function setRoboNoms(){
   const {x,y} = getCanvasCentre();
-  const numOfRoboNoms = (upgrades.addRoboNom.level-1) - roboList.length;
+  const numOfRoboNoms = (upgrades.addRoboNom.level) - roboList.length;
   for (let i=0; i<numOfRoboNoms; i++){
     roboList.push(new RoboNom(x, y));
   }
@@ -150,9 +181,11 @@ export function calcNomGain(){
   return formatNum(gameState.nomscendScore.divide(100000).times(gameState.nomCoinMulti));
 }
 
-export function randomDirection() {
+export function randomDirection(speed) {
+  if (!speed) {
+    speed = 2;
+  }
   const angle = Math.random() * Math.PI * 2;
-  const speed = 2;
   return { vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed };
 }
 
@@ -166,4 +199,10 @@ export function distance(ax, ay, bx, by) {
   const dx = ax - bx;
   const dy = ay - by;
   return Math.sqrt(dx * dx + dy * dy);
+}
+
+export function setUpgradeCosts(){
+      for (let [value] of Object.entries(upgrades)){
+        upgrades[value].cost = increaseCost(upgrades[value]);
+    }
 }
