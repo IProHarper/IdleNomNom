@@ -18,6 +18,17 @@ export var mouseNom = {
     color: "yellow"
 }
 
+export var options = {
+    drawDots: true,
+    drawSquares: true,
+    drawTriangles: true,
+    drawFloatingDotText: true,
+    drawFloatingSquareText: true,
+    drawFloatingTriangleText: true,
+    drawRoboNoms: true
+
+}
+
 export const gameStages = [
     {
         name: "Beginning",
@@ -33,9 +44,15 @@ export const gameStages = [
     },
     {
         name: "Unlock Squares",
-        progressText: "Eat 10 Squares",
+        progressText: "Eat 1000 Squares",
         statType: "square",
-        requirement: new Decimal(10)
+        requirement: new Decimal(1000)
+    },
+    {
+        name: "Unlock Triangles",
+        progressText: "Not Implemented just yet...",
+        statType: "cap",
+        requirement: new Decimal(1)
     }
 ]
 
@@ -51,6 +68,7 @@ export var gameState = {
     dotMaxCount: 10,
     dotSpawnCount: 1,
     dotSpawnInterval: 5,
+    dotColor: "white",
     nomscensionCount: new Decimal(0),
     nomScoreBoostAmount: new Decimal(1),
     stage: 0,
@@ -75,6 +93,17 @@ export var gameState = {
     squareSpawnInterval: 10,
     squareSpawnIntervalID: 999,
     lifetimeSquares: new Decimal(0),
+    squareScoreBoost: new Decimal(1),
+    //Triangles
+    triangles: new Decimal(0),
+    triangleValue : new Decimal(1),
+    triangleMulti : new Decimal(1),
+    trianglesEaten: new Decimal(0),
+    triangleMaxCount: 3,
+    triangleSpawnCount: 1,
+    triangleSpawnInterval: 15,
+    triangleSpawnIntervalID: 9999,
+    lifetimeTriangles: new Decimal(0)
 }
 
 
@@ -188,11 +217,11 @@ export var upgrades = {
         name: "Permanent Dot Base Value",
         desc: "Increase the base dot value permanently",
         type: "nomCoins",
-        increase: new Decimal(10),
+        increase: 10,
         baseCost: new Decimal(1),
         cost: new Decimal(1),
-        upgradeScale: 1.21,
-        level: 1,
+        upgradeScale: 1.15,
+        level: 0,
         maxlevel: 100,
         resetTier: 1
     },
@@ -218,7 +247,7 @@ export var upgrades = {
         baseCost: new Decimal(2),
         cost: new Decimal(2),
         upgradeScale: 2.52,
-        level: 1,
+        level: 0,
         maxlevel: 20,
         resetTier: 1
     },
@@ -303,11 +332,11 @@ export var upgrades = {
     unlockSquares : {
         id: "unlockSquare",
         name: "Unlock Squares",
-        desc: "Unlock squares which give you access to more upgrades!",
+        desc: "Unlock squares which give you access to more upgrades! These upgrades reset on Nomscension!",
         bought: false,
         type: "nomCoins",
-        baseCost: new Decimal(1e+6),
-        cost: new Decimal(1e+6),
+        baseCost: new Decimal(10000),
+        cost: new Decimal(10000),
         upgradeScale: 1,
         level: 1,
         maxlevel: 2,
@@ -363,7 +392,21 @@ export var upgrades = {
         increase: 1,
         baseCost: new Decimal(10),
         cost: new Decimal(10),
-        upgradeScale: 1.36,
+        upgradeScale: 1.21,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 50,
+        resetTier: 0
+    },
+    unlockAutoBuyDotUpgrades : {
+        id: "unlockAutoBuyDots",
+        name: "Unlock Auto Buyers",
+        desc: "Auto Buyers will purchase any affordable Dot Upgrades",
+        type: "square",
+        increase: 1,
+        baseCost: new Decimal(10),
+        cost: new Decimal(10),
+        upgradeScale: 1.21,
         level: 1,
         minlevel: 1,
         maxlevel: 50,
@@ -383,31 +426,62 @@ export var upgrades = {
         maxlevel: 50,
         resetTier: 0
     },
-    moreShopUpgrades : {
-        id: "unlockMoreShopUpgrades",
-        name: "More Shop Upgrades",
-        desc: "Unlock some more shop upgrades to help boost your score!",
-        bought: false,
-        type: "nomCoins",
+    increaseMaxRoboNoms : {
+        id: "upgradeMaxRoboNoms",
+        name: "Max RoboNoms Level",
+        desc: "Increase the amount of Robo Noms you can buy",
+        type: "square",
+        increase: 3,
+        baseCost: new Decimal(25),
+        cost: new Decimal(25),
+        upgradeScale: 1.78,
+        level: 0,
+        minlevel: 0,
+        maxlevel: 10,
+        resetTier: 0
+    },
+    increaseSquareDotMulti : {
+        id: "upgradeSquareDotMulti",
+        name: "Dot Score Mega Boost!",
+        desc: "Increase base dot value significantly!",
+        type: "square",
+        increase: 1.21,
         baseCost: new Decimal(10),
         cost: new Decimal(10),
+        upgradeScale: 2.13,
+        level: 0,
+        minlevel: 0,
+        maxlevel: 10,
+        resetTier: 0
+    },
+    keepSquareUpgrades : {
+        id: "keepSquareUpgradesOnNom",
+        name: "Keep Squares",
+        desc: "Keep all square upgrades on Nomscension",
+        type: "nomCoins",
+        increase: 1,
+        baseCost: new Decimal(5e6),
+        cost: new Decimal(5e6),
         upgradeScale: 1,
-        level: 1,
-        maxlevel: 2,
+        bought: false,
+        level: 0,
+        minlevel: 0,
+        maxlevel: 1,
         resetTier: 1
     },
-    nomCoinScoreBoost : {
-        id: "unlockNomCoinScoreBoost",
-        name: "Score Boost",
-        desc: "Your score is now boosted by your lifetime NomCoin's! /100",
-        bought: false,
-        type: "nomCoins",
-        baseCost: new Decimal(1),
-        cost: new Decimal(1),
-        upgradeScale: 1,
-        level: 1,
-        maxlevel: 2,
-        resetTier: 1
+    increaseDotValMaxSquare : {
+        id: "upgradeDotValMaxSquare",
+        name: "Dot Value Upgrade Max level +",
+        desc: "Increase the Dot Value upgrade's max level by 1000!",
+        type: "square",
+        increase: 1000,
+        baseCost: new Decimal(25000),
+        cost: new Decimal(25000),
+        upgradeScale: 2.13,
+        level: 0,
+        minlevel: 0,
+        maxlevel: 10,
+        resetTier: 0
     },
     unlockRoboNom : {
         id: "unlockRoboNoms",
@@ -431,10 +505,36 @@ export var upgrades = {
         baseCost: new Decimal(50),
         cost: new Decimal(50),
         upgradeScale: 1.75,
-        level: 1,
-        minlevel: 1,
-        maxlevel: 4,
+        level: 0,
+        minlevel: 0,
+        maxlevel: 3,
         resetTier: 0
+    },
+    unlockTriangles : {
+        id: "unlockTriangles",
+        name: "Unlock Triangles",
+        desc: "Triangles will allow you to boost squares even more. These don't reset on Nomscension",
+        type: "nomCoins",
+        increase: 1,
+        baseCost: new Decimal(2e40),
+        cost: new Decimal(2e40),
+        upgradeScale: 1,
+        level: 0,
+        maxlevel: 1,
+        resetTier: 1
+    },
+    unlockExtraNomUpgrades : {
+        id: "unlockNomUpgrades",
+        name: "Unlock Extra Nom Upgrades!",
+        desc: "Unlock some more useful Nom Upgrades",
+        type: "triangles",
+        increase: 1,
+        baseCost: new Decimal(1),
+        cost: new Decimal(1),
+        upgradeScale: 1,
+        level: 0,
+        maxlevel: 1,
+        resetTier: 2
     },
     increaseBigDotChance : {
         id: "upgradeBigDotChance",
@@ -447,6 +547,19 @@ export var upgrades = {
         upgradeScale: 1.05,
         level: 1,
         maxlevel: 20,
+        resetTier: 1
+    },
+    finishGame : {
+        id: "completeGame",
+        name: "Beat Idle Nom Nom!",
+        desc: "Buying this will complete the game!",
+        type: "nomCoins",
+        increase: 1,
+        baseCost: new Decimal(1e308),
+        cost: new Decimal(1e308),
+        upgradeScale: 1,
+        level: 0,
+        maxlevel: 1,
         resetTier: 1
     }
 }
