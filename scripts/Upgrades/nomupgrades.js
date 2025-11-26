@@ -1,5 +1,5 @@
 import { addUpgrade } from "../display.js";
-import { increaseCost, setAutoFeed, setSpeed, setDotMulti } from "../util.js";
+import { increaseCost, setAutoFeed, setSpeed, setDotMulti, setDotValue } from "../util.js";
 import { upgrades, gameState, shopUpgrades } from "../data.js";
 import { updateNomScoreBoost } from "../score.js";
 
@@ -25,13 +25,11 @@ export function upgradeNomDotVal(){
         //Purchase upgrade
         gameState.nomCoins = gameState.nomCoins.minus(upgradeData.cost);
         //Upgrade effect
-        gameState.dotValue = gameState.dotValue.minus(gameState.nomscendDotVal);
-        gameState.nomscendDotVal = gameState.nomscendDotVal.plus(upgradeData.increase);
-        gameState.dotValue = gameState.dotValue.plus(gameState.nomscendDotVal);
         //Increase upgrade level
-        upgrades.increaseNomDotVal.level = upgradeData.level+1;
+        upgrades.increaseNomDotVal.level++;
         //Increase cost
         upgrades.increaseNomDotVal.cost = increaseCost(upgradeData);
+        setDotValue();
     }
 }
 
@@ -147,6 +145,20 @@ export function unlockRoboNoms(){
         upgradeData.level = upgradeData.level+1;
         upgradeData.bought = true;
         //Upgrade Effect
+        $("#baseUpgrades").find(".upgrades-grid").append(`<h2>Other</h2>`);
         addUpgrade("#baseUpgrades", upgrades.addRoboNom);
+    }
+}
+
+export function unlockNomUpgrades(){
+    const upgrade = upgrades.unlockExtraNomUpgrades;
+    if (upgrade.level >= upgrade.maxlevel){ return;}
+    if (gameState.nomCoins.greaterThanOrEqualTo(upgrade.cost)){
+        //Reduce score
+        gameState.nomCoins = gameState.nomCoins.minus(upgrade.cost);
+        //Update level
+        upgrades.unlockExtraNomUpgrades.level++;
+        upgrades.unlockExtraNomUpgrades.bought = true;
+        //Upgrade effect
     }
 }
