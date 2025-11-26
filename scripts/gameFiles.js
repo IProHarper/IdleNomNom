@@ -1,6 +1,7 @@
 import { gameState, upgrades, shopUpgrades } from './data.js'
 import { createDot } from './consumables.js';
-import { increaseCost, setAutoFeed, setDotMaxCount, setDotMulti, setDotSpawnCount, setDotSpawnRate, setDotValue, setRoboNoms, setSpeed } from './util.js';
+import { increaseCost, setAutoFeed, setDotMaxCount, setDotMulti, setDotsALL, setDotSpawnCount, setDotSpawnRate, setDotValue, setRoboNoms, setSpeed, setSquaresALL, setSquareSpawnRate } from './util.js';
+import { setSquareDotMulti, setSquareMaxCount, setSquareSpawnCount, setSquareValue } from './Upgrades/squareUpgrades.js';
 
 export function saveGame(){
     //Set data into local storage
@@ -33,28 +34,27 @@ export function compareSaveData(data,name){
 
     if (name == "Upgrades"){
                 //Look through keys in site version
-                for (let item in upgrades){
+                for (const [item] of Object.entries(upgrades)){
                     //If players verions has an upgrade variable. Use it. Otherwise take it from site version
                     if (data[item]){
-                        for (const [key, value] of Object.entries(upgrades[item])){
+                        for (const [key] of Object.entries(upgrades[item])){
                             //If the user version doesn't have a variable. Assign site version
                             if (!data[item][key]){
                                 data[item][key] = upgrades[item][key];
                             }
                             //Assign site version for upgrageScale and baseCost regardless (For balance patches)
                             //Will probably need to update this if going to update increase later
-                            if (key == "upgradeScale" || key == "baseCost" || key == "increase" || key == "maxlevel"){
+                            if (key == "upgradeScale" || key == "baseCost" || key == "increase" || key == "maxlevel" || key == "minlevel" || key == "resetTier"){
                                 data[item][key] = upgrades[item][key];
                             }
                         }
                     } else {
-                        data[item] = upgrades[item]
+                        data[item] = upgrades[item];
                     }
                 }
                 //Remove any extra upgrades that may have been removed.
                 for (let item in data){
                     if (data[item] && !upgrades[item]){
-                        //Splice the index of the extra items, 1 = number of items to splice.
                         delete data[item];
                     }
                 }
@@ -75,7 +75,7 @@ export function compareSaveData(data,name){
             }
             //Check for removed upgrades and delete them.
             if (Object.keys(data).length > Object.keys(shopUpgrades).length){
-                for (const [key, value] of Object.entries(data)){
+                for (const [key] of Object.entries(data)){
                     if (data[key] && !shopUpgrades[key]){
                         delete data[key];
                     }
@@ -174,16 +174,6 @@ export function resetUpgrades(){
             upgrades[item].cost = increaseCost(upgrades[item]);
         }
     }
-    setDotValue();
-    setSpeed();
-    setDotMulti();
-    setDotMaxCount();
-    setDotSpawnCount();
-    setDotSpawnRate();
-    setRoboNoms();
-    for (let item in shopUpgrades){
-        if (shopUpgrades[item].resetTier <= 0){
-            shopUpgrades[item].bought = false;
-        }
-    }
+    setDotsALL();
+    setSquaresALL();
 }
