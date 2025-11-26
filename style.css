@@ -376,12 +376,16 @@ button:disabled {
 
 /* Centered modal box */
 .modal-container {
+  display:flex;
+  flex-direction: column;
   background-color: #F0FFFF;
+  align-items: center;
   color: black;
   margin: 10% auto;
   padding: 20px;
   border-radius: 12px;
   width: 40%;
+  height: 50%;
   box-shadow: 0 0 15px rgba(0,0,0,0.4);
   position: relative;
   text-align: center;
@@ -389,6 +393,16 @@ button:disabled {
 .modal-container p{
     text-align:left;
     font-size: medium;
+}
+.modal-container button{
+  width:10em;
+  justify-items: center;
+}
+.modal-container button.on{
+  background-color: #4CAF50;
+}
+.modal-container button.off{
+  background-color:#96999b;
 }
 
 /* Close button */
@@ -404,6 +418,12 @@ button:disabled {
   background-color: white;
   border:5px solid black;
   border-radius: 25%;
+}
+#OptionsBttn{
+  position: absolute;
+  z-index: 2;
+  left:30vw;
+  top:10px;
 }
 
 #customize-container {
@@ -818,6 +838,102 @@ button:disabled {
   border-bottom: 2px solid var(--border-color);
   padding-bottom: 10px;
 }
+
+/* -------- Prestige Overlay -------- */
+.prestige-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.2);
+  height:100%;
+  z-index: 99999;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.prestige-overlay.show {
+  display: flex;
+  transition: 0.5s ease-in-out;
+  pointer-events: none;
+}
+
+/* full-screen canvas for particles */
+#prestigeCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1000;
+}
+
+/* backdrop & blur effect */
+.prestige-content {
+  position: relative;
+  z-index: 1010;
+  width: 100%;
+  margin:auto;
+  text-align: center;
+  justify-content: center;
+}
+
+/* inner card that floats */
+.prestige-inner {
+  display: inline-block;
+  margin:auto;
+  align-items: center;
+  padding: 36px 28px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(10,10,15,0.9), rgba(6,6,8,0.9));
+  border: 2px solid rgba(51,236,255,0.12);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 40px rgba(51,236,255,0.06) inset;
+  transform: translateY(-6px) scale(0.98);
+  animation: prestigePop 420ms cubic-bezier(.16,.8,.24,1) forwards;
+}
+
+/* small pop */
+@keyframes prestigePop {
+  to { transform: translateY(0) scale(1); }
+}
+
+/* title */
+.prestige-title {
+  font-size: clamp(28px, 5.5vw, 64px);
+  margin: 0 0 6px;
+  letter-spacing: 1px;
+  color: #ffd94d;
+  text-shadow: 0 6px 18px rgba(255,200,50,0.12), 0 0 40px rgba(255,200,50,0.08);
+}
+
+/* subtitle */
+.prestige-sub {
+  margin: 0 0 18px;
+  color: rgba(255,255,255,0.9);
+  font-size: clamp(12px, 2.2vw, 18px);
+  opacity: .95;
+}
+
+/* big counter */
+.prestige-gain {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+.prestige-plus { color: #cfeefc; font-weight: 700; font-size: 20px; }
+.prestige-count {
+  font-size: clamp(28px, 6vw, 56px);
+  font-weight: 800;
+  color: #33ecff;
+  text-shadow: 0 10px 40px rgba(51,236,255,0.12);
+}
+
+
+
 
 
 
