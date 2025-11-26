@@ -52,9 +52,6 @@ export function initDisplay(){
         $("#baseUpgrades").find(".upgrades-grid").append(`<h2 style="margin-top:auto;">Other</h2>`);
         addUpgrade("#baseUpgrades", upgrades.addRoboNom);
     }
-    if (upgrades.unlockSquares.bought){
-        unlockSquare();
-    }
     progressGameStage();
 }
 
