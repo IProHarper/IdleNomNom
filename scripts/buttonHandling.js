@@ -3,7 +3,7 @@ import { enableAutofeed, createKids, nomscend, unlockSquare } from './features.j
 import { upgradeDotValue, upgradeDotMulti, upgradeDotSpawnRate, upgradeDotSpawnCount, addRoboNom, upgradeMaxDotCount} from './upgradeButtons.js';
 import { unlockNomCoinScoreBoost, unlockRoboNoms, upgradeDotMultiMax, upgradeDotValMax, upgradeNomCoinMulti, upgradeNomDotVal } from './Upgrades/nomupgrades.js'
 import { upgrades, gameState, mouseNom, roboList, mousePos, options } from './data.js';
-import { calcBuyMax, formatNum, increaseCost  } from './util.js';
+import { calcBuyMax, calcNomGain, formatNum, increaseCost  } from './util.js';
 
 import { saveGame } from './gameFiles.js';
 import { keepSquareUpgradesOnNom, setSquareResetTier, upgradeDotValMaxSquare, upgradeMaxRoboNoms, upgradeMaxSquareCount, upgradeSquareDotMulti, upgradeSquareMulti, upgradeSquareSpawnCount, upgradeSquareSpawnRate, upgradeSquareValue } from './Upgrades/squareUpgrades.js';
@@ -385,5 +385,5 @@ export function buttonCheck(){
             $("#"+value.id+"Lvl").text(`${value.level}/${value.maxlevel}`);
         }
     }
-    $("#nomscendBttn").prop("disabled", 200000 > (gameState.nomscendScore))
+    $("#nomscendBttn").prop("disabled", 5 > (calcNomGain()));
 }
