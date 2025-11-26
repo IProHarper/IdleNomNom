@@ -1,16 +1,26 @@
 import { saveGame,checkSaveFile } from './gameFiles.js';
-import { gameState, gameStages, mouseNom, mousePos } from './data.js'
-import { setDotSpawnRate, setRoboNoms } from './util.js';
+import { gameState, gameStages, upgrades, mouseNom, mousePos } from './data.js'
+import { setDotsALL, setDotSpawnRate, setRoboNoms, setSquaresALL, setUpgradeCosts } from './util.js';
 import { buttonCheck, handleBuyMax, handleUpgrade } from './buttonHandling.js';
-import { unlockNomscend } from './features.js';
+import { unlockNomscend, unlockSquare } from './features.js';
 import { initDisplay, updateStats, updateProgressBar, updateCanvas } from './display.js';
+import { prestigeAnimationPrep } from './prestigeAnimation.js';
 
 
 $(document).ready(function(){
 
     //Load the gamestate if it exists in local storage
     checkSaveFile();
+    setUpgradeCosts();
     initDisplay();
+    setDotsALL();
+    if (upgrades.unlockSquares.bought){
+        unlockSquare();
+    }
+    
+
+    
+
 
     const canvas = document.getElementById("gameCanvas");
 
@@ -114,28 +124,42 @@ $(document).ready(function(){
         updateStats();
     }
 
-
+    prestigeAnimationPrep();
 
 });
 
 export function progressGameStage(){
         if (gameState.stage > gameStages.length-1){
-        return
-    }
+            gameState.stage = gameStages.length-1;
+        }
         let stat = new Decimal(0);
         if (gameStages[gameState.stage].statType == "score"){
             stat = gameState.liftimeScore;
         } else if (gameStages[gameState.stage].statType == "nomscend"){
             stat = gameState.nomscensionCount;
         } else if (gameStages[gameState.stage].statType == "square"){
-            stat = gameState.squares;
+            stat = gameState.lifetimeSquares;
         }else if (gameStages[gameState.stage].statType == "cap"){
-            stat = gameState.liftimeScore;
+            stat = new Decimal(0);
         }
         if (stat.greaterThanOrEqualTo(gameStages[gameState.stage].requirement)){
             gameState.stage = gameState.stage+1;
-            gameState.nomscentionUnlocked = true;
-            unlockNomscend();
+            switch(gameState.stage) {
+                case 1:
+                    gameState.nomscentionUnlocked = true;
+                    unlockNomscend();
+                    break;
+                case 2:
+                    console.log("Stage 2")
+                    break;
+                case 3:
+                    console.log("Stage 3")
+                    break;
+                default:
+                    console.log("Stage ?")
+            }
+                
+            
         }
         updateProgressBar();
     }
