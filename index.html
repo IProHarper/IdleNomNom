@@ -19,9 +19,9 @@
             <h2>Welcome to Nomscension!</h2>
             <p>You've unlocked Nomscension! This means you can reset all your progress in exchange for some Nom Coins!</p>
             <p>Nom Coins can be used to buy upgrades that will help you get to your next Nomscension a LOT quicker.
-            Checkout the Nom button in the top right to see what you might want before you Nomscend</p>
-            <p>It's recommended to have at least <span style="color:blue; font-weight: bold;">5</span> coins before you reset!</p>
-            <p style="text-align:center">Nomscension Score Required: <span id="nomsecReqText" style="color:blue">200000</span></p>
+            Checkout the Nom button in the top right to see what you might want before you Nomscend.</p>
+            <p>It's recommended to have at least <span style="color:blue; font-weight: bold;">10</span> coins before your first reset!</p>
+            <p style="text-align:center">Nom coins required: <span id="nomsecReqText" style="color:blue">5</span></p>
             <p style="text-align: center;">By Nomscending now, you'll get</p>
             <div class="nomCoinDisplay">
                 <span id="nomCoinGainsText" style="color:blue">1</span>
@@ -44,10 +44,17 @@
     <div id="optionsModal" class="modal" style="display:none;">
         <div class="modal-container">
             <span class="closeBttn">&times;</span>
-            <h2>Options</h2>
-            <p></p>
+            <h2 style="text-decoration: underline;">Options</h2>
             <br>
-            <button id="resetProgressModal">RESET</button>
+            <button id="toggleDrawDots" class="on">Draw Dots</button>
+            <button id="toggleDrawSquares" class="on">Draw Squares</button>
+            <button id="toggleDrawTriangles" class="on">Draw Triangles</button>
+            <br>
+            <button id="toggleDrawDotsText" class="on">Draw Dots Text</button>
+            <button id="toggleDrawSquaresText" class="on">Draw Squares Text</button>
+            <button id="toggleDrawTriangleText" class="on">Draw Triangle Text</button>
+            <br>
+            <button id="toggleRoboNoms" class="on">Draw RoboNoms</button>
         </div>
     </div>
 
@@ -55,9 +62,10 @@
     <!-- <audio id="eatDot-audio" src="./assets/audio/dotEat.wav" preload="auto"></audio> -->
     <h1 style="text-decoration: underline;">IDLE NOM NOM</h1>
     
-    <!-- <button id="debugBttn">Debug</button> -->
+    <button id="debugBttn">Debug</button>
     <button id="ResetBttn">Reset</button>
     <button id="SaveBttn">Save</button>
+    <button id="OptionsBttn">Options</button>
     <div id="resource-container" class="resources">
         <span class="resource-item">
             <div class="icon-dot"></div>
@@ -275,7 +283,7 @@
                 </div>
 
                 <!-- Score Boost from Nom Coins -->
-                <div class="upgrade-card">
+                <!-- <div class="upgrade-card">
                     <div class="upgrade-header">
                         <span class="upgrade-icon"></span>
                         <div class="upgrade-info">
@@ -289,7 +297,7 @@
                             <span class="cost-text">0</span>
                         </button>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 
@@ -381,6 +389,42 @@
                         <button id="enableLachlanMode" class="buy-button" style="background: purple;">FREE</button>
                     </div>
                 </div>
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon">🎨</span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">Rino Mode</h3>
+                            <p class="upgrade-description">Wife mode</p>
+                        </div>
+                    </div>
+                    <div class="upgrade-actions">
+                        <button id="enableRinoMode" class="buy-button" style="background: rgb(255, 75, 165);">FREE</button>
+                    </div>
+                </div>
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon">🎨</span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">Mi-chan Mode</h3>
+                            <p class="upgrade-description">みちゃん</p>
+                        </div>
+                    </div>
+                    <div class="upgrade-actions">
+                        <button id="enableMichanMode" class="buy-button" style="background: orange;">FREE</button>
+                    </div>
+                </div>
+                <div class="upgrade-card">
+                    <div class="upgrade-header">
+                        <span class="upgrade-icon">🎨</span>
+                        <div class="upgrade-info">
+                            <h3 class="upgrade-name">Kin-san Mode</h3>
+                            <p class="upgrade-description">金さん</p>
+                        </div>
+                    </div>
+                    <div class="upgrade-actions">
+                        <button id="enableKinsanMode" class="buy-button" style="background: grey;">FREE</button>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -390,7 +434,7 @@
             <div class="upgrades-grid">
                 <div class="upgrade-card">
                     <div class="upgrade-header">
-                        <span class="upgrade-icon">📊</span>
+                        <span class="upgrade-icon" class="icon-dot"></span>
                         <div class="upgrade-info">
                             <h3 class="stat-name">Dots</h3>
                         </div>
@@ -403,6 +447,10 @@
                         <div style="width: 100%; display: flex; justify-content: space-between;">
                             <span class="stat-label">Multiplier:</span>
                             <span class="stat-value" id="dotMultiText">0</span>
+                        </div>
+                        <div style="width: 100%; display: flex; justify-content: space-between;">
+                            <span class="stat-label">Dot Award:</span>
+                            <span class="stat-value" id="dotAwardText">0</span>
                         </div>
                         <div style="width: 100%; display: flex; justify-content: space-between;">
                             <span class="stat-label">Spawn Amount:</span>
@@ -446,6 +494,10 @@
                                 <span class="stat-value" id="squareMultiText">0</span>
                             </div>
                             <div style="width: 100%; display: flex; justify-content: space-between;">
+                                <span class="stat-label">Square Award:</span>
+                                <span class="stat-value" id="squareAwardText">0</span>
+                            </div>
+                            <div style="width: 100%; display: flex; justify-content: space-between;">
                                 <span class="stat-label">Spawn Amount:</span>
                                 <span class="stat-value" id="squareSpawnAmountText">0</span>
                             </div>
@@ -473,7 +525,7 @@
                         <div class="upgrade-header">
                             <span class="upgrade-icon">📊</span>
                             <div class="upgrade-info">
-                                <h3 class="stat-name">Nomsension</h3>
+                                <h3 class="stat-name">Nomscension</h3>
                             </div>
                         </div>
                         <div class="upgrade-stats">
@@ -489,10 +541,6 @@
                                 <span class="stat-label">Lifetime Nom Coins:</span>
                                 <span class="stat-value" id="LifetimeNomCoinsText">0</span>
                             </div>
-                            <div style="width: 100%; display: flex; justify-content: space-between;">
-                                <span class="stat-label">Nom Coin Boost Value:</span>
-                                <span class="stat-value" id="nomScoreBoostAmountText">0</span>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -504,12 +552,34 @@
         </div>
     </div>
 
+
 <!-- Progress bar at the bottom -->
     <div class="progress-container">
         <div class="progress-bar">
             <div id="progress-text">Unlock Nomscension - 10,0000 (0%)</div>
         </div>
     </div>
-<div id="savePopup">Game Saved!</div>    
+<div id="savePopup">Game Saved!</div> 
+
+
+<!-- Prestige overlay (hidden by default) -->
+<div id="prestigeOverlay" class="prestige-overlay" role="dialog" tabindex="-1">
+  <canvas id="prestigeCanvas"></canvas>
+
+  <div class="prestige-content" role="document">
+    <div class="prestige-inner">
+      <h1 class="prestige-title">NOMSCENDED!</h1>
+      <p class="prestige-sub" id="prestigeSubtitle">You reset for glory</p>
+      <div class="prestige-gain">
+        <span class="prestige-plus">+ </span>
+        <span id="prestigeCounter" class="prestige-count">0</span>
+        <span class="prestige-currency"><img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom coins"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 </body>
 </html>
