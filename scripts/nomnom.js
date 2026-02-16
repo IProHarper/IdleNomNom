@@ -1,6 +1,6 @@
-import { options, squareList } from "./data.js";
+import { options, squareList, triangleList } from "./data.js";
 import { increaseScore, showFloatingText } from "./score.js";
-import { distance, randomDirection } from "./util.js";
+import { distance, getCanvasCentre, randomDirection } from "./util.js";
 
 export class RoboNom {
     constructor(x, y) {
@@ -8,7 +8,7 @@ export class RoboNom {
         this.y = y;
         this.radius = 10;
 
-        const {vx, vy} = randomDirection();
+        const {vx, vy} = randomDirection(1.5);
         // Random initial velocity
         this.vx = vx;
         this.vy = vy;
@@ -47,6 +47,8 @@ export class RoboNom {
             this.vy *= -1;
         } 
 
+        this.bounceOffCentre();
+
         // Mouth animation timer
         this.mouthTimer += this.mouthSpeed;
 
@@ -55,7 +57,7 @@ export class RoboNom {
             const distToDot = distance(this.x, this.y, dot.x, dot.y);
             if (distToDot < this.radius + dot.r) {
                 dot.eaten = true;
-                if (options.drawFloatingDotText){
+                if (options.DrawDotsText){
                         showFloatingText(increaseScore(), this.x, this.y, "white");
                 } else {
                 increaseScore();
@@ -66,6 +68,9 @@ export class RoboNom {
         for (let square of squareList){
             square.checkEaten(this.x, this.y, this.radius);
         }
+        // for (let triangle of triangleList){
+        //     triangle.eaten = triangle.checkCollision(this.x, this.y, this.radius);
+        // }
     }
 
     draw(ctx) {
@@ -108,5 +113,25 @@ export class RoboNom {
 
         this.vx = Math.cos(angle) * speed;
         this.vy = Math.sin(angle) * speed;
+    }
+
+    bounceOffCentre(){
+        // Bounce off big central dot
+        const { x: cx, y: cy } = getCanvasCentre();
+        const centreDotR = 25;
+        const dist = distance(this.x, this.y, cx, cy);
+        if (dist < centreDotR + this.radius) {
+            // Compute normal vector and reflect velocity
+            const nx = (this.x - cx) / dist;
+            const ny = (this.y - cy) / dist;
+            const nom = this.vx * nx + this.vy * ny;
+            this.vx -= 2 * nom * nx;
+            this.vy -= 2 * nom * ny;
+
+            // Push dot just outside the big dot
+            const overlap = centreDotR + this.radius - dist;
+            this.x += nx * overlap;
+            this.y += ny * overlap;
+        }
     }
 }
