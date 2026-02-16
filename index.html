@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Idle Nom Nom</title>
-    <link rel="icon" type="image/x-icon" href="./assets/images/NomCoin.png">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="mobile.css">
 
@@ -26,11 +25,11 @@
             <p>You've unlocked Nomscension! This means you can reset all your progress in exchange for some Nom Coins!</p>
             <p>Nom Coins can be used to buy upgrades that will help you get to your next Nomscension a LOT quicker.
             Checkout the Nom button in the top right to see what you might want before you Nomscend.</p>
-            <p>It's recommended to have at least <span style="color:blue; font-weight: bold;">10</span> coins before your first reset!</p>
-            <p style="text-align:center">Nom coins required: <span id="nomsecReqText" style="color:blue">5</span></p>
+            <p>It's recommended to have at least <span style="color:aqua; font-weight: bold;">10</span> coins before your first reset!</p>
+            <p style="text-align:center">Nom coins required: <span id="nomsecReqText" style="color:aqua">5</span></p>
             <p style="text-align: center;">By Nomscending now, you'll get</p>
             <div class="nomCoinDisplay">
-                <span id="nomCoinGainsText" style="color:blue">1</span>
+                <span id="nomCoinGainsText" style="color:aqua">1</span>
                 <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom coins">
             </div>
             <br>
@@ -47,28 +46,69 @@
             <button id="resetProgressModal">RESET</button>
         </div>
     </div>
-    <div id="optionsModal" class="modal" style="display:none;">
-        <div class="modal-container">
-            <span class="closeBttn">&times;</span>
-            <h2 style="text-decoration: underline;">Options</h2>
-            <br>
-            <button id="toggleDrawDots" class="on">Draw Dots</button>
-            <button id="toggleDrawSquares" class="on">Draw Squares</button>
-            <button id="toggleDrawTriangles" class="on">Draw Triangles</button>
-            <br>
-            <button id="toggleDrawDotsText" class="on">Draw Dots Text</button>
-            <button id="toggleDrawSquaresText" class="on">Draw Squares Text</button>
-            <button id="toggleDrawTriangleText" class="on">Draw Triangle Text</button>
-            <br>
-            <button id="toggleRoboNoms" class="on">Draw RoboNoms</button>
-        </div>
+
+    <div id="optionsModal" class="modal hidden">
+  <div class="modal-container">
+    <span class="closeBttn">&times;</span>
+    <h2>Options</h2>
+
+    <div class="option-group">
+      <label class="toggle">
+        <span class="label-text">Draw Dots</span>
+        <input type="checkbox" id="toggleDrawDots" checked>
+        <span class="slider"></span>
+      </label>
+
+      <label class="toggle">
+        <span class="label-text">Draw Squares</span>
+        <input type="checkbox" id="toggleDrawSquares" checked>
+        <span class="slider"></span>
+      </label>
+
+      <label class="toggle">
+        <span class="label-text">Draw Triangles</span>
+        <input type="checkbox" id="toggleDrawTriangles" checked>
+        <span class="slider"></span>
+      </label>
     </div>
+
+    <div class="option-group">
+      <label class="toggle">
+        <span class="label-text">Dots Text</span>
+        <input type="checkbox" id="toggleDrawDotsText" checked>
+        <span class="slider"></span>
+      </label>
+
+      <label class="toggle">
+        <span class="label-text">Squares Text</span>
+        <input type="checkbox" id="toggleDrawSquaresText" checked>
+        <span class="slider"></span>
+      </label>
+
+      <label class="toggle">
+        <span class="label-text">Triangles Text</span>
+        <input type="checkbox" id="toggleDrawTriangleText" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="option-group">
+      <label class="toggle">
+        <span class="label-text">Draw RoboNoms</span>
+        <input type="checkbox" id="toggleDrawRoboNoms" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+  </div>
+</div>
+
 
 
     <!-- <audio id="eatDot-audio" src="./assets/audio/dotEat.wav" preload="auto"></audio> -->
     <h1 style="text-decoration: underline;">IDLE NOM NOM</h1>
     
-    <button id="debugBttn">Debug</button>
+    <!-- <button id="debugBttn">Debug</button> -->
     <button id="ResetBttn">Reset</button>
     <button id="SaveBttn">Save</button>
     <button id="OptionsBttn">Options</button>
@@ -88,6 +128,22 @@
         <span id="squareDisplay" class="resource-item" style="display:none">
             <div class="icon-square"></div>
             <div id="squares" class="resource-amount">0</div>
+        </span>
+        <span id="activeTriangleDisplay" class="resource-item" style="display:none;"> 
+            <div class="icon-triangle">
+                <svg class="triangle-svg" viewBox="0 0 32 32" role="img">
+                    <polygon points="16,3 32,32 3,32" style="fill:green;"/>
+                </svg>
+            </div>
+            <div id="activeTriangles" class="resource-amount" >0/0</div>
+        </span>
+        <span id="triangleDisplay" class="resource-item" style="display:none">
+            <div class="icon-triangle">
+                <svg class="triangle-svg" viewBox="0 0 32 32" role="img">
+                    <polygon points="16,3 32,32 3,32" style="fill:green;"/>
+                </svg>
+            </div>
+            <div id="triangles" class="resource-amount">0</div>
         </span>
         <div  class="resource-item">
             <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom coins">
@@ -120,6 +176,14 @@
         <button id="toggleSquareUpgrades" class="menu-toggle-btn" style="display:none;">
             <div class="icon-square"></div>
             Square
+        </button>
+        <button id="toggleTriangleUpgrades" class="menu-toggle-btn" style="display:none;">
+            <div class="icon-triangle">
+                <svg class="triangle-svg" viewBox="0 0 32 32" role="img">
+                    <polygon points="16,3 32,32 3,32" style="fill:green;"/>
+                </svg>
+            </div>
+            Triangles
         </button>
     </div>
     <div id="menu-left">
@@ -313,6 +377,13 @@
             <div class="upgrades-grid">
             </div>
         </div>
+
+        <!-- Triangle Upgrade panel -->
+        <div id="triangleUpgrades" class="upgrades-container-right" class="hidden">
+            <h2>Triangle Upgrades</h2>
+            <div class="upgrades-grid">
+            </div>
+        </div>
         
         <!-- CUSTOMIZE SECTION -->
         <div id="customize-container" class="upgrades-container-left">
@@ -423,6 +494,7 @@
                     <div class="upgrade-header">
                         <span class="upgrade-icon">🎨</span>
                         <div class="upgrade-info">
+                            <span class="icon-dot"></span>
                             <h3 class="upgrade-name">Kin-san Mode</h3>
                             <p class="upgrade-description">金さん</p>
                         </div>
@@ -440,7 +512,7 @@
             <div class="upgrades-grid">
                 <div class="upgrade-card">
                     <div class="upgrade-header">
-                        <span class="upgrade-icon" class="icon-dot"></span>
+                        <span class="icon-dot" style="margin-right: 10px;"></span>
                         <div class="upgrade-info">
                             <h3 class="stat-name">Dots</h3>
                         </div>
@@ -527,6 +599,56 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Triangle Stats -->
+                    <div class="upgrade-card" id="triangleStats" style="display:none;">
+                        <div class="upgrade-header">
+                            <span class="icon-triangle" style="margin-right: 10px;">
+                                <svg class="triangle-svg" viewBox="0 0 32 32" role="img">
+                                    <polygon points="16,3 32,32 3,32" style="fill:green;"/>
+                                </svg>
+                            </span>
+                            <div class="upgrade-info">
+                                <h3 class="stat-name">Triangles</h3>
+                            </div>
+                        </div>
+                    <div class="upgrade-stats">
+                        <div style="width: 100%; display: flex; justify-content: space-between;">
+                                <span class="stat-label">Base Value:</span>
+                                <span class="stat-value" id="triangleBaseValueText">0</span>
+                            </div>
+                            <div style="width: 100%; display: flex; justify-content: space-between;">
+                                <span class="stat-label">Multiplier:</span>
+                                <span class="stat-value" id="triangleMultiText">0</span>
+                            </div>
+                            <div style="width: 100%; display: flex; justify-content: space-between;">
+                                <span class="stat-label">Triangle Award:</span>
+                                <span class="stat-value" id="triangleAwardText">0</span>
+                            </div>
+                            <div style="width: 100%; display: flex; justify-content: space-between;">
+                                <span class="stat-label">Spawn Amount:</span>
+                                <span class="stat-value" id="triangleSpawnAmountText">0</span>
+                            </div>
+                            <div style="width: 100%; display: flex; justify-content: space-between;">
+                                <span class="stat-label">Spawn Rate:</span>
+                                <span class="stat-value" id="triangleSpawnRateText">0</span>
+                            </div>
+                            <div style="width: 100%; display: flex; justify-content: space-between;">
+                                <span class="stat-label">Max Spawn:</span>
+                                <span class="stat-value" id="triangleMaxSpawnText">0</span>
+                            </div>
+                        </div>
+                        <div class="upgrade-stats">
+                            <div style="width: 100%; display: flex; justify-content: space-between;">
+                                <span class="stat-label">Lifetime Triangles:</span>
+                                <span class="stat-value" id="lifetimeTrianglesText">0</span>
+                            </div>
+                            <div style="width: 100%; display: flex; justify-content: space-between;">
+                                <span class="stat-label">Triangles Eaten:</span>
+                                <span class="stat-value" id="trianglesEatenText">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Nomscension -->
                     <div class="upgrade-card">
                         <div class="upgrade-header">
                             <span class="upgrade-icon">📊</span>
