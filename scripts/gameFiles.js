@@ -1,4 +1,4 @@
-import { gameState, upgrades, shopUpgrades } from './data.js'
+import { gameState, upgrades, shopUpgrades, options } from './data.js'
 import { createDot } from './consumables.js';
 import { increaseCost, setAutoFeed, setDotMaxCount, setDotMulti, setDotsALL, setDotSpawnCount, setDotSpawnRate, setDotValue, setRoboNoms, setSpeed, setSquaresALL, setSquareSpawnRate } from './util.js';
 import { setSquareDotMulti, setSquareMaxCount, setSquareSpawnCount, setSquareValue } from './Upgrades/squareUpgrades.js';
@@ -8,6 +8,7 @@ export function saveGame(){
     localStorage.setItem("gameState", JSON.stringify(gameState));
     localStorage.setItem("Upgrades", JSON.stringify(upgrades));
     localStorage.setItem("shopUpgrades", JSON.stringify(shopUpgrades));
+    localStorage.setItem("Options", JSON.stringify(options));
     //Display Save in top right
     var savePopup = document.getElementById('savePopup');
             savePopup.classList.add('show');
@@ -60,6 +61,12 @@ export function compareSaveData(data,name){
                 }
             loadUpgradeData(data, "upgrades"); 
     }
+
+    if (name == "Options"){
+        for (const id in data){
+            options[id] = data[id];
+        }
+    }
     if (name == "shopUpgrades"){
         //Look through keys in site version
             // for (let item in Object.keys(shopUpgrades)){
@@ -83,6 +90,7 @@ export function compareSaveData(data,name){
             }
         loadUpgradeData(data, "shopUpgrades"); 
     }
+
 }
 function checkGameVersion(gameData){
     //Pre overhaul requires a reset.
@@ -106,6 +114,13 @@ export function checkSaveFile(){
         compareSaveData(data, "Upgrades")
     } else { 
         localStorage.setItem("Upgrades", JSON.stringify(upgrades));
+    }
+
+    if (localStorage.getItem("Options")){
+        let data = JSON.parse(localStorage.getItem("Options"));
+        compareSaveData(data, "Options")
+    } else { 
+        localStorage.setItem("Options", JSON.stringify(options));
     }
 
     if (localStorage.getItem("shopUpgrades")){
