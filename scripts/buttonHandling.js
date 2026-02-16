@@ -1,12 +1,14 @@
 import { createDot, createSquare, spawnDot } from './consumables.js';
-import { enableAutofeed, createKids, nomscend, unlockSquare } from './features.js';
+import { enableAutofeed, createKids, nomscend, unlockSquare, unlockTriangles } from './features.js';
 import { upgradeDotValue, upgradeDotMulti, upgradeDotSpawnRate, upgradeDotSpawnCount, addRoboNom, upgradeMaxDotCount} from './upgradeButtons.js';
 import { unlockNomCoinScoreBoost, unlockRoboNoms, upgradeDotMultiMax, upgradeDotValMax, upgradeNomCoinMulti, upgradeNomDotVal } from './Upgrades/nomupgrades.js'
-import { upgrades, gameState, mouseNom, roboList, mousePos, options } from './data.js';
-import { calcBuyMax, calcNomGain, formatNum, increaseCost  } from './util.js';
+import { upgrades, gameState, mouseNom, roboList, mousePos, options, triangleList } from './data.js';
+import { calcBuyMax, calcNomGain, formatNum, getCanvasCentre, increaseCost  } from './util.js';
 
 import { saveGame } from './gameFiles.js';
 import { keepSquareUpgradesOnNom, setSquareResetTier, upgradeDotValMaxSquare, upgradeMaxRoboNoms, upgradeMaxSquareCount, upgradeSquareDotMulti, upgradeSquareMulti, upgradeSquareSpawnCount, upgradeSquareSpawnRate, upgradeSquareValue } from './Upgrades/squareUpgrades.js';
+import { Triangle } from './triangle.js';
+import { upgradeMaxTriangleCount, upgradeTriangleMulti, upgradeTriangleSpawnCount, upgradeTriangleSpawnRate, upgradeTriangleValue } from './Upgrades/triangleUpgrades.js';
 
 //Spawn Dots with Feed button
 $("#feedNomNom").on("click", function () {
@@ -36,6 +38,9 @@ $("#toggleNomUpgrades").on("click", function() {
 });
 $("#toggleSquareUpgrades").on("click", function() {
     switchMenu("#squareUpgrades","right");
+});
+$("#toggleTriangleUpgrades").on("click", function() {
+    switchMenu("#triangleUpgrades","right");
 });
 $("#toggleStats").on("click", function() {
     switchMenu("#stats-container","left");
@@ -68,83 +73,20 @@ $(window).on("click", function(event) {
 
 //###############
 // Options
-$("#toggleDrawDots").on("click", function() {
-    if ($("#toggleDrawDots").hasClass('on')){
-        options.drawDots = false;
-        $("#toggleDrawDots").toggleClass('on');
-        $("#toggleDrawDots").toggleClass('off');
-    } else if ($("#toggleDrawDots").hasClass('off')){
-        options.drawDots = true;
-        $("#toggleDrawDots").toggleClass('on');
-        $("#toggleDrawDots").toggleClass('off');
-    }
+document.querySelectorAll('.toggle input').forEach(chk => {
+  chk.addEventListener('change', () => {
+    const isOn = chk.checked;
+    const id = chk.id;
+
+    chk.classList.toggle('on', isOn);
+    chk.classList.toggle('off', !isOn);
+
+    console.log(id.replace("toggle", ""), " = ", isOn);
+    const optionID = id.replace("toggle", "")
+    options[optionID] = isOn;
+  });
 });
-$("#toggleDrawSquares").on("click", function() {
-    if ($("#toggleDrawSquares").hasClass('on')){
-        options.drawSquares = false;
-        $("#toggleDrawSquares").toggleClass('on');
-        $("#toggleDrawSquares").toggleClass('off');
-    } else if ($("#toggleDrawSquares").hasClass('off')){
-        options.drawSquares = true;
-        $("#toggleDrawSquares").toggleClass('on');
-        $("#toggleDrawSquares").toggleClass('off');
-    }
-});
-$("#toggleDrawTriangles").on("click", function() {
-    if ($("#toggleDrawTriangles").hasClass('on')){
-        options.drawTriangles = false;
-        $("#toggleDrawTriangles").toggleClass('on');
-        $("#toggleDrawTriangles").toggleClass('off');
-    } else if ($("#toggleDrawTriangles").hasClass('off')){
-        options.drawTriangles = true;
-        $("#toggleDrawTriangles").toggleClass('on');
-        $("#toggleDrawTriangles").toggleClass('off');
-    }
-});
-$("#toggleDrawDotsText").on("click", function() {
-    if ($("#toggleDrawDotsText").hasClass('on')){
-        options.drawFloatingDotText = false;
-        $("#toggleDrawDotsText").toggleClass('on');
-        $("#toggleDrawDotsText").toggleClass('off');
-    } else if ($("#toggleDrawDotsText").hasClass('off')){
-        options.drawFloatingDotText = true;
-        $("#toggleDrawDotsText").toggleClass('on');
-        $("#toggleDrawDotsText").toggleClass('off');
-    }
-});
-$("#toggleDrawSquaresText").on("click", function() {
-    if ($("#toggleDrawSquaresText").hasClass('on')){
-        options.drawFloatingSquareText = false;
-        $("#toggleDrawSquaresText").toggleClass('on');
-        $("#toggleDrawSquaresText").toggleClass('off');
-    } else if ($("#toggleDrawSquaresText").hasClass('off')){
-        options.drawFloatingSquareText = true;
-        $("#toggleDrawSquaresText").toggleClass('on');
-        $("#toggleDrawSquaresText").toggleClass('off');
-    }
-});
-$("#toggleDrawTriangleText").on("click", function() {
-    if ($("#toggleDrawTriangleText").hasClass('on')){
-        options.drawFloatingTriangleText = false;
-        $("#toggleDrawTriangleText").toggleClass('on');
-        $("#toggleDrawTriangleText").toggleClass('off');
-    } else if ($("#toggleDrawTriangleText").hasClass('off')){
-        options.drawFloatingTriangleText = true;
-        $("#toggleDrawTriangleText").toggleClass('on');
-        $("#toggleDrawTriangleText").toggleClass('off');
-    }
-});
-$("#toggleRoboNoms").on("click", function() {
-    if ($("#toggleRoboNoms").hasClass('on')){
-        options.drawRoboNoms = false;
-        $("#toggleRoboNoms").toggleClass('on');
-        $("#toggleRoboNoms").toggleClass('off');
-    } else if ($("#toggleRoboNoms").hasClass('off')){
-        options.drawRoboNoms = true;
-        $("#toggleRoboNoms").toggleClass('on');
-        $("#toggleRoboNoms").toggleClass('off');
-    }
-});
+
 
 //################
 //Customization buttons (Color)
@@ -231,7 +173,13 @@ const upgradeActions = {
     upgradeMaxRoboNoms,
     upgradeSquareDotMulti,
     keepSquareUpgradesOnNom,
-    upgradeDotValMaxSquare
+    upgradeDotValMaxSquare,
+    upgradeTriangleValue,
+    upgradeTriangleMulti,
+    upgradeTriangleSpawnCount,
+    upgradeTriangleSpawnRate,
+    upgradeMaxTriangleCount,
+    unlockTriangles
 };
 
 export function handleUpgrade(id) {
@@ -261,44 +209,50 @@ export function handleBuyMax(ButtonID){
 
 
 //##############
-
-// $("#upgradeDotValue-i").on("mouseenter", function(){
-//     showTooltip(upgrades.increaseDotValue.desc, mousePos.x, mousePos.y);
-//     });
-// $("#upgradeDotValue-i").on("mouseleave", function(){
-//     hideTooltip();
-//     });
+export function addDescriptionHover(){
+    document.querySelectorAll('.upgrade-card').forEach(card => {
+        if (!card.querySelector(".upgradeBttn")){
+                return;
+            }
+        card.addEventListener('mouseenter', function(){
+            console.log("Hi")
+            
+            const upgradeID = (card.querySelector(".upgradeBttn").id);
+            
+            let descText = "";
+            for (const obj in upgrades){
+                if (upgrades[obj].id == upgradeID && upgrades[obj].desc){
+                    descText = upgrades[obj].desc;
+                }
+            }
+            const pos = card.getBoundingClientRect();
+            const cardWidth = 200;
+            showTooltip(descText, pos.x-cardWidth, pos.y);
+        });
+        card.addEventListener('mouseleave', function(){
+            hideTooltip();
+        });
+    });
+}
 
 
     
 //Tool tip
 //##############
 function showTooltip(htmlContent, x, y) {
-    let tooltip = document.createElement("div");
-    tooltip.className = "upgrade-tooltip";
-    document.body.appendChild(tooltip);
     
-    tooltip.innerHTML = htmlContent;
-    tooltip.classList.add("show");
+    $("#tooltip").html(htmlContent);
+    $("#tooltip").toggleClass("show");
 
     // Position with screen-bound protection
     const padding = 18;
-    let left = x + 20;
-    let top = y + 20;
 
-    if (left + tooltip.offsetWidth > window.innerWidth - padding) {
-        left = x - tooltip.offsetWidth - 20;
-    }
-    if (top + tooltip.offsetHeight > window.innerHeight - padding) {
-        top = y - tooltip.offsetHeight - 20;
-    }
-
-    tooltip.style.left = left + "px";
-    tooltip.style.top = top + "px";
+    $("#tooltip").css("left", x)
+    $("#tooltip").css("top", y);
 }
 
 function hideTooltip() {
-    tooltip.classList.remove("show");
+    $("#tooltip").toggleClass("show");
 }
 
 
@@ -318,6 +272,10 @@ $("#nomscendBttn").on('click',function(){
 $("#debugBttn").on('click',function(){
     // gameState.score = gameState.score.plus(10000);
     // gameState.nomCoins = gameState.nomCoins.plus(1000);
+    unlockTriangles();
+    const {x,y} = getCanvasCentre();
+    const tri = new Triangle(x, y);
+    triangleList.push(tri);
 });
 
 $("#OptionsBttn").on('click', function(){
@@ -353,8 +311,10 @@ export function buttonBought(button_id, self){
     disableButton(button_id);
 }
 
-
-const nomCoinImgSrc = "./assets/images/NomCoin.png";
+const triangleIcon = `
+<svg class="triangle-svg" viewBox="0 0 32 32" role="img">
+    <polygon points="16,3 32,32 3,32" style="fill:green;"/>
+</svg>`;
 //Check all game buttons and update their status
 export function buttonCheck(){
     for (let [key, value] of Object.entries(upgrades)){
@@ -367,6 +327,9 @@ export function buttonCheck(){
         } else if (value.type == "square"){
             $("#"+value.id).prop("disabled", value.cost.greaterThan(gameState.squares));
             $("#"+value.id).html(`<div class="icon-square"></div>${formatNum(value.cost)}`);
+        } else if (value.type == "triangle"){
+            $("#"+value.id).prop("disabled", value.cost.greaterThan(gameState.triangles));
+            $("#"+value.id).html(`<div class="icon-triangle">${triangleIcon}</div>${formatNum(value.cost)}`);
         }
 
         if (value.level >= value.maxlevel){
