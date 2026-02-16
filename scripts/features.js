@@ -1,7 +1,7 @@
 import { dotList, gameState, roboList, shopUpgrades, squareList, upgrades } from './data.js'
-import { createDot, spawnSquare } from './consumables.js';
+import { createDot, spawnSquare, spawnTriangle } from './consumables.js';
 import { resetUpgrades } from './gameFiles.js';
-import { calcNomGain, setSquareSpawnRate, formatNum, setSquaresALL } from './util.js';
+import { calcNomGain, setSquareSpawnRate, formatNum, setSquaresALL, setTrianglesALL } from './util.js';
 import { updateNomScoreBoost } from './score.js';
 import { addNomUpgrade, addUpgrade } from './display.js';
 import { progressGameStage } from './main.js';
@@ -13,7 +13,7 @@ export function unlockSquare(){
         //Reduce coins
         gameState.nomCoins = gameState.nomCoins.minus(upgrade.cost);
         //Update level
-        upgrades.unlockSquares.level = upgrades.increaseSquareValue.level +1;
+        upgrades.unlockSquares.level++;
         upgrades.unlockSquares.bought = true;
     }
     $("#toggleSquareUpgrades").show();
@@ -36,6 +36,32 @@ export function unlockSquare(){
     addUpgrade("#squareUpgrades", upgrades.increaseDotValMaxSquare);
     addNomUpgrade("#nomUpgrades", upgrades.keepSquareUpgrades);
     addNomUpgrade("#nomUpgrades", upgrades.unlockTriangles);
+}
+
+export function unlockTriangles(){
+    const upgrade = upgrades.unlockTriangles;
+    if (!upgrade.bought && gameState.nomCoins.greaterThanOrEqualTo(upgrade.cost)){
+        //Reduce coins
+        gameState.nomCoins = gameState.nomCoins.minus(upgrade.cost);
+        //Update level
+        upgrades.unlockTriangles.level++;
+        upgrades.unlockTriangles.bought = true;
+    }
+    $("#triangles").show();
+    $("#activeTriangleDisplay").show();
+    $("#triangleDisplay").show();
+    $("#toggleTriangleUpgrades").show();
+    $("#triangleStats").show();
+    $("#triangleUpgrades").show();
+    //Add upgrades to html
+    addUpgrade("#triangleUpgrades", upgrades.increaseTriangleValue);
+    addUpgrade("#triangleUpgrades", upgrades.increaseTriangleMulti);
+    addUpgrade("#triangleUpgrades", upgrades.increaseTriangleSpawnRate);
+    addUpgrade("#triangleUpgrades", upgrades.increaseTriangleSpawnCount);
+    addUpgrade("#triangleUpgrades", upgrades.increaseMaxTriangleCount);
+    $("#triangleUpgrades").find(".upgrades-grid").append(`<h2>Other</h2>`);
+    spawnTriangle();
+    setTrianglesALL();
 }
 
 //Enable the Auto feed Button
