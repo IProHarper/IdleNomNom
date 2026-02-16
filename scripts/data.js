@@ -2,6 +2,7 @@ import "./break_infinity.js";
 
 export var dotList = [];
 export var squareList = [];
+export var triangleList = [];
 export var roboList = [];
 export var mousePos = {
     x: 0,
@@ -19,14 +20,13 @@ export var mouseNom = {
 }
 
 export var options = {
-    drawDots: true,
-    drawSquares: true,
-    drawTriangles: true,
-    drawFloatingDotText: true,
-    drawFloatingSquareText: true,
-    drawFloatingTriangleText: true,
-    drawRoboNoms: true
-
+    DrawDots: true,
+    DrawSquares: true,
+    DrawTriangles: true,
+    DrawDotsText: true,
+    DrawSquaresText: true,
+    DrawTrianglesText: true,
+    DrawRoboNoms: true
 }
 
 export const gameStages = [
@@ -522,6 +522,90 @@ export var upgrades = {
         level: 0,
         maxlevel: 1,
         resetTier: 1
+    },
+    increaseTriangleValue : {
+        id: "upgradeTriangleValue",
+        name: "Triangle Value",
+        desc: "Increase Triangle Value.",
+        type: "triangle",
+        increase: new Decimal(1),
+        baseCost: new Decimal(3),
+        cost: new Decimal(3),
+        upgradeScale: 1.1,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 100,
+        resetTier: 1
+    },
+     increaseTriangleMulti : {
+        id: "upgradeTriangleMulti",
+        name: "Triangle Multiplier X",
+        desc: "Multi + 3",
+        type: "triangle",
+        increase: new Decimal(3),
+        baseCost: new Decimal(50),
+        cost: new Decimal(50),
+        upgradeScale: 2,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 5,
+        resetTier: 1
+    },
+    increaseTriangleSpawnRate : {
+        id: "upgradeTriangleSpawnRate",
+        name: "Spawn Rate +",
+        desc: "Increase the spawn rate",
+        type: "triangle",
+        increase: 0.5,
+        baseCost: new Decimal(25),
+        cost: new Decimal(25),
+        upgradeScale: 1.36,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 10,
+        resetTier: 1
+    },
+    increaseTriangleSpawnCount : {
+        id: "upgradeTriangleSpawnCount",
+        name: "Triangle Spawn Count",
+        desc: "Increase the amount of triangles that spawn",
+        type: "triangle",
+        increase: 1,
+        baseCost: new Decimal(10),
+        cost: new Decimal(10),
+        upgradeScale: 1.21,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 50,
+        resetTier: 1
+    },
+    increaseMaxTriangleCount : {
+        id: "upgradeMaxTriangleCount",
+        name: "Max Triangles",
+        desc: "Increase the amount of triangles that can exist at the same time",
+        type: "triangle",
+        increase: 5,
+        baseCost: new Decimal(25),
+        cost: new Decimal(25),
+        upgradeScale: 2.02,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 50,
+        resetTier: 0
+    },
+    unlockAutoBuyDotUpgrades : {
+        id: "unlockAutoBuyDots",
+        name: "Unlock Auto Buyers",
+        desc: "Auto Buyers will purchase any affordable Dot Upgrades",
+        type: "square",
+        increase: 1,
+        baseCost: new Decimal(10),
+        cost: new Decimal(10),
+        upgradeScale: 1.21,
+        level: 1,
+        minlevel: 1,
+        maxlevel: 50,
+        resetTier: 0
     },
     unlockExtraNomUpgrades : {
         id: "unlockNomUpgrades",
