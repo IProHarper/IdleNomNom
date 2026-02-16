@@ -1,9 +1,10 @@
 import { increaseScore } from './score.js'
-import { gameState, dotList, squareList } from './data.js';
+import { gameState, dotList, squareList, triangleList } from './data.js';
 // import { playEatDotSound } from './soundHandler.js';
 import { getCanvasCentre } from './util.js';
 import Dot from './dots.js';
 import Square from './squares.js';
+import { Triangle } from './triangle.js';
 
 
 export function spawnDot(){
@@ -17,6 +18,12 @@ export function spawnSquare(){
         if (squareList.length < gameState.squareMaxCount){
             const { x, y } = getCanvasCentre();
             squareList.push(new Square(x, y));
+        }
+    }
+export function spawnTriangle(){
+        if (triangleList.length < gameState.triangleMaxCount){
+            const { x, y } = getCanvasCentre();
+            triangleList.push(new Triangle(x, y, 25));
         }
     }
 
