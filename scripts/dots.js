@@ -35,8 +35,9 @@ export default class Dot {
 
         // Bounce off big central dot
         const { x: cx, y: cy } = getCanvasCentre();
+        const centreDotR = 25;
         const dist = distance(this.x, this.y, cx, cy);
-        if (dist < 25 + this.r) {
+        if (dist < centreDotR + this.r) {
             // Compute normal vector and reflect velocity
             const nx = (this.x - cx) / dist;
             const ny = (this.y - cy) / dist;
@@ -45,7 +46,7 @@ export default class Dot {
             this.vy -= 2 * dot * ny;
 
             // Push dot just outside the big dot
-            const overlap = 25 + this.r - dist;
+            const overlap = centreDotR + this.r - dist;
             this.x += nx * overlap;
             this.y += ny * overlap;
         }
@@ -53,7 +54,7 @@ export default class Dot {
     const distToNom = distance(this.x, this.y, mouseNom.x, mouseNom.y);
     if (distToNom < this.r + mouseNom.radius) {
       this.eaten = true;
-      if (options.drawFloatingDotText){
+      if (options.DrawDotsText){
               showFloatingText(increaseScore(), this.x, this.y, "white");
       } else {
         increaseScore();
