@@ -1,8 +1,9 @@
-import { gameState, roboList, upgrades } from "./data.js";
-import { createDot, spawnDot, spawnSquare } from "./consumables.js";
+import { gameState, options, roboList, upgrades } from "./data.js";
+import { createDot, spawnDot, spawnSquare, spawnTriangle } from "./consumables.js";
 import "./break_infinity.js";
 import { RoboNom } from "./nomnom.js";
 import { setDotValueMaxLvl, setRoboNomMaxLevel, setSquareDotMulti, setSquareMaxCount, setSquareMulti, setSquareResetTier, setSquareSpawnCount, setSquareValue } from "./Upgrades/squareUpgrades.js";
+import { setTriangleMaxCount, setTriangleMulti, setTriangleSpawnCount, setTriangleSpawnRate, setTriangleValue } from "./Upgrades/triangleUpgrades.js";
 
 
 //Utils
@@ -38,7 +39,10 @@ export function calcBuyMax(upgradeData){
       case "square":
         moneyType = gameState.squares;
         break;
-
+      case "triangle":
+        moneyType = gameState.triangles;
+        break;
+        
       default:
         console.warn("Unknown handler for moneyType:"+upgradeData.type);
     }
@@ -98,6 +102,20 @@ export function setDotSpawnRate(){
       }, gameState.dotSpawnInterval*1000);
 }
 
+export function setOptions(){
+      document.querySelectorAll('.toggle input').forEach(chk => {
+      const id = chk.id;
+      const optionID = id.replace("toggle", "")
+
+      chk.checked = options[optionID];
+      const isOn = chk.checked;
+
+      chk.classList.toggle('on', isOn);
+      chk.classList.toggle('off', !isOn);
+      
+    });
+}
+
 
 export function setDotsALL(){
   setDotValue();
@@ -113,15 +131,25 @@ export function setDotsALL(){
 export function setSquaresALL(){
   if (!upgrades.unlockSquares.bought){return;}
   spawnSquare();
-  setSquareSpawnRate();
   setRoboNomMaxLevel();
   setSquareDotMulti();
   setSquareMaxCount();
   setSquareSpawnCount();
+  setSquareSpawnRate();
   setSquareValue();
   setSquareMulti();
   setSquareResetTier();
   setDotValueMaxLvl();
+}
+
+export function setTrianglesALL(){
+  if (!upgrades.unlockTriangles.bought){return;}
+  spawnTriangle();
+  setTriangleValue();
+  setTriangleMulti();
+  setTriangleMaxCount();
+  setTriangleSpawnCount();
+  setTriangleSpawnRate();
 }
 
 export function setSquareSpawnRate(){
@@ -136,6 +164,8 @@ export function setSquareSpawnRate(){
           }
       }, gameState.squareSpawnInterval*1000);
 }
+
+
 
 
 export function setSpeed(){
