@@ -1,4 +1,4 @@
-import { gameState, upgrades, gameStages, dotList, mouseNom, roboList, squareList, options } from "./data.js";
+import { gameState, upgrades, gameStages, dotList, mouseNom, roboList, squareList, options, triangleList } from "./data.js";
 import { unlockSquare } from "./features.js";
 import { progressGameStage } from "./main.js";
 import { calcNomGain, formatNum, getCanvasCentre } from "./util.js";
@@ -17,6 +17,7 @@ export function initDisplay(){
     //Set display to only have upgrades at first
     $("#nomUpgrades").toggleClass("hidden");
     $("#squareUpgrades").toggleClass("hidden");
+    $("#triangleUpgrades").toggleClass("hidden");
     $("#customize-container").toggleClass("hidden");
 
     //Add extra upgrades to page:
@@ -56,10 +57,12 @@ export function initDisplay(){
 }
 
 export function updateStats(){
-    $("#score").text(formatNum(gameState.score))
+    $("#score").text(formatNum(gameState.score));
     $("#squares").text(formatNum(gameState.squares));
-    $("#activeDots").text(dotList.length+"/"+gameState.dotMaxCount)
-    $("#activeSquares").text(squareList.length+"/"+gameState.squareMaxCount)
+    $("#triangles").text(formatNum(gameState.triangles));
+    $("#activeDots").text(dotList.length+"/"+gameState.dotMaxCount);
+    $("#activeSquares").text(squareList.length+"/"+gameState.squareMaxCount);
+    $("#activeTriangles").text(triangleList.length+"/"+gameState.triangleMaxCount);
     
     //Dots
     $("#dotBaseValueText").text(formatNum(gameState.dotValue));
@@ -81,6 +84,16 @@ export function updateStats(){
     $("#squareMaxSpawnText").text(gameState.squareMaxCount);
     $("#squaresEatenText").text(formatNum(gameState.squaresEaten));
     $("#lifetimeSquaresText").text(formatNum(gameState.lifetimeSquares));
+
+    //Triangle Stats:
+    $("#triangleBaseValueText").text(formatNum(gameState.triangleValue));
+    $("#triangleMultiText").text(formatNum(gameState.triangleMulti));
+    $("#triangleAwardText").text(formatNum(gameState.triangleValue.times(gameState.triangleMulti)));
+    $("#triangleSpawnAmountText").text(gameState.triangleSpawnCount);
+    $("#triangleSpawnRateText").text(gameState.triangleSpawnInterval+"s");
+    $("#triangleMaxSpawnText").text(gameState.triangleMaxCount);
+    $("#trianglesEatenText").text(formatNum(gameState.trianglesEaten));
+    $("#lifetimeTrianglesText").text(formatNum(gameState.lifetimeTriangles));
 
     //Nomscensions
     $("#nomscensionCountText").text(formatNum(gameState.nomscensionCount));
@@ -172,11 +185,23 @@ export function updateCanvas(){
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    drawFloatingTexts(ctx);
     drawCentreDot(ctx);
 
+    //Draw RoboNoms
+    if (options.DrawRoboNoms){
+        for (const robo of roboList) {
+            robo.update(canvas, dotList);
+            robo.draw(ctx);
+        }
+    } else {
+        for (const robo of roboList) {
+            robo.update(canvas, dotList);
+        }
+    } 
 
     //Draw Dots
-    if (options.drawDots){
+    if (options.DrawDots){
         for (const dot of dotList) {
             dot.update();
             dot.draw(ctx);
@@ -191,7 +216,7 @@ export function updateCanvas(){
     dotList.splice(0, dotList.length, ...dotList.filter(dot => !dot.eaten));
 
     //Draw Squares
-    if (options.drawSquares){
+    if (options.DrawSquares){
         for (const square of squareList) {
             square.update(canvas);
             square.draw(ctx);
@@ -205,20 +230,23 @@ export function updateCanvas(){
     //Remove eaten squares
     squareList.splice(0, squareList.length, ...squareList.filter(square => !square.eaten));
 
-    //Draw RoboNoms
-    if (options.drawRoboNoms){
-        for (const robo of roboList) {
-            robo.update(canvas, dotList);
-            robo.draw(ctx);
+    //Draw Triangles
+    if (options.DrawTriangles){
+        for (const triangle of triangleList) {
+            triangle.update(canvas);
+            triangle.draw(ctx);
         }
     } else {
-        for (const robo of roboList) {
-            robo.update(canvas, dotList);
-        }
-    } 
+       for (const triangle of triangleList) {
+            triangle.update(canvas);
+        } 
+    }
+    
+    // Remove eaten dots
+    triangleList.splice(0, triangleList.length, ...triangleList.filter(triangle => !triangle.eaten));
+
     
 
-    drawFloatingTexts(ctx);
     drawMouseNom(ctx);
     requestAnimationFrame(updateCanvas);
 }
