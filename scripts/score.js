@@ -25,6 +25,15 @@ export function eatSquare(){
     return value
 }
 
+export function eatTriangle(){
+    const value = gameState.triangleValue.times(gameState.triangleMulti);
+    gameState.triangles = gameState.triangles.plus(value);
+    gameState.trianglesEaten = gameState.trianglesEaten.plus(1);
+    gameState.lifetimeTriangles = gameState.lifetimeTriangles.plus(1);
+    progressGameStage();
+    return value
+}
+
 export function updateNomScoreBoost(){
     gameState.nomScoreBoostAmount = new Decimal(gameState.lifetimeNomCoins / 100);
     if (gameState.nomScoreBoostAmount.lessThan(1)) {
