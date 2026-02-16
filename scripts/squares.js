@@ -4,7 +4,7 @@ import { getCanvasCentre, randomDirection } from "./util.js";
 
 export default class Square {
     constructor(x, y) {
-        const { vx, vy } = randomDirection();
+        const { vx, vy } = randomDirection(5);
         this.x = x;
         this.y = y;
         this.size = 15;
@@ -80,7 +80,7 @@ export default class Square {
         if (dist < eaterRadius) {
             this.eaten = true;
 
-            if(options.drawFloatingSquareText) {
+            if(options.DrawSquaresText) {
                 showFloatingText(eatSquare(), this.x, this.y, "#6F07F0");
             } else {
                 eatSquare();
