@@ -1,0 +1,21 @@
+Issues:
+First nom upgrade of max dot value doesn't increase
+
+
+Features:
+Element based things
+Unlock Survivla Mode. Survival mode lets you find Water, Earth, Fire and Air. 
+Each element upgrade allows you to expand your survivial mode
+Auto buy upgrades
+
+Clean ups:
+Convert upgrades to classes. methods would include cost increase, level increase, purchased
+Optimise display updates
+Update save file to be encrypted.
+
+
+
+
+
+
+
