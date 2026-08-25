@@ -1,4 +1,4 @@
-import { dotList, gameState, roboList, shopUpgrades, squareList, upgrades } from './data.js'
+import { dotList, gameState, roboList, shopUpgrades, squareList, triangleList, upgrades } from './data.js'
 import { createDot, spawnSquare, spawnTriangle } from './consumables.js';
 import { resetUpgrades } from './gameFiles.js';
 import { calcNomGain, setSquareSpawnRate, formatNum, setSquaresALL, setTrianglesALL } from './util.js';
@@ -20,6 +20,8 @@ export function unlockSquare(){
     $("#squareDisplay").show();
     $("#squareStats").show();
     $("#activeSquareDisplay").show();
+    $("#drawSquaresToggle").show();
+    $("#squaresTextToggle").show();
     //Set all upgrades
     spawnSquare();
     setSquaresALL();
@@ -53,6 +55,8 @@ export function unlockTriangles(){
     $("#toggleTriangleUpgrades").show();
     $("#triangleStats").show();
     $("#triangleUpgrades").show();
+    $("#drawTrianglesToggle").show();
+    $("#trianglesTextToggle").show();
     //Add upgrades to html
     addUpgrade("#triangleUpgrades", upgrades.increaseTriangleValue);
     addUpgrade("#triangleUpgrades", upgrades.increaseTriangleMulti);
@@ -60,8 +64,22 @@ export function unlockTriangles(){
     addUpgrade("#triangleUpgrades", upgrades.increaseTriangleSpawnCount);
     addUpgrade("#triangleUpgrades", upgrades.increaseMaxTriangleCount);
     $("#triangleUpgrades").find(".upgrades-grid").append(`<h2>Other</h2>`);
+    addUpgrade("#triangleUpgrades", upgrades.unlockAutoBuyDots);
     spawnTriangle();
     setTrianglesALL();
+}
+
+export function unlockAutoBuyDots(){
+    const upgrade = upgrades.unlockAutoBuyDots;
+    if (!upgrade.bought && gameState.triangles.greaterThanOrEqualTo(upgrade.cost)){
+        //Reduce triangles
+        gameState.triangles = gameState.triangles.minus(upgrade.cost);
+        //Update level
+        upgrades.unlockAutoBuyDots.level++;
+        upgrades.unlockAutoBuyDots.bought = true;
+    }
+    //Reveal the auto-buy toggles on the Dot upgrade cards
+    $(".auto-buy-toggle").addClass("unlocked");
 }
 
 //Enable the Auto feed Button
@@ -98,11 +116,13 @@ export function nomscend(){
     }
     gameState.lifetimeNomCoins = gameState.lifetimeNomCoins.plus(gainedCoins);
     gameState.score = new Decimal(0);
+    gameState.squares = new Decimal(0);
     gameState.nomscensionCount = gs.nomscensionCount.plus(1);
     gameState.nomscendScore = new Decimal(0);
     clearInterval(gameState.dotIntervalID);
     dotList.length = 0;
     squareList.length = 0;
+    triangleList.length = 0;
     roboList.length = 0;
     gameState.nomsecScoreReq = gs.nomsecScoreReq.times(11);
     resetUpgrades();

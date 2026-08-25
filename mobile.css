@@ -27,28 +27,10 @@
     /* ------------------------------
        TOP BUTTONS
        ------------------------------ */
-    #ResetBttn,
-    #SaveBttn,
-    #OptionsBttn {
-        position: fixed;
+    #top-toolbar {
         top: 5px;
         z-index: 999;
-        transform: scale(1.1);
-    }
-
-    #ResetBttn {
-        left: 10px !important;
-    }
-
-    #SaveBttn {
-        left: auto !important;
-        right: 10px !important;
-    }
-    #OptionsBttn{
-        left: auto !important;
-        right: 10px !important;
-        top:80px;
-        z-index: 99999;
+        transform: translateX(-50%) scale(1.1);
     }
 
 

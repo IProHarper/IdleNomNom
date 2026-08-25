@@ -147,6 +147,7 @@ export function unlockRoboNoms(){
         //Upgrade Effect
         $("#baseUpgrades").find(".upgrades-grid").append(`<h2>Other</h2>`);
         addUpgrade("#baseUpgrades", upgrades.addRoboNom);
+        $("#drawRoboNomsToggle").show();
     }
 }
 

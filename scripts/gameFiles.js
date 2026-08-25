@@ -92,13 +92,21 @@ export function compareSaveData(data,name){
     }
 
 }
+//Set by checkGameVersion when an older save needs a one-time correction applied after its Upgrades data loads.
+let needsDotValMaxLevelFix = false;
+
 function checkGameVersion(gameData){
     //Pre overhaul requires a reset.
     if (gameData.gameVersion < 1.0){
         console.log(`Game Version old. Your version:${gameData.gameVersion}. New version:${gameState.gameVersion}`);
         $("#patchModal").show();
-        gameData.gameVersion = gameState.gameVersion;
+    } else if (gameData.gameVersion < 1.1){
+        //Pre-1.1 saves have increaseDotValMax.level starting at 0 instead of 1, which (given the
+        //pre-increment effect formula in upgradeDotValMax()) made every purchase's max-level bonus
+        //apply one purchase late. Corrected once the Upgrades save data has loaded, below.
+        needsDotValMaxLevelFix = true;
     }
+    gameData.gameVersion = gameState.gameVersion;
 }
 
 //Check Game files for existing save
@@ -112,7 +120,12 @@ export function checkSaveFile(){
     if (localStorage.getItem("Upgrades")){
         let data = JSON.parse(localStorage.getItem("Upgrades"));
         compareSaveData(data, "Upgrades")
-    } else { 
+        if (needsDotValMaxLevelFix){
+            upgrades.increaseDotValMax.level += 1;
+            upgrades.increaseDotValMax.cost = increaseCost(upgrades.increaseDotValMax);
+            upgrades.increaseDotValue.maxlevel = ((upgrades.increaseDotValMax.level-1)*upgrades.increaseDotValMax.increase)+100;//100 = base max level
+        }
+    } else {
         localStorage.setItem("Upgrades", JSON.stringify(upgrades));
     }
 

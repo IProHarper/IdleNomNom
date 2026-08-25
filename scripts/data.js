@@ -58,7 +58,7 @@ export const gameStages = [
 
 
 export var gameState = {
-    gameVersion: 1.0,
+    gameVersion: 1.1,
     score: new Decimal(0),
     liftimeScore: new Decimal(0),
     dotValue: new Decimal(1),
@@ -103,7 +103,25 @@ export var gameState = {
     triangleSpawnCount: 1,
     triangleSpawnInterval: 15,
     triangleSpawnIntervalID: 9999,
-    lifetimeTriangles: new Decimal(0)
+    lifetimeTriangles: new Decimal(0),
+    //Auto Buy toggles (per Dot upgrade, unlocked via unlockAutoBuyDots)
+    autoBuyDotValue: false,
+    autoBuyDotMulti: false,
+    autoBuyDotSpawnRate: false,
+    autoBuyDotSpawnCount: false,
+    autoBuyMaxDotCount: false,
+    //Customize panel theme unlocks (one-time purchase with Nom Coins, persists through Nomscension)
+    boughtThemes: {
+        default: false,
+        lachlan: false,
+        cillian: false,
+        conall: false,
+        aidan: false,
+        rino: false,
+        michan: false,
+        kinsan: false,
+        dad: false
+    }
 }
 
 
@@ -247,7 +265,7 @@ export var upgrades = {
         baseCost: new Decimal(2),
         cost: new Decimal(2),
         upgradeScale: 2.52,
-        level: 0,
+        level: 1,
         maxlevel: 20,
         resetTier: 1
     },
@@ -280,7 +298,7 @@ export var upgrades = {
     increaseNomCoinMulti : {
         id: "upgradeNomCoinMulti",
         name: "Nom Coin x2",
-        desc: "Nom coin gain x2 per level!",
+        desc: "Nom coin gain + 2 per level!",
         type: "nomCoins",
         increase: 2,
         baseCost: new Decimal(20),
@@ -398,20 +416,6 @@ export var upgrades = {
         maxlevel: 50,
         resetTier: 0
     },
-    unlockAutoBuyDotUpgrades : {
-        id: "unlockAutoBuyDots",
-        name: "Unlock Auto Buyers",
-        desc: "Auto Buyers will purchase any affordable Dot Upgrades",
-        type: "square",
-        increase: 1,
-        baseCost: new Decimal(10),
-        cost: new Decimal(10),
-        upgradeScale: 1.21,
-        level: 1,
-        minlevel: 1,
-        maxlevel: 50,
-        resetTier: 0
-    },
     increaseMaxSquareCount : {
         id: "upgradeMaxSquareCount",
         name: "Max Square",
@@ -513,7 +517,7 @@ export var upgrades = {
     unlockTriangles : {
         id: "unlockTriangles",
         name: "Unlock Triangles",
-        desc: "Triangles will allow you to boost squares even more. These don't reset on Nomscension",
+        desc: "Unlocks Triangles, a new resource with its own set of upgrades. Most of these upgrades don't reset on Nomscension!",
         type: "nomCoins",
         increase: 1,
         baseCost: new Decimal(2e40),
@@ -593,19 +597,19 @@ export var upgrades = {
         maxlevel: 50,
         resetTier: 0
     },
-    unlockAutoBuyDotUpgrades : {
+    unlockAutoBuyDots : {
         id: "unlockAutoBuyDots",
         name: "Unlock Auto Buyers",
-        desc: "Auto Buyers will purchase any affordable Dot Upgrades",
-        type: "square",
+        desc: "Automatically buy affordable Dot Upgrades. Toggle which ones auto-buy from each Dot Upgrade card. Stays unlocked through Nomscension.",
+        type: "triangle",
         increase: 1,
-        baseCost: new Decimal(10),
-        cost: new Decimal(10),
-        upgradeScale: 1.21,
-        level: 1,
-        minlevel: 1,
-        maxlevel: 50,
-        resetTier: 0
+        baseCost: new Decimal(100),
+        cost: new Decimal(100),
+        upgradeScale: 1,
+        level: 0,
+        maxlevel: 1,
+        resetTier: 2,
+        bought: false
     },
     unlockExtraNomUpgrades : {
         id: "unlockNomUpgrades",
@@ -623,7 +627,7 @@ export var upgrades = {
     increaseBigDotChance : {
         id: "upgradeBigDotChance",
         name: "Big Dot Spawn Chance",
-        desc: "Adds a chance to send a mega dot woth 10x!",
+        desc: "Adds a chance to send a mega dot worth 10x!",
         type: "nomCoins",
         increase: 1,
         baseCost: new Decimal(25),

@@ -3,6 +3,7 @@
   --primary-color: #3399FF;
   --primary-hover: #33D;
   --success-color: #5cb85c;
+  --danger-color: #d9534f;
   --disabled-color: #95a5a6;
   --bg-primary: #323436;
   --bg-secondary: #404056;
@@ -18,6 +19,10 @@ body {
     color: white;
     text-align: center;
     font-family: pixleFont, Arial, sans-serif;
+}
+
+h1 {
+    margin-top: 70px;
 }
 
 
@@ -203,28 +208,67 @@ body {
 }
 
 /* Buttons */
-#ResetBttn {
-    float: right;
-    background-color: Red;
-    position: absolute;
-    z-index: 5;
-    left:20vw;
-    top:10px;
-}
 #resetProgressModal {
-    float: right;
     background-color: Red;
-    position: absolute;
-    z-index: 5;
-    left:20vw;
-    top:10px;
+    margin: 0.5em;
 }
-#SaveBttn {
-    background-color: green;
-    position: absolute;
-    z-index: 2;
-    left:25vw;
-    top:10px;
+
+/* Top toolbar (Reset/Save/Options) - separate fixed strip, top-center,
+   styled to match the #menu-left/#menu-right toolbars without merging into them */
+#top-toolbar {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 40px;
+  width: fit-content;
+  background: rgba(20, 20, 20, 0.85);
+  border-left: 2px solid var(--border-color);
+  border-right: 2px solid var(--border-color);
+  border-bottom: 2px solid var(--border-color);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  box-shadow: 0 4px 15px rgba(51, 236, 255, 0.25);
+  z-index: 200;
+  backdrop-filter: blur(6px);
+}
+
+.toolbar-btn {
+  padding: 6px 14px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(51, 236, 255, 0.25);
+  transition: all 0.2s ease, transform 0.15s ease;
+}
+.toolbar-btn:hover {
+  background: rgba(25, 25, 25, 1);
+  box-shadow: 0 0 14px rgba(51, 236, 255, 0.45);
+  transform: translateY(-2px);
+}
+.toolbar-btn:active {
+  transform: translateY(0px) scale(0.97);
+}
+.toolbar-btn-danger {
+  border-color: var(--danger-color);
+  color: var(--danger-color);
+}
+.toolbar-btn-danger:hover {
+  box-shadow: 0 0 14px rgba(217, 83, 79, 0.5);
+}
+.toolbar-btn-success {
+  border-color: var(--success-color);
+  color: var(--success-color);
+}
+.toolbar-btn-success:hover {
+  box-shadow: 0 0 14px rgba(92, 184, 92, 0.5);
 }
 #nomscensionBttn{
     font-size: large;
@@ -255,17 +299,28 @@ button {
     font-family: pixleFont, Arial, sans-serif;
     font-size: small;
     word-spacing: -50%;
+    transition: filter 0.15s ease, transform 0.1s ease;
    }
-   
-button:hover {
-    background-color: #66B3FF;
+
+/* filter/transform (not background) so hover still shows up on buttons
+   that set their own background inline, e.g. the Customize theme buttons */
+button:hover:not(:disabled) {
+    filter: brightness(1.15);
+    transform: translateY(-1px);
 }
-button:active{
-    background-color: #33D;
+button:active:not(:disabled) {
+    filter: brightness(0.9);
+    transform: translateY(0);
 }
 button:disabled {
     background-color: #ccc;
     color: #666;
+    cursor: not-allowed;
+}
+/* Customize theme buttons set their own background inline (see comment above),
+   so signal "can't afford" via filter instead, same trick as the hover rule. */
+.buy-button:disabled {
+    filter: grayscale(0.7) brightness(0.7);
     cursor: not-allowed;
 }
 #feedNomNom {
@@ -476,56 +531,18 @@ button:disabled {
 }
 
 
-#OptionsBttn{
-  position: absolute;
-  z-index: 2;
-  left:30vw;
-  top:10px;
-}
-
-#customize-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 16vw;
-  background: var(--bg-panel, rgba(20, 20, 20, 0.95));
-  border-left: none;
-  border-right: 2px solid var(--border-color);
-  box-shadow: 0 0 20px rgba(51, 236, 255, 0.4);
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  z-index: 100;
-}
-
-#customize-container.hidden{
-  transform: translateX(-100%);
-}
-
-
-#stats-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 16vw;
-  background: var(--bg-panel, rgba(20, 20, 20, 0.95));
-  border-left: none;
-  border-right: 2px solid var(--border-color);
-  box-shadow: 0 0 20px rgba(51, 236, 255, 0.4);
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  z-index: 100;
-}
-#stats-container.hidden{
-  transform: translateX(-100%);
-}
 .stat-value{
   color: #33ecff;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+.stat-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex-shrink: 1;
 }
 #menu-left {
   position: fixed;
@@ -648,15 +665,6 @@ button:disabled {
   transition: transform 0.4s ease-in-out;
   transform: translateX(0);
 }
-.upgrades-container-left h2{
-    margin-top:25px;
-    font-size: x-large;
-    text-align: left;
-    font-size: 28px;
-    color: var(--text-primary);
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 10px;
-}
 
 
 /* Sidebar container for upgrades */
@@ -679,24 +687,21 @@ button:disabled {
   transition: transform 0.4s ease-in-out;
   transform: translateX(0);
 }
-.upgrades-container-right h2{
-    margin-top:25px;
-    font-size: x-large;
-    text-align: left;
+.upgrades-container-left h2,
+.upgrades-container-right h2 {
+    margin-top: 25px;
     font-size: 28px;
+    text-align: left;
     color: var(--text-primary);
     border-bottom: 2px solid var(--border-color);
     padding-bottom: 10px;
 }
-/* Hidden (slid out) state */
-#baseUpgrades.hidden {
-  transform: translateX(100%);
+/* Hidden (slid out) state - direction depends on which side the panel docks to */
+.upgrades-container-left.hidden {
+  transform: translateX(-100%);
 }
-#squareUpgrades.hidden{
+.upgrades-container-right.hidden {
   transform: translateX(100%);
-}
-#triangleUpgrades.hidden{
-    transform: translateX(100%);
 }
 .upgrade-card:last-child {
   margin-bottom: 100px;
@@ -712,40 +717,14 @@ button:disabled {
 
 
 /* Make scrollbar subtle */
-.upgrades-container-left::-webkit-scrollbar {
-  width: 8px;
-}
-.upgrades-container-left::-webkit-scrollbar-thumb {
-  background-color: var(--border-color);
-  border-radius: 4px;
-}
+.upgrades-container-left::-webkit-scrollbar,
 .upgrades-container-right::-webkit-scrollbar {
   width: 8px;
 }
+.upgrades-container-left::-webkit-scrollbar-thumb,
 .upgrades-container-right::-webkit-scrollbar-thumb {
   background-color: var(--border-color);
   border-radius: 4px;
-}
-
-#nomUpgrades{
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100vh;                /* Full viewport height */
-  width: 16vw;                 /* Adjust width as needed */
-  background: var(--bg-panel, rgba(20, 20, 20, 0.95));
-  border-left: 2px solid var(--border-color);
-  box-shadow: 0 0 20px rgba(51, 236, 255, 0.4);
-  overflow-y: auto;             /* Scroll vertically */
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  z-index: 99;                 /* Stays above other game elements */
-  transition: transform 0.4s ease-in-out;
-  transform: translateX(0);
-}
-#nomUpgrades.hidden {
-  transform: translateX(100%);
 }
 
 .toggle-upgrades-btn:hover {
@@ -756,7 +735,7 @@ button:disabled {
 .upgrades-grid {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 }
 
 
@@ -764,12 +743,17 @@ button:disabled {
 .upgrade-card {
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 12px;
   background: var(--bg-card);
-  border-radius: 12px;
-  padding: 5px;
+  border-radius: 10px;
+  padding: 8px 12px;
   border: 2px solid var(--border-color);
-  box-shadow: 0 4px 6px var(--shadow);
-  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px var(--shadow);
+  transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
 }
@@ -780,16 +764,52 @@ button:disabled {
 }
 
 .upgrade-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 12px var(--shadow);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--shadow);
   border-color: var(--primary-color);
+}
+
+/* Reserve corner space for the auto-buy toggle */
+.upgrade-card.has-auto-buy {
+  padding-bottom: 30px;
+}
+
+/* Auto-buy toggle, pinned bottom-right; hidden until unlockAutoBuyDots is bought */
+.auto-buy-toggle {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  bottom: 6px;
+  right: 10px;
+  width: 40px;
+  height: 21px;
+  margin: 0;
+  gap: 0;
+}
+.auto-buy-toggle.unlocked {
+  visibility: visible;
+  pointer-events: auto;
+}
+.auto-buy-toggle .slider {
+  top: 0;
+  left: 0;
+  right: auto;
+  width: 40px;
+  height: 21px;
+}
+.auto-buy-toggle .slider::after {
+  width: 15px;
+  height: 15px;
+}
+.auto-buy-toggle input:checked + .slider::after {
+  transform: translateX(19px);
 }
 .upgrade-actions {
     display: flex;
     flex-direction: row;
+    flex: 0 0 auto;
     gap: 8px;
-    justify-content: center;
-    width: 100%;
+    justify-content: flex-end;
 }
 
 /* Main upgrade button */
@@ -839,60 +859,79 @@ button:disabled {
 /* Upgrade Header */
 .upgrade-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 12px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 220px;
+  min-width: 0;
 }
 
 .upgrade-icon {
-  font-size: 20px;
-  margin-right: 12px;
+  font-size: 18px;
   pointer-events: none;
+  flex-shrink: 0;
 }
 
 .upgrade-info {
   flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 8px;
 }
 
 .upgrade-name {
-  font-size: medium;
-  text-decoration: underline;
+  order: 1;
+  font-size: 0.9em;
   font-weight: 600;
-  margin: 0 0 4px 0;
+  margin: 0;
   color: var(--text-primary);
   text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .upgrade-level {
-  font-size: 0.8em;
+  order: 2;
+  font-size: 0.7em;
   color: var(--text-secondary);
   background: var(--bg-secondary);
-  padding: 2px 8px;
+  padding: 1px 7px;
   border-radius: 12px;
   display: inline-block;
+  flex-shrink: 0;
 }
 
 /* Upgrade Description */
 .upgrade-description {
-  font-size: small;
+  order: 3;
+  flex-basis: 100%;
+  font-size: 0.75em;
   word-spacing: -0.2em;
   color: var(--text-secondary);
-  margin: auto;
+  margin: 0;
   text-align: left;
 }
 
 /* Upgrade Stats */
 .upgrade-stats {
-  font-size: 0.8em;
+  font-size: 0.78em;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-around;
-  margin: 12px 0;
-  padding: 12px;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 10px 0 0 0;
+  padding: 10px;
   background: var(--bg-secondary);
   border-radius: 8px;
   gap: 0.4em;
+}
+.upgrade-stats:last-child {
+  margin-bottom: 10px;
 }
 .stat-name {
   font-size: medium;

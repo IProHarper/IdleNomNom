@@ -35,6 +35,7 @@ export function upgradeDotMulti(){
 
 export function upgradeDotSpawnRate(){
     const upgrade = upgrades.increaseDotSpawnRate;
+    if (upgrade.level >= upgrade.maxlevel){ return; }
     if (gameState.score.greaterThanOrEqualTo(upgrade.cost)){
         //Reduce score
         gameState.score = gameState.score.minus(upgrade.cost);
@@ -50,6 +51,7 @@ export function upgradeDotSpawnRate(){
 
 export function upgradeDotSpawnCount(){
     const upgrade = upgrades.increaseDotSpawnCount;
+    if (upgrade.level >= upgrade.maxlevel){ return; }
     if (gameState.score.greaterThanOrEqualTo(upgrade.cost)){
         //Reduce score
         gameState.score = gameState.score.minus(upgrade.cost);
@@ -65,6 +67,7 @@ export function upgradeDotSpawnCount(){
 
 export function upgradeMaxDotCount(){
     const upgrade = upgrades.increaseMaxDotCount;
+    if (upgrade.level >= upgrade.maxlevel){ return; }
     if (gameState.score.greaterThanOrEqualTo(upgrade.cost)){
         //Reduce score
         gameState.score = gameState.score.minus(upgrade.cost);

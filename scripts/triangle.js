@@ -120,12 +120,22 @@ export class Triangle {
 
     // ----------- BOUNCE OFF WALLS --------------------------------
     bounceOffWalls(canvas) {
-        if (this.x < this.size*3 + this.dashSpeed || this.x > canvas.width - this.size*3) {
-            this.vx *= -1;
+        const margin = this.size * 3;
+
+        if (this.x < margin) {
+            this.x = margin;
+            this.vx = Math.abs(this.vx);
+        } else if (this.x > canvas.width - margin) {
+            this.x = canvas.width - margin;
+            this.vx = -Math.abs(this.vx);
         }
-        
-        if (this.y < this.size*3  + this.dashSpeed || this.y > canvas.height - this.size*3) {
-            this.vy *= -1;
+
+        if (this.y < margin) {
+            this.y = margin;
+            this.vy = Math.abs(this.vy);
+        } else if (this.y > canvas.height - margin) {
+            this.y = canvas.height - margin;
+            this.vy = -Math.abs(this.vy);
         }
     }
 
