@@ -97,6 +97,7 @@ export function enableAutofeed(){
 }
 
 export function unlockNomscend(){
+    $("#nomCoinPill").show();
     $("#nomscendBttn").show();
     $("#nomscendUpgradesBttn").show();
     $("#nomscensionBttn").show();

@@ -26,7 +26,8 @@ export var options = {
     DrawDotsText: true,
     DrawSquaresText: true,
     DrawTrianglesText: true,
-    DrawRoboNoms: true
+    DrawRoboNoms: true,
+    HudCollapsed: false
 }
 
 export const gameStages = [

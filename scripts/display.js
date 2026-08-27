@@ -43,9 +43,16 @@ export function initDisplay(){
     $("#upgradeAutoFeedSpeedDesc").text(upgrades.autoFeed.desc);
 
 
+    //Restore the on-board HUD collapsed state from saved options
+    if (options.HudCollapsed){
+        $("#board-hud").addClass("collapsed");
+        $("#hudToggle").attr("aria-expanded", "false");
+    }
+
     //Display nomscention specfics buttons and areas if its unlocked.
+    $("#nomCoinPill").toggle(!!gameState.nomscentionUnlocked);
     if (gameState.nomscentionUnlocked) {
-        $("#nomscendUpgradesBttn").show(); 
+        $("#nomscendUpgradesBttn").show();
         $("#nomscensionBttn").show();
         $("#nomCoinDisplay").show();
         $("#toggleNomUpgrades").show();

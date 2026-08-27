@@ -115,48 +115,68 @@
         <button id="OptionsBttn" class="toolbar-btn">Options</button>
     </div>
     <div id="resource-container" class="resources">
-        <span class="resource-item">
+        <div class="resource-pill" data-res="score">
             <div class="icon-dot"></div>
-            <div id="activeDots" class="resource-amount">0/0</div>
-        </span>
-        <span class="resource-item">
-            <div class="icon-dot"></div>
-            <div id="score" class="resource-amount">0</div>
-        </span>
-        <span id="activeSquareDisplay" class="resource-item" style="display:none;">
-            <div class="icon-square"></div>
-            <div id="activeSquares" class="resource-amount">0/0</div>
-        </span>
-        <span id="squareDisplay" class="resource-item" style="display:none">
-            <div class="icon-square"></div>
-            <div id="squares" class="resource-amount">0</div>
-        </span>
-        <span id="activeTriangleDisplay" class="resource-item" style="display:none;"> 
-            <div class="icon-triangle">
-                <svg class="triangle-svg" viewBox="0 0 32 32" role="img">
-                    <polygon points="16,3 32,32 3,32" style="fill:green;"/>
-                </svg>
+            <div class="resource-body">
+                <span class="resource-label">Score</span>
+                <span id="score" class="resource-amount">0</span>
             </div>
-            <div id="activeTriangles" class="resource-amount" >0/0</div>
-        </span>
-        <span id="triangleDisplay" class="resource-item" style="display:none">
-            <div class="icon-triangle">
-                <svg class="triangle-svg" viewBox="0 0 32 32" role="img">
-                    <polygon points="16,3 32,32 3,32" style="fill:green;"/>
-                </svg>
-            </div>
-            <div id="triangles" class="resource-amount">0</div>
-        </span>
-        <div  class="resource-item">
-            <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-            <div id="nomCoinStatText" style="color:#33ecff">1</div>
-            <!-- (+<span id="nomCoinGainText" style="color:#33ecff">1</span>) -->
         </div>
-        
+        <div id="squareDisplay" class="resource-pill" data-res="square" style="display:none">
+            <div class="icon-square"></div>
+            <div class="resource-body">
+                <span class="resource-label">Squares</span>
+                <span id="squares" class="resource-amount">0</span>
+            </div>
+        </div>
+        <div id="triangleDisplay" class="resource-pill" data-res="triangle" style="display:none">
+            <div class="icon-triangle">
+                <svg class="triangle-svg" viewBox="0 0 32 32" role="img">
+                    <polygon points="16,3 32,32 3,32" style="fill:green;"/>
+                </svg>
+            </div>
+            <div class="resource-body">
+                <span class="resource-label">Triangles</span>
+                <span id="triangles" class="resource-amount">0</span>
+            </div>
+        </div>
+        <div id="nomCoinPill" class="resource-pill" data-res="nomcoin" style="display:none">
+            <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom Coins">
+            <div class="resource-body">
+                <span class="resource-label">Nom Coins</span>
+                <span id="nomCoinStatText" class="resource-amount">1</span>
+            </div>
+        </div>
     </div>
 
     <!-- GAME CANVAS -->
-    <canvas id="gameCanvas"></canvas>
+    <div id="board-wrap">
+        <canvas id="gameCanvas"></canvas>
+        <div id="board-hud">
+            <button id="hudToggle" type="button" aria-expanded="true" aria-label="Toggle board info">
+                <span id="hud-title">On board</span>
+                <span id="hud-caret">&#9650;</span>
+            </button>
+            <div id="hud-body">
+                <div class="hud-row" data-res="dot">
+                    <span class="icon-dot"></span>
+                    <span id="activeDots">0/0</span>
+                </div>
+                <div class="hud-row" id="activeSquareDisplay" data-res="square" style="display:none">
+                    <span class="icon-square"></span>
+                    <span id="activeSquares">0/0</span>
+                </div>
+                <div class="hud-row" id="activeTriangleDisplay" data-res="triangle" style="display:none">
+                    <span class="icon-triangle">
+                        <svg class="triangle-svg" viewBox="0 0 32 32" role="img">
+                            <polygon points="16,3 32,32 3,32" style="fill:green;"/>
+                        </svg>
+                    </span>
+                    <span id="activeTriangles">0/0</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div>
         <button id="feedNomNom">FEEEEEED</button>

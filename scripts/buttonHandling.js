@@ -87,6 +87,13 @@ document.querySelectorAll('.toggle input').forEach(chk => {
   });
 });
 
+// Collapse/expand the on-board info HUD
+$("#hudToggle").on('click', function(){
+    const collapsed = $("#board-hud").toggleClass('collapsed').hasClass('collapsed');
+    options.HudCollapsed = collapsed;
+    $(this).attr('aria-expanded', String(!collapsed));
+});
+
 
 //################
 //Customization buttons (Color)
