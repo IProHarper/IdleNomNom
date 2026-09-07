@@ -1,8 +1,8 @@
 import { saveGame,checkSaveFile } from './gameFiles.js';
 import { gameState, gameStages, upgrades, mouseNom, mousePos } from './data.js'
 import { setDotsALL, setDotSpawnRate, setOptions, setRoboNoms, setSquaresALL, setUpgradeCosts } from './util.js';
-import { addDescriptionHover, buttonCheck, handleBuyMax, handleUpgrade } from './buttonHandling.js';
-import { unlockNomscend, unlockSquare, unlockTriangles } from './features.js';
+import { addDescriptionHover, autoBuyDotUpgrades, buttonCheck, handleBuyMax, handleUpgrade, updateThemeButtons } from './buttonHandling.js';
+import { unlockNomscend, unlockSquare, unlockTriangles, unlockAutoBuyDots } from './features.js';
 import { initDisplay, updateStats, updateProgressBar, updateCanvas } from './display.js';
 import { prestigeAnimationPrep } from './prestigeAnimation.js';
 
@@ -22,7 +22,10 @@ $(document).ready(function(){
     if (upgrades.unlockTriangles.bought){
         unlockTriangles();
     }
-    
+    if (upgrades.unlockAutoBuyDots.bought){
+        unlockAutoBuyDots();
+    }
+
 
     
 
@@ -46,6 +49,10 @@ $(document).ready(function(){
     $(document).on("click", ".maxBttn", function() {
         const id = $(this).attr("id");
         handleBuyMax(id);
+    });
+    $(document).on("change", ".auto-buy-checkbox", function() {
+        const field = $(this).closest(".auto-buy-toggle").data("state-field");
+        gameState[field] = this.checked;
     });
 
     canvas.addEventListener('touchstart', handleTouchStart, false);
@@ -126,7 +133,9 @@ $(document).ready(function(){
 
     function updateDisplay(){
         buttonCheck();
+        updateThemeButtons();
         updateStats();
+        autoBuyDotUpgrades();
     }
 
     prestigeAnimationPrep();

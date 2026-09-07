@@ -59,13 +59,13 @@
         <span class="slider"></span>
       </label>
 
-      <label class="toggle">
+      <label class="toggle" id="drawSquaresToggle" style="display:none;">
         <span class="label-text">Draw Squares</span>
         <input type="checkbox" id="toggleDrawSquares" checked>
         <span class="slider"></span>
       </label>
 
-      <label class="toggle">
+      <label class="toggle" id="drawTrianglesToggle" style="display:none;">
         <span class="label-text">Draw Triangles</span>
         <input type="checkbox" id="toggleDrawTriangles" checked>
         <span class="slider"></span>
@@ -79,13 +79,13 @@
         <span class="slider"></span>
       </label>
 
-      <label class="toggle">
+      <label class="toggle" id="squaresTextToggle" style="display:none;">
         <span class="label-text">Squares Text</span>
         <input type="checkbox" id="toggleDrawSquaresText" checked>
         <span class="slider"></span>
       </label>
 
-      <label class="toggle">
+      <label class="toggle" id="trianglesTextToggle" style="display:none;">
         <span class="label-text">Triangles Text</span>
         <input type="checkbox" id="toggleDrawTriangleText" checked>
         <span class="slider"></span>
@@ -93,7 +93,7 @@
     </div>
 
     <div class="option-group">
-      <label class="toggle">
+      <label class="toggle" id="drawRoboNomsToggle" style="display:none;">
         <span class="label-text">Draw RoboNoms</span>
         <input type="checkbox" id="toggleDrawRoboNoms" checked>
         <span class="slider"></span>
@@ -109,52 +109,74 @@
     <h1 style="text-decoration: underline;">IDLE NOM NOM</h1>
     
     <!-- <button id="debugBttn">Debug</button> -->
-    <button id="ResetBttn">Reset</button>
-    <button id="SaveBttn">Save</button>
-    <button id="OptionsBttn">Options</button>
+    <div id="top-toolbar">
+        <button id="ResetBttn" class="toolbar-btn toolbar-btn-danger">Reset</button>
+        <button id="SaveBttn" class="toolbar-btn toolbar-btn-success">Save</button>
+        <button id="OptionsBttn" class="toolbar-btn">Options</button>
+    </div>
     <div id="resource-container" class="resources">
-        <span class="resource-item">
+        <div class="resource-pill" data-res="score">
             <div class="icon-dot"></div>
-            <div id="activeDots" class="resource-amount">0/0</div>
-        </span>
-        <span class="resource-item">
-            <div class="icon-dot"></div>
-            <div id="score" class="resource-amount">0</div>
-        </span>
-        <span id="activeSquareDisplay" class="resource-item" style="display:none;">
-            <div class="icon-square"></div>
-            <div id="activeSquares" class="resource-amount">0/0</div>
-        </span>
-        <span id="squareDisplay" class="resource-item" style="display:none">
-            <div class="icon-square"></div>
-            <div id="squares" class="resource-amount">0</div>
-        </span>
-        <span id="activeTriangleDisplay" class="resource-item" style="display:none;"> 
-            <div class="icon-triangle">
-                <svg class="triangle-svg" viewBox="0 0 32 32" role="img">
-                    <polygon points="16,3 32,32 3,32" style="fill:green;"/>
-                </svg>
+            <div class="resource-body">
+                <span class="resource-label">Score</span>
+                <span id="score" class="resource-amount">0</span>
             </div>
-            <div id="activeTriangles" class="resource-amount" >0/0</div>
-        </span>
-        <span id="triangleDisplay" class="resource-item" style="display:none">
-            <div class="icon-triangle">
-                <svg class="triangle-svg" viewBox="0 0 32 32" role="img">
-                    <polygon points="16,3 32,32 3,32" style="fill:green;"/>
-                </svg>
-            </div>
-            <div id="triangles" class="resource-amount">0</div>
-        </span>
-        <div  class="resource-item">
-            <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom coins">
-            <div id="nomCoinStatText" style="color:#33ecff">1</div>
-            <!-- (+<span id="nomCoinGainText" style="color:#33ecff">1</span>) -->
         </div>
-        
+        <div id="squareDisplay" class="resource-pill" data-res="square" style="display:none">
+            <div class="icon-square"></div>
+            <div class="resource-body">
+                <span class="resource-label">Squares</span>
+                <span id="squares" class="resource-amount">0</span>
+            </div>
+        </div>
+        <div id="triangleDisplay" class="resource-pill" data-res="triangle" style="display:none">
+            <div class="icon-triangle">
+                <svg class="triangle-svg" viewBox="0 0 32 32" role="img">
+                    <polygon points="16,3 32,32 3,32" style="fill:green;"/>
+                </svg>
+            </div>
+            <div class="resource-body">
+                <span class="resource-label">Triangles</span>
+                <span id="triangles" class="resource-amount">0</span>
+            </div>
+        </div>
+        <div id="nomCoinPill" class="resource-pill" data-res="nomcoin" style="display:none">
+            <img class="resourceImg" src="./assets/images/NomCoin.png" alt="Nom Coins">
+            <div class="resource-body">
+                <span class="resource-label">Nom Coins</span>
+                <span id="nomCoinStatText" class="resource-amount">1</span>
+            </div>
+        </div>
     </div>
 
     <!-- GAME CANVAS -->
-    <canvas id="gameCanvas"></canvas>
+    <div id="board-wrap">
+        <canvas id="gameCanvas"></canvas>
+        <div id="board-hud">
+            <button id="hudToggle" type="button" aria-expanded="true" aria-label="Toggle board info">
+                <span id="hud-title">On board</span>
+                <span id="hud-caret">&#9650;</span>
+            </button>
+            <div id="hud-body">
+                <div class="hud-row" data-res="dot">
+                    <span class="icon-dot"></span>
+                    <span id="activeDots">0/0</span>
+                </div>
+                <div class="hud-row" id="activeSquareDisplay" data-res="square" style="display:none">
+                    <span class="icon-square"></span>
+                    <span id="activeSquares">0/0</span>
+                </div>
+                <div class="hud-row" id="activeTriangleDisplay" data-res="triangle" style="display:none">
+                    <span class="icon-triangle">
+                        <svg class="triangle-svg" viewBox="0 0 32 32" role="img">
+                            <polygon points="16,3 32,32 3,32" style="fill:green;"/>
+                        </svg>
+                    </span>
+                    <span id="activeTriangles">0/0</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div>
         <button id="feedNomNom">FEEEEEED</button>
@@ -209,8 +231,7 @@
                     <span class="upgrade-icon">📈</span>
                     <!-- <span id="upgradeDotValue-i" class="upgrade-i">I</span> -->
                     <div class="upgrade-info">
-                        <h3 class="upgrade-name">Dot Base Value</h3>            
-                        <p class="upgrade-description" id="upgradeDotValueDesc">Increases Dot Value</p>
+                        <h3 class="upgrade-name">Dot Base Value</h3>
                         <span id="upgradeDotValueLvl" class="upgrade-level">0</span>
                     </div>
                 </div>
@@ -225,7 +246,6 @@
                     <span class="upgrade-icon">❎</span>
                     <div class="upgrade-info">
                         <h3 class="upgrade-name">Dot Multiplier x</h3>
-                        <p class="upgrade-description" id="upgradeDotMultiDesc">Desc</p>
                         <span id="upgradeDotMultiLvl" class="upgrade-level">Level: 0</span>
                     </div>
                 </div>
@@ -240,7 +260,7 @@
 
 <!-- RIGHT main options -->
         <!-- Display the NomscendUpgrades items -->
-        <div id="nomUpgrades" class="upgrades-container-right" class="hidden">
+        <div id="nomUpgrades" class="upgrades-container-right hidden">
         <h2>Base Upgrades</h2>
             <div class="upgrades-grid">
                 <!-- upgradeNomDotVal -->
@@ -250,7 +270,6 @@
                         <span class="upgrade-icon"></span>
                         <div class="upgrade-info">
                             <h3 class="upgrade-name">Dot Base Value</h3>
-                            <p class="upgrade-description" id="upgradeNomDotValDesc">Desc</p>
                             <span id="upgradeNomDotValLvl" class="upgrade-level">Level: 0</span>
                         </div>
                     </div>
@@ -268,7 +287,6 @@
                         <span class="upgrade-icon"></span>
                         <div class="upgrade-info">
                             <h3 class="upgrade-name">Nom Coin gain x2</h3>
-                            <p class="upgrade-description" id="upgradeNomCoinMultiDesc">Desc</p>
                             <span id="upgradeNomCoinMultiLvl" class="upgrade-level">Level: 0</span>
                         </div>
                     </div>
@@ -288,7 +306,6 @@
                         <span class="upgrade-icon"></span>
                         <div class="upgrade-info">
                             <h3 class="upgrade-name">Dot Multi Max Level+</h3>
-                            <p class="upgrade-description" id="upgradeDotMultiMaxDesc">Desc</p>
                             <span id="upgradeDotMultiMaxLvl" class="upgrade-level">Level: 0</span>
                         </div>
                     </div>
@@ -306,7 +323,6 @@
                         <span class="upgrade-icon"></span>
                         <div class="upgrade-info">
                             <h3 class="upgrade-name">Dot Value Max Level+</h3>
-                            <p class="upgrade-description" id="upgradeDotValMaxDesc">Desc</p>
                             <span id="upgradeDotValMaxLvl" class="upgrade-level">Level: 0</span>
                         </div>
                     </div>
@@ -326,7 +342,6 @@
                         <span class="upgrade-icon">🤖</span>
                         <div class="upgrade-info">
                             <h3 class="upgrade-name">Unlock Robo-Noms</h3>
-                            <p class="upgrade-description" id="unlockRoboNomsDesc">Desc</p>
                         </div>
                     </div>
                     <div class="upgrade-actions">
@@ -341,7 +356,6 @@
                         <span class="upgrade-icon"><div class="icon-square"></div></span>
                         <div class="upgrade-info">
                             <h3 class="upgrade-name">Unlock Squares</h3>
-                            <p class="upgrade-description" id="unlockSquareDesc">Desc</p>
                         </div>
                     </div>
                     <div class="upgrade-actions">
@@ -372,14 +386,14 @@
         </div>
 
         <!-- Square Upgrade panel -->
-        <div id="squareUpgrades" class="upgrades-container-right" class="hidden">
+        <div id="squareUpgrades" class="upgrades-container-right hidden">
             <h2>Square Upgrades</h2>
             <div class="upgrades-grid">
             </div>
         </div>
 
         <!-- Triangle Upgrade panel -->
-        <div id="triangleUpgrades" class="upgrades-container-right" class="hidden">
+        <div id="triangleUpgrades" class="upgrades-container-right hidden">
             <h2>Triangle Upgrades</h2>
             <div class="upgrades-grid">
             </div>
@@ -398,7 +412,10 @@
                         </div>
                     </div>
                     <div class="upgrade-actions">
-                        <button id="enableDefaultMode" class="buy-button" style="background: white;color:black;">FREE</button>
+                        <button id="enableDefaultMode" class="buy-button" style="background: white;color:black;">
+                            <img src="./assets/images/NomCoin.png" class="icon-nomCoin">
+                            <span class="cost-text">20</span>
+                        </button>
                     </div>
                 </div>
 
@@ -411,7 +428,10 @@
                         </div>
                     </div>
                     <div class="upgrade-actions">
-                        <button id="enableCillianMode" class="buy-button" style="background: blue;">FREE</button>
+                        <button id="enableCillianMode" class="buy-button" style="background: blue;">
+                            <img src="./assets/images/NomCoin.png" class="icon-nomCoin">
+                            <span class="cost-text">20</span>
+                        </button>
                     </div>
                 </div>
 
@@ -424,7 +444,10 @@
                         </div>
                     </div>
                     <div class="upgrade-actions">
-                        <button id="enableConallMode" class="buy-button" style="background: yellow;color:black">FREE</button>
+                        <button id="enableConallMode" class="buy-button" style="background: yellow;color:black">
+                            <img src="./assets/images/NomCoin.png" class="icon-nomCoin">
+                            <span class="cost-text">20</span>
+                        </button>
                     </div>
                 </div>
 
@@ -437,7 +460,10 @@
                         </div>
                     </div>
                     <div class="upgrade-actions">
-                        <button id="enableAidanMode" class="buy-button" style="background: red;">FREE</button>
+                        <button id="enableAidanMode" class="buy-button" style="background: red;">
+                            <img src="./assets/images/NomCoin.png" class="icon-nomCoin">
+                            <span class="cost-text">20</span>
+                        </button>
                     </div> 
                 </div>
 
@@ -450,7 +476,10 @@
                         </div>
                     </div>
                     <div class="upgrade-actions">
-                        <button id="enableDADMode" class="buy-button" style="background: green;">FREE</button>
+                        <button id="enableDADMode" class="buy-button" style="background: green;">
+                            <img src="./assets/images/NomCoin.png" class="icon-nomCoin">
+                            <span class="cost-text">20</span>
+                        </button>
                     </div>
                 </div>
 
@@ -463,7 +492,10 @@
                         </div>
                     </div>
                     <div class="upgrade-actions">
-                        <button id="enableLachlanMode" class="buy-button" style="background: purple;">FREE</button>
+                        <button id="enableLachlanMode" class="buy-button" style="background: purple;">
+                            <img src="./assets/images/NomCoin.png" class="icon-nomCoin">
+                            <span class="cost-text">20</span>
+                        </button>
                     </div>
                 </div>
                 <div class="upgrade-card">
@@ -475,7 +507,10 @@
                         </div>
                     </div>
                     <div class="upgrade-actions">
-                        <button id="enableRinoMode" class="buy-button" style="background: rgb(255, 75, 165);">FREE</button>
+                        <button id="enableRinoMode" class="buy-button" style="background: rgb(255, 75, 165);">
+                            <img src="./assets/images/NomCoin.png" class="icon-nomCoin">
+                            <span class="cost-text">20</span>
+                        </button>
                     </div>
                 </div>
                 <div class="upgrade-card">
@@ -487,7 +522,10 @@
                         </div>
                     </div>
                     <div class="upgrade-actions">
-                        <button id="enableMichanMode" class="buy-button" style="background: orange;">FREE</button>
+                        <button id="enableMichanMode" class="buy-button" style="background: orange;">
+                            <img src="./assets/images/NomCoin.png" class="icon-nomCoin">
+                            <span class="cost-text">20</span>
+                        </button>
                     </div>
                 </div>
                 <div class="upgrade-card">
@@ -500,7 +538,10 @@
                         </div>
                     </div>
                     <div class="upgrade-actions">
-                        <button id="enableKinsanMode" class="buy-button" style="background: grey;">FREE</button>
+                        <button id="enableKinsanMode" class="buy-button" style="background: grey;">
+                            <img src="./assets/images/NomCoin.png" class="icon-nomCoin">
+                            <span class="cost-text">20</span>
+                        </button>
                     </div>
                 </div>
             </div>

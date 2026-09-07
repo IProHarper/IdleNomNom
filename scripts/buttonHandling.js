@@ -1,5 +1,5 @@
 import { createDot, createSquare, spawnDot } from './consumables.js';
-import { enableAutofeed, createKids, nomscend, unlockSquare, unlockTriangles } from './features.js';
+import { enableAutofeed, createKids, nomscend, unlockSquare, unlockTriangles, unlockAutoBuyDots } from './features.js';
 import { upgradeDotValue, upgradeDotMulti, upgradeDotSpawnRate, upgradeDotSpawnCount, addRoboNom, upgradeMaxDotCount} from './upgradeButtons.js';
 import { unlockNomCoinScoreBoost, unlockRoboNoms, upgradeDotMultiMax, upgradeDotValMax, upgradeNomCoinMulti, upgradeNomDotVal } from './Upgrades/nomupgrades.js'
 import { upgrades, gameState, mouseNom, roboList, mousePos, options, triangleList } from './data.js';
@@ -87,45 +87,99 @@ document.querySelectorAll('.toggle input').forEach(chk => {
   });
 });
 
+// Collapse/expand the on-board info HUD
+$("#hudToggle").on('click', function(){
+    const collapsed = $("#board-hud").toggleClass('collapsed').hasClass('collapsed');
+    options.HudCollapsed = collapsed;
+    $(this).attr('aria-expanded', String(!collapsed));
+});
+
 
 //################
 //Customization buttons (Color)
+//Each theme is a one-time purchase paid with Nom Coins; once bought it stays
+//unlocked (boughtThemes persists through Nomscension, same as other nomCoins buys).
+const THEME_COST = 20;
+const themeButtons = [
+    { id: "enableDefaultMode", key: "default" },
+    { id: "enableLachlanMode", key: "lachlan" },
+    { id: "enableCillianMode", key: "cillian" },
+    { id: "enableConallMode", key: "conall" },
+    { id: "enableAidanMode", key: "aidan" },
+    { id: "enableRinoMode", key: "rino" },
+    { id: "enableMichanMode", key: "michan" },
+    { id: "enableKinsanMode", key: "kinsan" },
+    { id: "enableDADMode", key: "dad" }
+];
+
+function purchaseTheme(themeKey){
+    if (gameState.boughtThemes[themeKey]){ return true; }
+    if (gameState.nomCoins.greaterThanOrEqualTo(THEME_COST)){
+        gameState.nomCoins = gameState.nomCoins.minus(THEME_COST);
+        gameState.boughtThemes[themeKey] = true;
+        return true;
+    }
+    return false;
+}
+
+//Keep each theme button's label/disabled state in sync with ownership + Nom Coin balance
+export function updateThemeButtons(){
+    for (const { id, key } of themeButtons){
+        const owned = gameState.boughtThemes[key];
+        $("#"+id).prop("disabled", !owned && gameState.nomCoins.lessThan(THEME_COST));
+        if (owned){
+            $("#"+id).text("OWNED");
+        } else {
+            $("#"+id+" .cost-text").text(THEME_COST);
+        }
+    }
+}
+
 $("#enableDefaultMode").on('click',function(){
+    if (!purchaseTheme("default")){ return; }
     mouseNom.color = "white";
     gameState.dotColor = "white";
 });
 
 $("#enableLachlanMode").on('click',function(){
+    if (!purchaseTheme("lachlan")){ return; }
     mouseNom.color = "purple";
     gameState.dotColor = "white";
 });
 $("#enableCillianMode").on('click',function(){
+    if (!purchaseTheme("cillian")){ return; }
     mouseNom.color = "blue";
     gameState.dotColor = "white";
 });
 $("#enableConallMode").on('click',function(){
+    if (!purchaseTheme("conall")){ return; }
     mouseNom.color = "yellow";
     gameState.dotColor = "white";
 });
 $("#enableAidanMode").on('click',function(){
+    if (!purchaseTheme("aidan")){ return; }
     mouseNom.color = "red";
     gameState.dotColor = "white";
 });
 $("#enableRinoMode").on('click',function(){
+    if (!purchaseTheme("rino")){ return; }
     mouseNom.color = "rgb(255, 75, 165)";
     gameState.dotColor = "rgb(255, 75, 165)";
 });
 $("#enableMichanMode").on('click',function(){
+    if (!purchaseTheme("michan")){ return; }
     mouseNom.color = "orange";
     gameState.dotColor = "white";
 });
 $("#enableKinsanMode").on('click',function(){
+    if (!purchaseTheme("kinsan")){ return; }
     mouseNom.color = "grey";
     gameState.dotColor = "white";
 });
 
 
 $("#enableDADMode").on('click',function(){
+    if (!purchaseTheme("dad")){ return; }
      mouseNom.color = "green";
     // $("#mrNomNom").css("fill", "green");
     // if ($(".nomnomjr").children().length == 0){
@@ -133,7 +187,7 @@ $("#enableDADMode").on('click',function(){
     // } else {
     //     $(".nomnomjr").children().show();
     // }
-    
+
 });
 //####################
 
@@ -179,8 +233,33 @@ const upgradeActions = {
     upgradeTriangleSpawnCount,
     upgradeTriangleSpawnRate,
     upgradeMaxTriangleCount,
-    unlockTriangles
+    unlockTriangles,
+    unlockAutoBuyDots
 };
+
+//Maps each Dot upgrade's button id to the gameState flag its auto-buy toggle controls
+const autoBuyDotUpgradeIDs = {
+    upgradeDotValue: "autoBuyDotValue",
+    upgradeDotMulti: "autoBuyDotMulti",
+    upgradeDotSpawnRate: "autoBuyDotSpawnRate",
+    upgradeDotSpawnCount: "autoBuyDotSpawnCount",
+    upgradeMaxDotCount: "autoBuyMaxDotCount",
+};
+
+//Buys as many levels as currently affordable (same calcBuyMax used by the manual Max button,
+//so it never overshoots an upgrade's max level) for any Dot upgrade whose auto-buy toggle is on
+export function autoBuyDotUpgrades(){
+    if (!upgrades.unlockAutoBuyDots.bought){ return; }
+    for (const [upgradeID, stateField] of Object.entries(autoBuyDotUpgradeIDs)){
+        if (!gameState[stateField]){ continue; }
+        const upgradeData = Object.values(upgrades).find(u => u.id === upgradeID);
+        const numToBuy = calcBuyMax(upgradeData).count;
+        const action = upgradeActions[upgradeID];
+        for (let i = 0; i < numToBuy; i++){
+            action();
+        }
+    }
+}
 
 export function handleUpgrade(id) {
     const action = upgradeActions[id];
@@ -210,28 +289,25 @@ export function handleBuyMax(ButtonID){
 
 //##############
 export function addDescriptionHover(){
-    document.querySelectorAll('.upgrade-card').forEach(card => {
-        if (!card.querySelector(".upgradeBttn")){
-                return;
+    //Delegated so cards added dynamically after startup (e.g. Square/Triangle upgrades,
+    //added on unlock rather than present at load) still pick up the hover tooltip.
+    $(document).on('mouseenter', '.upgrade-card', function(){
+        const bttn = this.querySelector(".upgradeBttn");
+        if (!bttn){ return; }
+
+        const upgradeID = bttn.id;
+        let descText = "";
+        for (const obj in upgrades){
+            if (upgrades[obj].id == upgradeID && upgrades[obj].desc){
+                descText = upgrades[obj].desc;
             }
-        card.addEventListener('mouseenter', function(){
-            console.log("Hi")
-            
-            const upgradeID = (card.querySelector(".upgradeBttn").id);
-            
-            let descText = "";
-            for (const obj in upgrades){
-                if (upgrades[obj].id == upgradeID && upgrades[obj].desc){
-                    descText = upgrades[obj].desc;
-                }
-            }
-            const pos = card.getBoundingClientRect();
-            const cardWidth = 200;
-            showTooltip(descText, pos.x-cardWidth, pos.y);
-        });
-        card.addEventListener('mouseleave', function(){
-            hideTooltip();
-        });
+        }
+        const pos = this.getBoundingClientRect();
+        const cardWidth = 200;
+        showTooltip(descText, pos.x-cardWidth, pos.y);
+    });
+    $(document).on('mouseleave', '.upgrade-card', function(){
+        hideTooltip();
     });
 }
 
@@ -242,7 +318,7 @@ export function addDescriptionHover(){
 function showTooltip(htmlContent, x, y) {
     
     $("#tooltip").html(htmlContent);
-    $("#tooltip").toggleClass("show");
+    $("#tooltip").addClass("show");
 
     // Position with screen-bound protection
     const padding = 18;
@@ -252,7 +328,7 @@ function showTooltip(htmlContent, x, y) {
 }
 
 function hideTooltip() {
-    $("#tooltip").toggleClass("show");
+    $("#tooltip").removeClass("show");
 }
 
 

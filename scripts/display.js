@@ -15,15 +15,16 @@ export function initDisplay(){
     }
 
     //Set display to only have upgrades at first
-    $("#nomUpgrades").toggleClass("hidden");
-    $("#squareUpgrades").toggleClass("hidden");
-    $("#triangleUpgrades").toggleClass("hidden");
-    $("#customize-container").toggleClass("hidden");
+    $("#nomUpgrades").addClass("hidden");
+    $("#squareUpgrades").addClass("hidden");
+    $("#triangleUpgrades").addClass("hidden");
+    $("#customize-container").addClass("hidden");
 
     //Add extra upgrades to page:
     addUpgrade("#baseUpgrades", upgrades.increaseDotSpawnRate);
     addUpgrade("#baseUpgrades", upgrades.increaseDotSpawnCount);
     addUpgrade("#baseUpgrades", upgrades.increaseMaxDotCount);
+    addAutoBuyToggles();
 
     $("#nomscendUpgradesBttn").hide(); 
     $("#toggleNomUpgrades").hide();
@@ -42,9 +43,16 @@ export function initDisplay(){
     $("#upgradeAutoFeedSpeedDesc").text(upgrades.autoFeed.desc);
 
 
+    //Restore the on-board HUD collapsed state from saved options
+    if (options.HudCollapsed){
+        $("#board-hud").addClass("collapsed");
+        $("#hudToggle").attr("aria-expanded", "false");
+    }
+
     //Display nomscention specfics buttons and areas if its unlocked.
+    $("#nomCoinPill").toggle(!!gameState.nomscentionUnlocked);
     if (gameState.nomscentionUnlocked) {
-        $("#nomscendUpgradesBttn").show(); 
+        $("#nomscendUpgradesBttn").show();
         $("#nomscensionBttn").show();
         $("#nomCoinDisplay").show();
         $("#toggleNomUpgrades").show();
@@ -52,6 +60,7 @@ export function initDisplay(){
     if (upgrades.unlockRoboNom.level > 1){
         $("#baseUpgrades").find(".upgrades-grid").append(`<h2 style="margin-top:auto;">Other</h2>`);
         addUpgrade("#baseUpgrades", upgrades.addRoboNom);
+        $("#drawRoboNomsToggle").show();
     }
     progressGameStage();
 }
@@ -142,8 +151,7 @@ export function addUpgrade(upgradePosition, upgradeData){
     `<div class="upgrade-header">
         <span class="upgrade-icon"></span>
         <div class="upgrade-info">
-            <h3 class="upgrade-name">${upgradeData.name}</h3>            
-            <p class="upgrade-description" id="${upgradeData.id}Desc">Increases Dot Value</p>
+            <h3 class="upgrade-name">${upgradeData.name}</h3>
             <span id="${upgradeData.id}Lvl" class="upgrade-level">0</span>
         </div>
     </div>
@@ -153,6 +161,29 @@ export function addUpgrade(upgradePosition, upgradeData){
     </div`;
 
     $(upgradePosition).find(".upgrades-grid").append(newUpgrade);
+}
+
+//Maps each Dot upgrade's button id to the gameState flag its auto-buy toggle controls
+const autoBuyDotFields = {
+    upgradeDotValue: "autoBuyDotValue",
+    upgradeDotMulti: "autoBuyDotMulti",
+    upgradeDotSpawnRate: "autoBuyDotSpawnRate",
+    upgradeDotSpawnCount: "autoBuyDotSpawnCount",
+    upgradeMaxDotCount: "autoBuyMaxDotCount",
+};
+
+//Adds a small auto-buy on/off toggle to each Dot upgrade card, hidden until unlockAutoBuyDots is bought
+export function addAutoBuyToggles(){
+    for (const [upgradeID, stateField] of Object.entries(autoBuyDotFields)){
+        const card = $("#"+upgradeID).closest(".upgrade-card");
+        card.addClass("has-auto-buy");
+        card.append(
+            `<label class="toggle auto-buy-toggle" data-state-field="${stateField}" title="Auto-buy when affordable">
+                <input type="checkbox" class="auto-buy-checkbox" ${gameState[stateField] ? "checked" : ""}>
+                <span class="slider"></span>
+            </label>`
+        );
+    }
 }
 
 export function addNomUpgrade(upgradePosition, upgradeData){
@@ -165,7 +196,6 @@ export function addNomUpgrade(upgradePosition, upgradeData){
             <span class="upgrade-icon"><div class="icon-nom"></div></span>
             <div class="upgrade-info">
                 <h3 class="upgrade-name">${upgradeData.name}</h3>
-                <p class="upgrade-description" id="${upgradeData.id}Desc">Desc</p>
             </div>
         </div>
         <div class="upgrade-actions">
